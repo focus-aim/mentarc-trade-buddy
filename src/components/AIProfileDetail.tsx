@@ -114,6 +114,8 @@ const KB_MODULES: {
   desc: string;
   icon: typeof Package;
   mastery: number;
+  accent: { tile: string; ring: string; glow: string; bar: string; chip: string };
+  insights: string[];
   fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
 }[] = [
   {
@@ -122,6 +124,18 @@ const KB_MODULES: {
     desc: "公司背景、产能规模与资质背书",
     icon: Building2,
     mastery: 92,
+    accent: {
+      tile: "from-primary/90 to-[hsl(212,100%,62%)]",
+      ring: "ring-primary/20",
+      glow: "bg-primary/12",
+      bar: "from-primary to-[hsl(212,100%,62%)]",
+      chip: "bg-primary/8 text-primary border-primary/15",
+    },
+    insights: [
+      "工厂规模 12,000㎡，月产能 50 万 pcs",
+      "通过 BSCI / SEDEX / FDA / CE 认证",
+      "服务 Stanley、Contigo 等头部品牌",
+    ],
     fields: [
       { label: "公司名称", key: "companyName" },
       { label: "公司官网", key: "website" },
@@ -136,6 +150,18 @@ const KB_MODULES: {
     desc: "主营产品、卖点与交付条件",
     icon: Tags,
     mastery: 76,
+    accent: {
+      tile: "from-[hsl(174,72%,45%)] to-[hsl(186,88%,52%)]",
+      ring: "ring-[hsl(174,72%,45%)]/20",
+      glow: "bg-[hsl(174,72%,45%)]/12",
+      bar: "from-[hsl(174,72%,45%)] to-[hsl(186,88%,52%)]",
+      chip: "bg-[hsl(174,72%,45%)]/8 text-[hsl(174,72%,32%)] border-[hsl(174,72%,45%)]/15",
+    },
+    insights: [
+      "12 款双层不锈钢真空保温杯 SKU",
+      "核心卖点：12h 保温 · 316 食品级 · 防漏",
+      "MOQ 1,000 pcs，交期 25 天起",
+    ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
       { label: "产品卖点", key: "productSelling", textarea: true },
@@ -148,6 +174,18 @@ const KB_MODULES: {
     desc: "样品规则、报价框架与付款条件",
     icon: Wallet,
     mastery: 48,
+    accent: {
+      tile: "from-[hsl(28,92%,55%)] to-[hsl(40,96%,58%)]",
+      ring: "ring-[hsl(28,92%,55%)]/20",
+      glow: "bg-[hsl(28,92%,55%)]/14",
+      bar: "from-[hsl(28,92%,55%)] to-[hsl(40,96%,58%)]",
+      chip: "bg-[hsl(28,92%,55%)]/10 text-[hsl(24,78%,42%)] border-[hsl(28,92%,55%)]/20",
+    },
+    insights: [
+      "免费样品 1–2 pcs，运费到付",
+      "默认 FOB 宁波，三档报价框架",
+      "T/T 30% 定金 + 70% 见提单副本",
+    ],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
       { label: "报价规则", key: "quoteRule", textarea: true },
@@ -160,6 +198,18 @@ const KB_MODULES: {
     desc: "目标市场、对标对手与趋势洞察",
     icon: TrendingUp,
     mastery: 35,
+    accent: {
+      tile: "from-[hsl(262,82%,62%)] to-[hsl(286,86%,66%)]",
+      ring: "ring-[hsl(262,82%,62%)]/20",
+      glow: "bg-[hsl(262,82%,62%)]/14",
+      bar: "from-[hsl(262,82%,62%)] to-[hsl(286,86%,66%)]",
+      chip: "bg-[hsl(262,82%,62%)]/8 text-[hsl(262,72%,52%)] border-[hsl(262,82%,62%)]/18",
+    },
+    insights: [
+      "重点市场：欧洲 / 北美 / 澳洲",
+      "对标 Stanley、Contigo、YETI",
+      "户外露营与环保定制礼品趋势上升",
+    ],
     fields: [
       { label: "目标市场", key: "targetMarket", textarea: true },
       { label: "对标对手", key: "competitorIntel", textarea: true },
@@ -505,16 +555,17 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             </div>
 
                 {/* Unified materials list */}
-                <div className="mt-8 rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm backdrop-blur-sm">
-                  <header className="flex items-center justify-between gap-3 border-b border-border/40 pb-3">
+                <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 shadow-sm backdrop-blur-sm">
+                  <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-primary/[0.05] blur-3xl" />
+                  <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div>
-                        <h3 className="text-[14px] font-bold text-foreground">已上传资料</h3>
+                        <h3 className="text-[14.5px] font-bold text-foreground tracking-tight">训练资料库</h3>
                         <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                          共 {Object.values(materials).reduce((s, arr) => s + arr.length, 0)} 份，按模块归类
+                          共 <span className="font-semibold text-foreground">{Object.values(materials).reduce((s, arr) => s + arr.length, 0)}</span> 份资料，AI 持续从中提炼关键信息
                         </p>
                       </div>
                     </div>
@@ -1023,20 +1074,25 @@ const CondensedModuleCard = ({
 }) => {
   const Icon = mod.icon;
   const style = masteryStyle(mod.mastery);
+  const insightCount = mod.insights.length;
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_4px_8px_rgba(15,23,42,0.04),0_18px_44px_-18px_rgba(0,97,255,0.18)]"
     >
-      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+      {/* Ambient glow following accent */}
+      <div aria-hidden className={cn("pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full blur-3xl transition-opacity duration-500 opacity-70 group-hover:opacity-100", mod.accent.glow)} />
+      <div aria-hidden className={cn("pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r opacity-60 group-hover:opacity-100 transition-opacity", mod.accent.bar)} />
+
+      {/* Header */}
       <header className="relative flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon className="h-4.5 w-4.5" />
+          <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm ring-4 ring-offset-0 transition-transform duration-300 group-hover:scale-105", mod.accent.tile, mod.accent.ring)}>
+            <Icon className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <h3 className="text-[15px] font-bold text-foreground leading-snug tracking-tight">{mod.title}</h3>
             <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
           </div>
         </div>
@@ -1045,14 +1101,38 @@ const CondensedModuleCard = ({
         </span>
       </header>
 
-      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
-        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      {/* Mastery bar with subtle gradient */}
+      <div className="relative mt-3.5 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-500", mod.accent.bar)} style={{ width: `${mod.mastery}%` }} />
       </div>
 
+      {/* Extracted key insights */}
+      <div className="relative mt-4">
+        <div className="mb-2 flex items-center gap-1.5">
+          <Sparkles className="h-3 w-3 text-primary/70" />
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">AI 已提炼</span>
+        </div>
+        <ul className="space-y-1.5">
+          {mod.insights.map((it, i) => (
+            <li
+              key={i}
+              className={cn(
+                "flex items-start gap-2 rounded-xl border px-2.5 py-1.5 text-[12.5px] leading-snug text-foreground/85 transition-colors",
+                mod.accent.chip,
+              )}
+            >
+              <Check className="mt-0.5 h-3 w-3 shrink-0 opacity-70" />
+              <span className="min-w-0 flex-1">{it}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Footer */}
       <div className="relative mt-4 flex items-center justify-between border-t border-border/40 pt-3">
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-          <FileText className="h-3.5 w-3.5" />
-          已上传 {materialCount} 份资料
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-muted-foreground">
+          <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
+          已识别 <span className="font-bold text-foreground">{insightCount}</span> 项关键信息
         </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
