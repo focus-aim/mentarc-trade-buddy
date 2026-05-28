@@ -848,6 +848,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             </div>
           </section>
         )}
+
+        {/* Material detail dialog */}
+        <MaterialDetailDialog
+          material={activeMaterial}
+          onClose={() => setActiveMaterial(null)}
+        />
       </div>
     </main>
   );
