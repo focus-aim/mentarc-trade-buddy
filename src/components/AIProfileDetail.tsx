@@ -555,16 +555,17 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             </div>
 
                 {/* Unified materials list */}
-                <div className="mt-8 rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm backdrop-blur-sm">
-                  <header className="flex items-center justify-between gap-3 border-b border-border/40 pb-3">
+                <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 shadow-sm backdrop-blur-sm">
+                  <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-primary/[0.05] blur-3xl" />
+                  <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
                         <FileText className="h-4 w-4" />
                       </div>
                       <div>
-                        <h3 className="text-[14px] font-bold text-foreground">已上传资料</h3>
+                        <h3 className="text-[14.5px] font-bold text-foreground tracking-tight">训练资料库</h3>
                         <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                          共 {Object.values(materials).reduce((s, arr) => s + arr.length, 0)} 份，按模块归类
+                          共 <span className="font-semibold text-foreground">{Object.values(materials).reduce((s, arr) => s + arr.length, 0)}</span> 份资料，AI 持续从中提炼关键信息
                         </p>
                       </div>
                     </div>
