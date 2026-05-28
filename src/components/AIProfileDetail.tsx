@@ -108,6 +108,76 @@ const initialMaterials: Record<KBModuleKey, MaterialFile[]> = {
   market: [],
 };
 
+const KB_MODULES: {
+  key: KBModuleKey;
+  title: string;
+  desc: string;
+  icon: typeof Package;
+  mastery: number;
+  fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
+}[] = [
+  {
+    key: "strength",
+    title: "公司实力",
+    desc: "公司背景、产能规模与资质背书",
+    icon: Building2,
+    mastery: 92,
+    fields: [
+      { label: "公司名称", key: "companyName" },
+      { label: "公司官网", key: "website" },
+      { label: "公司简介", key: "companyProfile", textarea: true },
+      { label: "产能与团队", key: "capacityScale", textarea: true },
+      { label: "资质背书", key: "trustEndorsement", textarea: true },
+    ],
+  },
+  {
+    key: "product",
+    title: "产品服务",
+    desc: "主营产品、卖点与交付条件",
+    icon: Tags,
+    mastery: 76,
+    fields: [
+      { label: "主营产品", key: "mainProducts", textarea: true },
+      { label: "产品卖点", key: "productSelling", textarea: true },
+      { label: "起订与交期", key: "moqLeadtime", textarea: true },
+    ],
+  },
+  {
+    key: "pricing",
+    title: "报价策略",
+    desc: "样品规则、报价框架与付款条件",
+    icon: Wallet,
+    mastery: 48,
+    fields: [
+      { label: "样品规则", key: "sampleRule", textarea: true },
+      { label: "报价规则", key: "quoteRule", textarea: true },
+      { label: "付款条件", key: "paymentRule", textarea: true },
+    ],
+  },
+  {
+    key: "market",
+    title: "市场情报",
+    desc: "目标市场、对标对手与趋势洞察",
+    icon: TrendingUp,
+    mastery: 35,
+    fields: [
+      { label: "目标市场", key: "targetMarket", textarea: true },
+      { label: "对标对手", key: "competitorIntel", textarea: true },
+      { label: "趋势洞察", key: "marketTrend", textarea: true },
+    ],
+  },
+];
+
+const masteryStyle = (m: number) => {
+  if (m >= 80) {
+    return { label: "掌握度 高", cls: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", bar: "bg-emerald-500" };
+  }
+  if (m >= 55) {
+    return { label: "掌握度 中", cls: "bg-amber-500/10 text-amber-600 border-amber-500/20", bar: "bg-amber-500" };
+  }
+  return { label: "待补充", cls: "bg-rose-500/10 text-rose-600 border-rose-500/20", bar: "bg-rose-500" };
+};
+
 const experts = [
   { name: "业务专家", role: "询盘到成交全流程", avatar: businessAvatar, tasks: 17, tagline: "询盘到成交全流程" },
   { name: "运营专家", role: "选品·内容·转化", avatar: operationAvatar, tasks: 13, tagline: "选品·内容·转化" },
