@@ -1046,6 +1046,204 @@ const ModuleHeader = ({
 
 export default AIProfileDetail;
 
+// ===================== Training material library =====================
+
+const TrainingLibrary = ({
+  materials,
+  onUpload,
+  onRemove,
+  onOpen,
+}: {
+  materials: MaterialFile[];
+  onUpload: (file: File) => void;
+  onRemove: (id: string) => void;
+  onOpen: (m: MaterialFile) => void;
+}) => {
+  const moduleTitle = (k: KBModuleKey) =>
+    KB_MODULES.find((m) => m.key === k)?.title ?? k;
+
+  return (
+    <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/95 via-card/90 to-primary/[0.03] p-5 shadow-sm backdrop-blur-sm">
+      <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-44 w-44 rounded-full bg-primary/[0.05] blur-3xl" />
+
+      <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3.5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
+            <FileText className="h-4 w-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-[15px] font-bold tracking-tight text-foreground">训练资料库</h3>
+              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10.5px] font-semibold text-muted-foreground tabular-nums">
+                {materials.length}
+              </span>
+            </div>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground">
+              统一投喂，AI 自动识别并入库到四大模块
+            </p>
+          </div>
+        </div>
+        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90">
+          <FileUp className="h-3.5 w-3.5" />
+          上传资料
+          <input
+            type="file"
+            className="hidden"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onUpload(file);
+              e.target.value = "";
+            }}
+          />
+        </label>
+      </header>
+
+      {materials.length === 0 ? (
+        <div className="relative mt-4 rounded-xl border border-dashed border-border/60 bg-background/40 px-3 py-8 text-center text-[12.5px] text-muted-foreground">
+          暂无训练资料，上传后 AI 会自动解析并归类到对应模块
+        </div>
+      ) : (
+        <ul className="relative mt-3 grid gap-2.5 sm:grid-cols-2">
+          {materials.map((m) => (
+            <li key={m.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(m)}
+                className="group/file relative flex w-full items-start gap-3 rounded-xl border border-border/50 bg-background/70 p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_28px_-18px_rgba(0,97,255,0.25)]"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FileText className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-[13px] font-semibold text-foreground">
+                      {m.name}
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-muted-foreground">
+                    {m.summary}
+                  </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-1">
+                    {m.modules.length > 0 ? (
+                      m.modules.map((k) => (
+                        <span
+                          key={k}
+                          className="inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary"
+                        >
+                          {moduleTitle(k)}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10.5px] font-medium text-amber-600">
+                        <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                        分析中
+                      </span>
+                    )}
+                    <span className="ml-auto text-[10.5px] text-muted-foreground/80">
+                      {m.size} · {m.uploadedAt}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(m.id);
+                  }}
+                  className="absolute right-2 top-2 opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
+                  aria-label="删除"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+const MaterialDetailDialog = ({
+  material,
+  onClose,
+}: {
+  material: MaterialFile | null;
+  onClose: () => void;
+}) => {
+  const moduleTitle = (k: KBModuleKey) =>
+    KB_MODULES.find((m) => m.key === k)?.title ?? k;
+  return (
+    <Dialog open={!!material} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-[600px] sm:rounded-2xl">
+        {material && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 pr-6 text-[16px] leading-snug">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FileText className="h-3.5 w-3.5" />
+                </span>
+                {material.name}
+              </DialogTitle>
+              <DialogDescription className="text-[12.5px] text-muted-foreground">
+                {material.size} · 上传于 {material.uploadedAt}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <div>
+                <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  AI 摘要
+                </p>
+                <p className="rounded-xl border border-border/50 bg-muted/30 px-3 py-2.5 text-[13px] leading-relaxed text-foreground/85">
+                  {material.summary}
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  入库到 {material.extractions.length} 个模块
+                </p>
+                {material.extractions.length === 0 ? (
+                  <p className="text-[12.5px] text-muted-foreground">AI 正在分析中…</p>
+                ) : (
+                  <div className="space-y-2.5">
+                    {material.extractions.map((ex) => (
+                      <div
+                        key={ex.module}
+                        className="rounded-xl border border-border/50 bg-background/60 p-3"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                          <span className="text-[12.5px] font-semibold text-foreground">
+                            {moduleTitle(ex.module)}
+                          </span>
+                        </div>
+                        <ul className="mt-2 space-y-1.5">
+                          {ex.points.map((p, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground/85"
+                            >
+                              <Check className="mt-[3px] h-3 w-3 shrink-0 text-primary" strokeWidth={3} />
+                              <span>{p}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const CondensedModuleCard = ({
   mod,
   materialCount,
