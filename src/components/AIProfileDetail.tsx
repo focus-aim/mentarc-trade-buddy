@@ -919,3 +919,211 @@ const ModuleHeader = ({
 );
 
 export default AIProfileDetail;
+
+interface KnowledgeModuleCardProps {
+  mod: (typeof KB_MODULES)[number];
+  company: CompanyForm;
+  draft: CompanyForm;
+  setDraft: (v: CompanyForm) => void;
+  editing: boolean;
+  retraining: boolean;
+  retrainProgress: number;
+  materials: MaterialFile[];
+  onStartEdit: () => void;
+  onCancelEdit: () => void;
+  onSave: () => void;
+  onRetrain: () => void;
+  onUpload: (file: File) => void;
+  onRemoveMaterial: (idx: number) => void;
+}
+
+const KnowledgeModuleCard = ({
+  mod,
+  company,
+  draft,
+  setDraft,
+  editing,
+  retraining,
+  retrainProgress,
+  materials,
+  onStartEdit,
+  onCancelEdit,
+  onSave,
+  onRetrain,
+  onUpload,
+  onRemoveMaterial,
+}: KnowledgeModuleCardProps) => {
+  const Icon = mod.icon;
+  const style = masteryStyle(mod.mastery);
+
+  return (
+    <article className="relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:shadow-md">
+      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+
+      {/* Header */}
+      <header className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon className="h-4.5 w-4.5" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
+          </div>
+        </div>
+        <span className={cn("shrink-0 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap", style.cls)}>
+          {style.label} · {mod.mastery}%
+        </span>
+      </header>
+
+      {/* Mastery bar */}
+      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      </div>
+
+      {/* Retraining banner */}
+      {retraining && (
+        <div className="relative mt-3 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5">
+          <div className="flex items-center gap-2 text-[12px] font-medium text-primary">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            正在重新训练 · {retrainProgress}%
+          </div>
+          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-primary/10">
+            <div className="h-full bg-primary transition-all" style={{ width: `${retrainProgress}%` }} />
+          </div>
+        </div>
+      )}
+
+      {/* Fields */}
+      <div className="relative mt-4 space-y-2.5">
+        {mod.fields.map((f) => {
+          const value = editing ? draft[f.key] : company[f.key];
+          return (
+            <div key={f.key} className="rounded-xl border border-border/40 bg-background/50 px-3 py-2">
+              <div className="text-[11px] font-medium text-muted-foreground">{f.label}</div>
+              {editing ? (
+                f.textarea ? (
+                  <textarea
+                    value={draft[f.key]}
+                    onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })}
+                    rows={2}
+                    className="mt-1 w-full resize-none bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                    placeholder="点击键入"
+                  />
+                ) : (
+                  <input
+                    value={draft[f.key]}
+                    onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })}
+                    className="mt-1 w-full bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                    placeholder="点击键入"
+                  />
+                )
+              ) : (
+                <p className="mt-1 text-[12.5px] leading-relaxed text-foreground/85 break-words">
+                  {value || <span className="text-muted-foreground/60">未填写</span>}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Materials */}
+      <div className="relative mt-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-[12px] font-semibold text-foreground">已上传资料</span>
+            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              {materials.length}
+            </span>
+          </div>
+          <label className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">
+            <FileUp className="h-3 w-3" />
+            上传
+            <input
+              type="file"
+              className="hidden"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onUpload(file);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        </div>
+        {materials.length > 0 ? (
+          <ul className="mt-2 space-y-1.5">
+            {materials.map((m, i) => (
+              <li
+                key={`${m.name}-${i}`}
+                className="group/file flex items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5"
+              >
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <FileText className="h-3 w-3" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
+                  <div className="text-[10.5px] text-muted-foreground">{m.size} · {m.uploadedAt}</div>
+                </div>
+                <button
+                  onClick={() => onRemoveMaterial(i)}
+                  className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
+                  aria-label="删除"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-2 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-3 text-center text-[11.5px] text-muted-foreground">
+            暂无资料,上传后 AI 将自动学习并提升掌握度
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="relative mt-4 flex items-center gap-2 border-t border-border/40 pt-3">
+        {editing ? (
+          <>
+            <button
+              onClick={onSave}
+              disabled={retraining}
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
+            >
+              <Check className="h-3.5 w-3.5" />
+              保存并重新训练
+            </button>
+            <button
+              onClick={onCancelEdit}
+              className="inline-flex items-center justify-center rounded-full border border-border bg-background/70 px-4 py-2 text-[12.5px] font-medium text-foreground hover:bg-accent transition-colors"
+            >
+              取消
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={onStartEdit}
+              disabled={retraining}
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-[12px] font-semibold text-foreground hover:bg-accent transition-colors disabled:opacity-50"
+            >
+              <PenLine className="h-3.5 w-3.5" />
+              编辑信息
+            </button>
+            <button
+              onClick={onRetrain}
+              disabled={retraining}
+              className="ml-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/15 transition-colors disabled:opacity-50"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              重新训练
+            </button>
+          </>
+        )}
+      </div>
+    </article>
+  );
+};
