@@ -581,7 +581,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                 <CondensedModuleCard
                   key={mod.key}
                   mod={mod}
-                  materialCount={materials[mod.key].length}
                   onOpen={() => setDetailModule(mod.key)}
                 />
               ))}
