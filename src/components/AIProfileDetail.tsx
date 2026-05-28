@@ -45,22 +45,24 @@ import businessAvatar from "@/assets/expert-business.jpg";
 import trainingAvatar from "@/assets/expert-training.jpg";
 
 interface CompanyForm {
-  // 企业知识
+  // 公司实力
   companyName: string;
-  mainProducts: string;
-  businessFocus: string;
   website: string;
-  targetMarket: string;
+  companyProfile: string;
   capacityScale: string;
   trustEndorsement: string;
-  companyProfile: string;
-  // 产品知识
+  // 产品服务
+  mainProducts: string;
   productSelling: string;
   moqLeadtime: string;
-  // 业务规则（保留以兼容其他模块引用）
+  // 报价策略
   sampleRule: string;
   quoteRule: string;
   paymentRule: string;
+  // 市场情报
+  targetMarket: string;
+  competitorIntel: string;
+  marketTrend: string;
 }
 
 interface PreferenceItem {
@@ -83,6 +85,99 @@ interface ExpertSkillBlock {
   skills: ExpertSkillEntry[];
 }
 
+type KBModuleKey = "strength" | "product" | "pricing" | "market";
+
+interface MaterialFile {
+  name: string;
+  size: string;
+  uploadedAt: string;
+}
+
+const initialMaterials: Record<KBModuleKey, MaterialFile[]> = {
+  strength: [
+    { name: "公司简介-2024.pdf", size: "2.4 MB", uploadedAt: "3 天前" },
+    { name: "工厂实景与认证.zip", size: "18.6 MB", uploadedAt: "1 周前" },
+  ],
+  product: [
+    { name: "产品手册-2024.pdf", size: "5.8 MB", uploadedAt: "今天" },
+    { name: "SKU 清单.xlsx", size: "320 KB", uploadedAt: "5 天前" },
+  ],
+  pricing: [
+    { name: "三档报价模板.xlsx", size: "180 KB", uploadedAt: "2 周前" },
+  ],
+  market: [],
+};
+
+const KB_MODULES: {
+  key: KBModuleKey;
+  title: string;
+  desc: string;
+  icon: typeof Package;
+  mastery: number;
+  fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
+}[] = [
+  {
+    key: "strength",
+    title: "公司实力",
+    desc: "公司背景、产能规模与资质背书",
+    icon: Building2,
+    mastery: 92,
+    fields: [
+      { label: "公司名称", key: "companyName" },
+      { label: "公司官网", key: "website" },
+      { label: "公司简介", key: "companyProfile", textarea: true },
+      { label: "产能与团队", key: "capacityScale", textarea: true },
+      { label: "资质背书", key: "trustEndorsement", textarea: true },
+    ],
+  },
+  {
+    key: "product",
+    title: "产品服务",
+    desc: "主营产品、卖点与交付条件",
+    icon: Tags,
+    mastery: 76,
+    fields: [
+      { label: "主营产品", key: "mainProducts", textarea: true },
+      { label: "产品卖点", key: "productSelling", textarea: true },
+      { label: "起订与交期", key: "moqLeadtime", textarea: true },
+    ],
+  },
+  {
+    key: "pricing",
+    title: "报价策略",
+    desc: "样品规则、报价框架与付款条件",
+    icon: Wallet,
+    mastery: 48,
+    fields: [
+      { label: "样品规则", key: "sampleRule", textarea: true },
+      { label: "报价规则", key: "quoteRule", textarea: true },
+      { label: "付款条件", key: "paymentRule", textarea: true },
+    ],
+  },
+  {
+    key: "market",
+    title: "市场情报",
+    desc: "目标市场、对标对手与趋势洞察",
+    icon: TrendingUp,
+    mastery: 35,
+    fields: [
+      { label: "目标市场", key: "targetMarket", textarea: true },
+      { label: "对标对手", key: "competitorIntel", textarea: true },
+      { label: "趋势洞察", key: "marketTrend", textarea: true },
+    ],
+  },
+];
+
+const masteryStyle = (m: number) => {
+  if (m >= 80) {
+    return { label: "掌握度 高", cls: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20", bar: "bg-emerald-500" };
+  }
+  if (m >= 55) {
+    return { label: "掌握度 中", cls: "bg-amber-500/10 text-amber-600 border-amber-500/20", bar: "bg-amber-500" };
+  }
+  return { label: "待补充", cls: "bg-rose-500/10 text-rose-600 border-rose-500/20", bar: "bg-rose-500" };
+};
+
 const experts = [
   { name: "业务专家", role: "询盘到成交全流程", avatar: businessAvatar, tasks: 17, tagline: "询盘到成交全流程" },
   { name: "运营专家", role: "选品·内容·转化", avatar: operationAvatar, tasks: 13, tagline: "选品·内容·转化" },
@@ -91,18 +186,19 @@ const experts = [
 
 const initialCompanyForm: CompanyForm = {
   companyName: "宁波恒杯进出口有限公司",
-  mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
-  businessFocus: "高客单 DTC 品牌、定制 Logo、长周期复购订单",
   website: "https://www.example-trade.com",
-  targetMarket: "欧洲、北美、澳洲；DTC 品牌、垂直进口商",
+  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
   capacityScale: "自有工厂 12,000㎡，注塑+焊接+喷涂全链；月产能 50 万 pcs，员工 280 人",
   trustEndorsement: "BSCI / SEDEX 工厂审核；FDA、LFGB、CE 认证；服务 Stanley、Contigo 等品牌",
-  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
+  mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
   productSelling: "12h 长效保温、316 食品级内胆、防漏静音盖、可定制 Logo",
   moqLeadtime: "标准款 MOQ 1,000 pcs，交期 25 天；定制款 MOQ 3,000 pcs，交期 35–45 天",
   sampleRule: "免费样品 1–2 pcs，运费到付；定制样收 80–150 USD，可在大货中冲抵",
   quoteRule: "默认 FOB 宁波；MOQ 1,000 pcs；标准 / 定制 / 品牌三档报价",
   paymentRule: "T/T 30% 定金 + 70% 见提单副本；老客户支持 OA 30 天",
+  targetMarket: "欧洲、北美、澳洲；DTC 品牌、垂直进口商",
+  competitorIntel: "主要对标 Stanley、Contigo、YETI；价格带集中在 USD 12-28 FOB 区间",
+  marketTrend: "户外露营与通勤场景持续增长；环保材质与定制礼品需求上升明显",
 };
 
 const initialPreferences: PreferenceItem[] = [
@@ -260,13 +356,11 @@ interface AIProfileDetailProps {
 const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
-  const [companyEditing, setCompanyEditing] = useState(false);
-  
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
-  const [docName, setDocName] = useState<string>("产品手册-2024.pdf");
-  const [draftDocName, setDraftDocName] = useState<string>(docName);
-  const [retraining, setRetraining] = useState(false);
+  const [editingModule, setEditingModule] = useState<KBModuleKey | null>(null);
+  const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
+  const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
@@ -278,36 +372,46 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
   const newPreferenceCount = preferences.filter((p) => p.isNew).length;
 
-  const startEditCompany = () => {
+  const startEditModule = (key: KBModuleKey) => {
     setDraft(company);
-    setDraftDocName(docName);
-    setCompanyEditing(true);
+    setEditingModule(key);
   };
-  const cancelEditCompany = () => setCompanyEditing(false);
+  const cancelEditModule = () => setEditingModule(null);
 
-  const saveCompany = () => {
+  const saveModule = (key: KBModuleKey) => {
     setCompany(draft);
-    setDocName(draftDocName);
-    setCompanyEditing(false);
+    setEditingModule(null);
+    triggerRetrain(key);
+  };
+
+  const triggerRetrain = (key: KBModuleKey) => {
     setRetrainProgress(0);
-    setRetraining(true);
+    setRetrainingModule(key);
     const timer = setInterval(() => {
       setRetrainProgress((p) => {
         if (p >= 100) {
           clearInterval(timer);
-          setTimeout(() => setRetraining(false), 600);
+          setTimeout(() => setRetrainingModule(null), 600);
           return 100;
         }
-        return Math.min(100, p + 8);
+        return Math.min(100, p + 10);
       });
     }, 120);
   };
 
-
-  const toggleFocus = (chip: string) => {
-    const selected = draft.businessFocus.split(/[、,,\s]+/).filter(Boolean);
-    const next = selected.includes(chip) ? selected.filter((c) => c !== chip) : [...selected, chip];
-    setDraft({ ...draft, businessFocus: next.join("、") });
+  const handleUpload = (key: KBModuleKey, file: File) => {
+    const sizeKB = file.size / 1024;
+    const sizeLabel = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB.toFixed(0)} KB`;
+    setMaterials((prev) => ({
+      ...prev,
+      [key]: [...prev[key], { name: file.name, size: sizeLabel, uploadedAt: "刚刚" }],
+    }));
+  };
+  const handleRemoveMaterial = (key: KBModuleKey, idx: number) => {
+    setMaterials((prev) => ({
+      ...prev,
+      [key]: prev[key].filter((_, i) => i !== idx),
+    }));
   };
 
   const dismissPreference = (id: string) =>
@@ -377,215 +481,36 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             <ModuleHeader
               icon={BookOpen}
               title="企业知识库"
-              sub="沉淀企业知识,让 AI 真正懂你,并在每次生成中持续应用"
+              sub="围绕公司实力、产品服务、报价策略、市场情报四大模块沉淀，AI 持续识别掌握程度"
               actions={
-                !companyEditing ? (
-                  retraining ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                      正在重新训练,请稍候
-                    </span>
-                  ) : (
-                    <button
-                      onClick={startEditCompany}
-                      className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-background/70 px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                    >
-                      <Sparkles className="h-3.5 w-3.5" />
-                      重新训练
-                    </button>
-                  )
-
-                ) : (
-                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-                    重新训练中
-                  </span>
-                )
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
+                  <Sparkles className="h-3 w-3" />
+                  整体掌握度 {Math.round(KB_MODULES.reduce((s, m) => s + m.mastery, 0) / KB_MODULES.length)}%
+                </span>
               }
-
             />
 
-            {!companyEditing && (
-              <div className="mt-4 space-y-4">
-                <KnowledgeCard
-                  icon={Building2}
-                  title="企业知识"
-                  desc="公司基础信息、目标市场与背书"
-                  badge="已识别 6 项"
-                  editing
-                  items={[
-                    { label: "公司名称", value: company.companyName, draft: company.companyName, onChange: (v) => setCompany({ ...company, companyName: v }) },
-                    { label: "主营产品", value: company.mainProducts, draft: company.mainProducts, onChange: (v) => setCompany({ ...company, mainProducts: v }) },
-                    { label: "业务关注点", value: company.businessFocus, draft: company.businessFocus, onChange: (v) => setCompany({ ...company, businessFocus: v }) },
-                    { label: "公司网址", value: company.website, draft: company.website, onChange: (v) => setCompany({ ...company, website: v }) },
-                    { label: "目标市场", value: company.targetMarket, draft: company.targetMarket, onChange: (v) => setCompany({ ...company, targetMarket: v }) },
-                    { label: "公司简介", value: company.companyProfile, draft: company.companyProfile, onChange: (v) => setCompany({ ...company, companyProfile: v }) },
-                  ]}
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {KB_MODULES.map((mod) => (
+                <KnowledgeModuleCard
+                  key={mod.key}
+                  mod={mod}
+                  company={company}
+                  draft={draft}
+                  setDraft={setDraft}
+                  editing={editingModule === mod.key}
+                  retraining={retrainingModule === mod.key}
+                  retrainProgress={retrainProgress}
+                  materials={materials[mod.key]}
+                  onStartEdit={() => startEditModule(mod.key)}
+                  onCancelEdit={cancelEditModule}
+                  onSave={() => saveModule(mod.key)}
+                  onRetrain={() => triggerRetrain(mod.key)}
+                  onUpload={(file) => handleUpload(mod.key, file)}
+                  onRemoveMaterial={(idx) => handleRemoveMaterial(mod.key, idx)}
                 />
-
-                <KnowledgeCard
-                  icon={Tags}
-                  title="产品知识"
-                  desc="主营产品的卖点与交付条件"
-                  badge="已识别 3 项"
-                  editing
-                  items={[
-                    { label: "主营产品", value: company.mainProducts, draft: company.mainProducts, onChange: (v) => setCompany({ ...company, mainProducts: v }) },
-                    { label: "产品卖点", value: company.productSelling, draft: company.productSelling, onChange: (v) => setCompany({ ...company, productSelling: v }) },
-                    { label: "起订量与交期", value: company.moqLeadtime, draft: company.moqLeadtime, onChange: (v) => setCompany({ ...company, moqLeadtime: v }) },
-                  ]}
-                />
-                {docName && (
-                  <div className="rounded-2xl border border-border/60 bg-card/70 px-4 py-3.5 backdrop-blur-sm">
-                    <div className="mb-2.5 flex items-center justify-between">
-                      <div>
-                        <h4 className="text-[13px] font-bold text-foreground">产品资料</h4>
-                        <p className="mt-0.5 text-[11px] text-muted-foreground">已上传的产品文档,支持下载查看</p>
-                      </div>
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] font-semibold text-primary">
-                        共 1 份
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-background/60 px-3 py-2.5 transition-colors hover:bg-background">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <FileText className="h-4 w-4" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="truncate text-[13px] font-medium text-foreground">{docName}</div>
-                        <div className="text-[11px] text-muted-foreground">
-                          {docName.split(".").pop()?.toUpperCase()} · 已同步至 AI 知识库
-                        </div>
-                      </div>
-                      <a
-                        href="#"
-                        download={docName}
-                        onClick={(e) => e.preventDefault()}
-                        className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-background/70 px-2.5 py-1 text-[11.5px] font-medium text-foreground hover:bg-accent transition-colors"
-                        title="下载查看"
-                      >
-                        <Download className="h-3.5 w-3.5" />
-                        下载
-                      </a>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-
-            {companyEditing && (
-              <div className="mt-4 relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/85 via-card/75 to-primary/5 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
-                <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-                <div aria-hidden className="pointer-events-none absolute -left-10 bottom-0 h-32 w-32 rounded-full bg-secondary/15 blur-3xl" />
-
-                <div className="relative">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    更新企业知识库
-                  </span>
-                  <h2 className="mt-3 text-xl font-bold leading-snug tracking-tight text-foreground">
-                    重新训练
-                  </h2>
-                  <p className="mt-1.5 text-[13px] text-muted-foreground">
-                    修改完成后保存,AI 会基于最新素材重新构建画像。
-                  </p>
-                </div>
-
-                <div className="relative mt-6 space-y-3">
-                  {/* 主营产品 */}
-                  <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                    <div className="text-xs font-medium text-muted-foreground">主营产品</div>
-                    <input
-                      value={draft.mainProducts}
-                      onChange={(e) => setDraft({ ...draft, mainProducts: e.target.value })}
-                      placeholder="说说你卖什么,比如 不锈钢保温杯"
-                      className="w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground/60 placeholder:font-normal focus:outline-none"
-                    />
-                  </div>
-
-                  {/* 业务关注点 chips */}
-                  <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200">
-                    <div className="text-xs font-medium text-muted-foreground">业务关注点</div>
-                    <div className="mt-2.5 flex flex-wrap gap-1.5">
-                      {FOCUS_OPTIONS.map((focus) => {
-                        const selected = draft.businessFocus.split(/[、,,\s]+/).filter(Boolean);
-                        const active = selected.includes(focus);
-                        return (
-                          <button
-                            key={focus}
-                            type="button"
-                            onClick={() => toggleFocus(focus)}
-                            className={cn(
-                              "rounded-full border px-2.5 py-1 text-xs font-medium transition-all",
-                              active
-                                ? "border-primary/40 bg-primary/10 text-primary"
-                                : "border-border bg-background/60 text-muted-foreground hover:border-primary/30 hover:text-foreground",
-                            )}
-                          >
-                            {active && <span className="mr-0.5">✓</span>}
-                            {focus}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* 企业官网 */}
-                  <div className="group rounded-2xl border border-border/40 bg-background/50 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                    <div className="text-xs font-medium text-muted-foreground">企业官网</div>
-                    <input
-                      value={draft.website}
-                      onChange={(e) => setDraft({ ...draft, website: e.target.value })}
-                      placeholder="贴上网址,AI 自动抓取分析"
-                      className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none"
-                    />
-                  </div>
-
-                  {/* 产品资料 */}
-                  <label className="group relative flex min-h-[140px] cursor-pointer flex-col gap-3 rounded-2xl border border-dashed border-border/60 bg-background/40 px-5 py-5 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5">
-                    <div className="min-w-0">
-                      <div className="text-xs font-medium text-muted-foreground">产品资料</div>
-                      <div className="truncate text-sm text-foreground/80">
-                        {draftDocName || "拖拽文件到此,或点击下方按钮上传"}
-                      </div>
-                    </div>
-                    <div className="mt-auto flex items-center justify-between gap-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                        <FileUp className="h-3.5 w-3.5" />
-                        上传文档
-                      </span>
-                      <span className="text-xs text-muted-foreground/80">支持 PDF / Word / Excel / PPT</span>
-                    </div>
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) setDraftDocName(file.name);
-                      }}
-                    />
-                  </label>
-                </div>
-
-                <div className="relative mt-6 flex items-center gap-2">
-                  <button
-                    onClick={saveCompany}
-                    className="group relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary to-[hsl(217,100%,58%)] px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.005] active:scale-[0.99]"
-                  >
-                    <span aria-hidden className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                    <Sparkles className="h-4 w-4" />
-                    重新训练
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </button>
-                  <button
-                    onClick={cancelEditCompany}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background/70 px-5 py-3 text-sm font-medium text-foreground hover:bg-accent transition-colors"
-                  >
-                    取消
-                  </button>
-                </div>
-              </div>
-            )}
+              ))}
+            </div>
           </section>
         )}
 
@@ -994,3 +919,211 @@ const ModuleHeader = ({
 );
 
 export default AIProfileDetail;
+
+interface KnowledgeModuleCardProps {
+  mod: (typeof KB_MODULES)[number];
+  company: CompanyForm;
+  draft: CompanyForm;
+  setDraft: (v: CompanyForm) => void;
+  editing: boolean;
+  retraining: boolean;
+  retrainProgress: number;
+  materials: MaterialFile[];
+  onStartEdit: () => void;
+  onCancelEdit: () => void;
+  onSave: () => void;
+  onRetrain: () => void;
+  onUpload: (file: File) => void;
+  onRemoveMaterial: (idx: number) => void;
+}
+
+const KnowledgeModuleCard = ({
+  mod,
+  company,
+  draft,
+  setDraft,
+  editing,
+  retraining,
+  retrainProgress,
+  materials,
+  onStartEdit,
+  onCancelEdit,
+  onSave,
+  onRetrain,
+  onUpload,
+  onRemoveMaterial,
+}: KnowledgeModuleCardProps) => {
+  const Icon = mod.icon;
+  const style = masteryStyle(mod.mastery);
+
+  return (
+    <article className="relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-all hover:shadow-md">
+      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+
+      {/* Header */}
+      <header className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon className="h-4.5 w-4.5" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
+          </div>
+        </div>
+        <span className={cn("shrink-0 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap", style.cls)}>
+          {style.label} · {mod.mastery}%
+        </span>
+      </header>
+
+      {/* Mastery bar */}
+      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      </div>
+
+      {/* Retraining banner */}
+      {retraining && (
+        <div className="relative mt-3 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5">
+          <div className="flex items-center gap-2 text-[12px] font-medium text-primary">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            正在重新训练 · {retrainProgress}%
+          </div>
+          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-primary/10">
+            <div className="h-full bg-primary transition-all" style={{ width: `${retrainProgress}%` }} />
+          </div>
+        </div>
+      )}
+
+      {/* Fields */}
+      <div className="relative mt-4 space-y-2.5">
+        {mod.fields.map((f) => {
+          const value = editing ? draft[f.key] : company[f.key];
+          return (
+            <div key={f.key} className="rounded-xl border border-border/40 bg-background/50 px-3 py-2">
+              <div className="text-[11px] font-medium text-muted-foreground">{f.label}</div>
+              {editing ? (
+                f.textarea ? (
+                  <textarea
+                    value={draft[f.key]}
+                    onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })}
+                    rows={2}
+                    className="mt-1 w-full resize-none bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                    placeholder="点击键入"
+                  />
+                ) : (
+                  <input
+                    value={draft[f.key]}
+                    onChange={(e) => setDraft({ ...draft, [f.key]: e.target.value })}
+                    className="mt-1 w-full bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                    placeholder="点击键入"
+                  />
+                )
+              ) : (
+                <p className="mt-1 text-[12.5px] leading-relaxed text-foreground/85 break-words">
+                  {value || <span className="text-muted-foreground/60">未填写</span>}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Materials */}
+      <div className="relative mt-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-[12px] font-semibold text-foreground">已上传资料</span>
+            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              {materials.length}
+            </span>
+          </div>
+          <label className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">
+            <FileUp className="h-3 w-3" />
+            上传
+            <input
+              type="file"
+              className="hidden"
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onUpload(file);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        </div>
+        {materials.length > 0 ? (
+          <ul className="mt-2 space-y-1.5">
+            {materials.map((m, i) => (
+              <li
+                key={`${m.name}-${i}`}
+                className="group/file flex items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5"
+              >
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                  <FileText className="h-3 w-3" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
+                  <div className="text-[10.5px] text-muted-foreground">{m.size} · {m.uploadedAt}</div>
+                </div>
+                <button
+                  onClick={() => onRemoveMaterial(i)}
+                  className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
+                  aria-label="删除"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-2 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-3 text-center text-[11.5px] text-muted-foreground">
+            暂无资料,上传后 AI 将自动学习并提升掌握度
+          </div>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="relative mt-4 flex items-center gap-2 border-t border-border/40 pt-3">
+        {editing ? (
+          <>
+            <button
+              onClick={onSave}
+              disabled={retraining}
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
+            >
+              <Check className="h-3.5 w-3.5" />
+              保存并重新训练
+            </button>
+            <button
+              onClick={onCancelEdit}
+              className="inline-flex items-center justify-center rounded-full border border-border bg-background/70 px-4 py-2 text-[12.5px] font-medium text-foreground hover:bg-accent transition-colors"
+            >
+              取消
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={onStartEdit}
+              disabled={retraining}
+              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-[12px] font-semibold text-foreground hover:bg-accent transition-colors disabled:opacity-50"
+            >
+              <PenLine className="h-3.5 w-3.5" />
+              编辑信息
+            </button>
+            <button
+              onClick={onRetrain}
+              disabled={retraining}
+              className="ml-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/15 transition-colors disabled:opacity-50"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              重新训练
+            </button>
+          </>
+        )}
+      </div>
+    </article>
+  );
+};
