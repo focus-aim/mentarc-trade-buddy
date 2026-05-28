@@ -437,9 +437,10 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [editingModule, setEditingModule] = useState<KBModuleKey | null>(null);
   const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
-  const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
+  const [materials, setMaterials] = useState<MaterialFile[]>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
+  const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
   const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
@@ -477,19 +478,24 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
     }, 120);
   };
 
-  const handleUpload = (key: KBModuleKey, file: File) => {
+  const handleUpload = (file: File) => {
     const sizeKB = file.size / 1024;
     const sizeLabel = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB.toFixed(0)} KB`;
-    setMaterials((prev) => ({
+    setMaterials((prev) => [
       ...prev,
-      [key]: [...prev[key], { name: file.name, size: sizeLabel, uploadedAt: "刚刚" }],
-    }));
+      {
+        id: `m-${Date.now()}`,
+        name: file.name,
+        size: sizeLabel,
+        uploadedAt: "刚刚",
+        modules: [],
+        summary: "AI 正在分析中…",
+        extractions: [],
+      },
+    ]);
   };
-  const handleRemoveMaterial = (key: KBModuleKey, idx: number) => {
-    setMaterials((prev) => ({
-      ...prev,
-      [key]: prev[key].filter((_, i) => i !== idx),
-    }));
+  const handleRemoveMaterial = (id: string) => {
+    setMaterials((prev) => prev.filter((m) => m.id !== id));
   };
 
   const dismissPreference = (id: string) =>
