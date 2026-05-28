@@ -88,25 +88,81 @@ interface ExpertSkillBlock {
 type KBModuleKey = "strength" | "product" | "pricing" | "market";
 
 interface MaterialFile {
+  id: string;
   name: string;
   size: string;
   uploadedAt: string;
+  /** Which modules AI dispatched insights to */
+  modules: KBModuleKey[];
+  /** AI summary of what was extracted */
+  summary: string;
+  /** Detailed extractions per module */
+  extractions: { module: KBModuleKey; points: string[] }[];
 }
 
-const initialMaterials: Record<KBModuleKey, MaterialFile[]> = {
-  strength: [
-    { name: "公司简介-2024.pdf", size: "2.4 MB", uploadedAt: "3 天前" },
-    { name: "工厂实景与认证.zip", size: "18.6 MB", uploadedAt: "1 周前" },
-  ],
-  product: [
-    { name: "产品手册-2024.pdf", size: "5.8 MB", uploadedAt: "今天" },
-    { name: "SKU 清单.xlsx", size: "320 KB", uploadedAt: "5 天前" },
-  ],
-  pricing: [
-    { name: "三档报价模板.xlsx", size: "180 KB", uploadedAt: "2 周前" },
-  ],
-  market: [],
-};
+const initialMaterials: MaterialFile[] = [
+  {
+    id: "m1",
+    name: "公司简介-2024.pdf",
+    size: "2.4 MB",
+    uploadedAt: "3 天前",
+    modules: ["strength", "product"],
+    summary: "公司发展历程、组织架构与主营品类介绍。",
+    extractions: [
+      { module: "strength", points: ["成立于 2008 年，员工 280 人", "服务全球 60+ 国家客户"] },
+      { module: "product", points: ["主营双层不锈钢真空保温杯"] },
+    ],
+  },
+  {
+    id: "m2",
+    name: "工厂实景与认证.zip",
+    size: "18.6 MB",
+    uploadedAt: "1 周前",
+    modules: ["strength"],
+    summary: "工厂车间实拍、产线说明及第三方认证报告。",
+    extractions: [
+      {
+        module: "strength",
+        points: ["自有工厂 12,000㎡，月产能 50 万 pcs", "通过 BSCI / SEDEX / FDA / CE 认证"],
+      },
+    ],
+  },
+  {
+    id: "m3",
+    name: "产品手册-2024.pdf",
+    size: "5.8 MB",
+    uploadedAt: "今天",
+    modules: ["product", "pricing"],
+    summary: "12 款 SKU 产品参数、卖点及标准报价。",
+    extractions: [
+      { module: "product", points: ["12 款 SKU，覆盖运动 / 商务 / 儿童系列", "核心卖点：12h 保温 · 316 食品级 · 防漏"] },
+      { module: "pricing", points: ["FOB 宁波 USD 4.8–5.6 / pc"] },
+    ],
+  },
+  {
+    id: "m4",
+    name: "SKU 清单.xlsx",
+    size: "320 KB",
+    uploadedAt: "5 天前",
+    modules: ["product"],
+    summary: "全 SKU 编码、规格、包装与海关编码清单。",
+    extractions: [{ module: "product", points: ["MOQ 1,000 pcs，交期 25 天起"] }],
+  },
+  {
+    id: "m5",
+    name: "三档报价模板.xlsx",
+    size: "180 KB",
+    uploadedAt: "2 周前",
+    modules: ["pricing"],
+    summary: "标准 / 定制 / 品牌三档报价框架与付款规则。",
+    extractions: [
+      {
+        module: "pricing",
+        points: ["默认 FOB 宁波，三档报价框架", "T/T 30% 定金 + 70% 见提单副本"],
+      },
+    ],
+  },
+];
 
 const KB_MODULES: {
   key: KBModuleKey;
@@ -381,9 +437,10 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [editingModule, setEditingModule] = useState<KBModuleKey | null>(null);
   const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
-  const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
+  const [materials, setMaterials] = useState<MaterialFile[]>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
+  const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
   const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
@@ -421,19 +478,24 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
     }, 120);
   };
 
-  const handleUpload = (key: KBModuleKey, file: File) => {
+  const handleUpload = (file: File) => {
     const sizeKB = file.size / 1024;
     const sizeLabel = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB.toFixed(0)} KB`;
-    setMaterials((prev) => ({
+    setMaterials((prev) => [
       ...prev,
-      [key]: [...prev[key], { name: file.name, size: sizeLabel, uploadedAt: "刚刚" }],
-    }));
+      {
+        id: `m-${Date.now()}`,
+        name: file.name,
+        size: sizeLabel,
+        uploadedAt: "刚刚",
+        modules: [],
+        summary: "AI 正在分析中…",
+        extractions: [],
+      },
+    ]);
   };
-  const handleRemoveMaterial = (key: KBModuleKey, idx: number) => {
-    setMaterials((prev) => ({
-      ...prev,
-      [key]: prev[key].filter((_, i) => i !== idx),
-    }));
+  const handleRemoveMaterial = (id: string) => {
+    setMaterials((prev) => prev.filter((m) => m.id !== id));
   };
 
   const dismissPreference = (id: string) =>
@@ -519,78 +581,22 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                 <CondensedModuleCard
                   key={mod.key}
                   mod={mod}
-                  materialCount={materials[mod.key].length}
                   onOpen={() => setDetailModule(mod.key)}
                 />
               ))}
             </div>
 
-                {/* Unified materials list */}
-                <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 shadow-sm backdrop-blur-sm">
-                  <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-primary/[0.05] blur-3xl" />
-                  <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
-                        <FileText className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3 className="text-[14.5px] font-bold text-foreground tracking-tight">训练资料库</h3>
-                        <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                          共 <span className="font-semibold text-foreground">{Object.values(materials).reduce((s, arr) => s + arr.length, 0)}</span> 份资料，AI 持续从中提炼关键信息
-                        </p>
-                      </div>
-                    </div>
-                  </header>
-                  {Object.values(materials).reduce((s, arr) => s + arr.length, 0) === 0 ? (
-                    <div className="mt-4 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-6 text-center text-[12px] text-muted-foreground">
-                      暂无资料，进入任一模块上传后 AI 将自动学习
-                    </div>
-                  ) : (
-                    <ul className="mt-3 divide-y divide-border/30">
-                      {KB_MODULES.flatMap((mod) =>
-                        materials[mod.key].map((m, i) => ({ mod, file: m, idx: i }))
-                      ).map(({ mod, file, idx }) => (
-                        <li
-                          key={`${mod.key}-${file.name}-${idx}`}
-                          className="group/file flex items-center gap-3 py-2.5"
-                        >
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <FileText className="h-3.5 w-3.5" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="truncate text-[12.5px] font-medium text-foreground">
-                              {file.name}
-                            </div>
-                            <div className="mt-0.5 flex items-center gap-2 text-[10.5px] text-muted-foreground">
-                              <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 font-medium">
-                                {mod.title}
-                              </span>
-                              <span>{file.size}</span>
-                              <span>· {file.uploadedAt}</span>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => setDetailModule(mod.key)}
-                            className="text-[11px] font-semibold text-primary opacity-0 transition-opacity group-hover/file:opacity-100"
-                          >
-                            管理
-                          </button>
-                          <button
-                            onClick={() => handleRemoveMaterial(mod.key, idx)}
-                            className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
-                            aria-label="删除"
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <TrainingLibrary
+                  materials={materials}
+                  onUpload={handleUpload}
+                  onRemove={handleRemoveMaterial}
+                  onOpen={(m) => setActiveMaterial(m)}
+                />
               </>
             ) : (
               (() => {
                 const mod = KB_MODULES.find((m) => m.key === detailModule)!;
+                const moduleMaterials = materials.filter((m) => m.modules.includes(mod.key));
                 return (
                   <>
                     <button
@@ -612,13 +618,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                         editing={editingModule === mod.key}
                         retraining={retrainingModule === mod.key}
                         retrainProgress={retrainProgress}
-                        materials={materials[mod.key]}
+                        materials={moduleMaterials}
                         onStartEdit={() => startEditModule(mod.key)}
                         onCancelEdit={cancelEditModule}
                         onSave={() => saveModule(mod.key)}
                         onRetrain={() => triggerRetrain(mod.key)}
-                        onUpload={(file) => handleUpload(mod.key, file)}
-                        onRemoveMaterial={(idx) => handleRemoveMaterial(mod.key, idx)}
+                        onOpenMaterial={(m) => setActiveMaterial(m)}
                       />
                     </div>
                   </>
@@ -842,6 +847,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             </div>
           </section>
         )}
+
+        {/* Material detail dialog */}
+        <MaterialDetailDialog
+          material={activeMaterial}
+          onClose={() => setActiveMaterial(null)}
+        />
       </div>
     </main>
   );
@@ -1034,13 +1045,209 @@ const ModuleHeader = ({
 
 export default AIProfileDetail;
 
+// ===================== Training material library =====================
+
+const TrainingLibrary = ({
+  materials,
+  onUpload,
+  onRemove,
+  onOpen,
+}: {
+  materials: MaterialFile[];
+  onUpload: (file: File) => void;
+  onRemove: (id: string) => void;
+  onOpen: (m: MaterialFile) => void;
+}) => {
+  const moduleTitle = (k: KBModuleKey) =>
+    KB_MODULES.find((m) => m.key === k)?.title ?? k;
+
+  return (
+    <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/95 via-card/90 to-primary/[0.03] p-5 shadow-sm backdrop-blur-sm">
+      <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-44 w-44 rounded-full bg-primary/[0.05] blur-3xl" />
+
+      <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3.5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
+            <FileText className="h-4 w-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-[15px] font-bold tracking-tight text-foreground">训练资料库</h3>
+              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10.5px] font-semibold text-muted-foreground tabular-nums">
+                {materials.length}
+              </span>
+            </div>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground">
+              统一投喂，AI 自动识别并入库到四大模块
+            </p>
+          </div>
+        </div>
+        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90">
+          <FileUp className="h-3.5 w-3.5" />
+          上传资料
+          <input
+            type="file"
+            className="hidden"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onUpload(file);
+              e.target.value = "";
+            }}
+          />
+        </label>
+      </header>
+
+      {materials.length === 0 ? (
+        <div className="relative mt-4 rounded-xl border border-dashed border-border/60 bg-background/40 px-3 py-8 text-center text-[12.5px] text-muted-foreground">
+          暂无训练资料，上传后 AI 会自动解析并归类到对应模块
+        </div>
+      ) : (
+        <ul className="relative mt-3 grid gap-2.5 sm:grid-cols-2">
+          {materials.map((m) => (
+            <li key={m.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(m)}
+                className="group/file relative flex w-full items-start gap-3 rounded-xl border border-border/50 bg-background/70 p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_28px_-18px_rgba(0,97,255,0.25)]"
+              >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FileText className="h-4 w-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-[13px] font-semibold text-foreground">
+                      {m.name}
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-muted-foreground">
+                    {m.summary}
+                  </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-1">
+                    {m.modules.length > 0 ? (
+                      m.modules.map((k) => (
+                        <span
+                          key={k}
+                          className="inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary"
+                        >
+                          {moduleTitle(k)}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10.5px] font-medium text-amber-600">
+                        <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                        分析中
+                      </span>
+                    )}
+                    <span className="ml-auto text-[10.5px] text-muted-foreground/80">
+                      {m.size} · {m.uploadedAt}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(m.id);
+                  }}
+                  className="absolute right-2 top-2 opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
+                  aria-label="删除"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+const MaterialDetailDialog = ({
+  material,
+  onClose,
+}: {
+  material: MaterialFile | null;
+  onClose: () => void;
+}) => {
+  const moduleTitle = (k: KBModuleKey) =>
+    KB_MODULES.find((m) => m.key === k)?.title ?? k;
+  return (
+    <Dialog open={!!material} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-[600px] sm:rounded-2xl">
+        {material && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 pr-6 text-[16px] leading-snug">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FileText className="h-3.5 w-3.5" />
+                </span>
+                {material.name}
+              </DialogTitle>
+              <DialogDescription className="text-[12.5px] text-muted-foreground">
+                {material.size} · 上传于 {material.uploadedAt}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <div>
+                <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  AI 摘要
+                </p>
+                <p className="rounded-xl border border-border/50 bg-muted/30 px-3 py-2.5 text-[13px] leading-relaxed text-foreground/85">
+                  {material.summary}
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  入库到 {material.extractions.length} 个模块
+                </p>
+                {material.extractions.length === 0 ? (
+                  <p className="text-[12.5px] text-muted-foreground">AI 正在分析中…</p>
+                ) : (
+                  <div className="space-y-2.5">
+                    {material.extractions.map((ex) => (
+                      <div
+                        key={ex.module}
+                        className="rounded-xl border border-border/50 bg-background/60 p-3"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                          <span className="text-[12.5px] font-semibold text-foreground">
+                            {moduleTitle(ex.module)}
+                          </span>
+                        </div>
+                        <ul className="mt-2 space-y-1.5">
+                          {ex.points.map((p, i) => (
+                            <li
+                              key={i}
+                              className="flex items-start gap-2 text-[12.5px] leading-relaxed text-foreground/85"
+                            >
+                              <Check className="mt-[3px] h-3 w-3 shrink-0 text-primary" strokeWidth={3} />
+                              <span>{p}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const CondensedModuleCard = ({
   mod,
-  materialCount,
   onOpen,
 }: {
   mod: (typeof KB_MODULES)[number];
-  materialCount: number;
   onOpen: () => void;
 }) => {
   const Icon = mod.icon;
@@ -1147,8 +1354,7 @@ interface KnowledgeModuleCardProps {
   onCancelEdit: () => void;
   onSave: () => void;
   onRetrain: () => void;
-  onUpload: (file: File) => void;
-  onRemoveMaterial: (idx: number) => void;
+  onOpenMaterial: (m: MaterialFile) => void;
 }
 
 const KnowledgeModuleCard = ({
@@ -1164,8 +1370,7 @@ const KnowledgeModuleCard = ({
   onCancelEdit,
   onSave,
   onRetrain,
-  onUpload,
-  onRemoveMaterial,
+  onOpenMaterial,
 }: KnowledgeModuleCardProps) => {
   const Icon = mod.icon;
   const style = masteryStyle(mod.mastery);
@@ -1242,58 +1447,39 @@ const KnowledgeModuleCard = ({
         })}
       </div>
 
-      {/* Materials */}
+      {/* Source materials (read-only — managed globally in 训练资料库) */}
       <div className="relative mt-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-[12px] font-semibold text-foreground">已上传资料</span>
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-              {materials.length}
-            </span>
-          </div>
-          <label className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">
-            <FileUp className="h-3 w-3" />
-            上传
-            <input
-              type="file"
-              className="hidden"
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) onUpload(file);
-                e.target.value = "";
-              }}
-            />
-          </label>
+        <div className="flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <span className="text-[12px] font-semibold text-foreground">来源训练资料</span>
+          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {materials.length}
+          </span>
         </div>
         {materials.length > 0 ? (
           <ul className="mt-2 space-y-1.5">
-            {materials.map((m, i) => (
-              <li
-                key={`${m.name}-${i}`}
-                className="group/file flex items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5"
-              >
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <FileText className="h-3 w-3" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
-                  <div className="text-[10.5px] text-muted-foreground">{m.size} · {m.uploadedAt}</div>
-                </div>
+            {materials.map((m) => (
+              <li key={m.id}>
                 <button
-                  onClick={() => onRemoveMaterial(i)}
-                  className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
-                  aria-label="删除"
+                  type="button"
+                  onClick={() => onOpenMaterial(m)}
+                  className="flex w-full items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5 text-left transition-all hover:border-primary/30 hover:bg-primary/[0.03]"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <FileText className="h-3 w-3" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
+                    <div className="truncate text-[10.5px] text-muted-foreground">{m.summary}</div>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60" />
                 </button>
               </li>
             ))}
           </ul>
         ) : (
           <div className="mt-2 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-3 text-center text-[11.5px] text-muted-foreground">
-            暂无资料,上传后 AI 将自动学习并提升掌握度
+            该模块暂无来源资料，请在底部「训练资料库」上传
           </div>
         )}
       </div>
