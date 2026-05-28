@@ -1012,6 +1012,57 @@ const ModuleHeader = ({
 
 export default AIProfileDetail;
 
+const CondensedModuleCard = ({
+  mod,
+  materialCount,
+  onOpen,
+}: {
+  mod: (typeof KB_MODULES)[number];
+  materialCount: number;
+  onOpen: () => void;
+}) => {
+  const Icon = mod.icon;
+  const style = masteryStyle(mod.mastery);
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md"
+    >
+      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+      <header className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon className="h-4.5 w-4.5" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
+          </div>
+        </div>
+        <span className={cn("shrink-0 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap", style.cls)}>
+          {style.label} · {mod.mastery}%
+        </span>
+      </header>
+
+      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      </div>
+
+      <div className="relative mt-4 flex items-center justify-between border-t border-border/40 pt-3">
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+          <FileText className="h-3.5 w-3.5" />
+          已上传 {materialCount} 份资料
+        </span>
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
+          查看详情
+          <ChevronRight className="h-3.5 w-3.5" />
+        </span>
+      </div>
+    </button>
+  );
+};
+
 interface KnowledgeModuleCardProps {
   mod: (typeof KB_MODULES)[number];
   company: CompanyForm;
