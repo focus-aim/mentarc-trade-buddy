@@ -45,22 +45,24 @@ import businessAvatar from "@/assets/expert-business.jpg";
 import trainingAvatar from "@/assets/expert-training.jpg";
 
 interface CompanyForm {
-  // 企业知识
+  // 公司实力
   companyName: string;
-  mainProducts: string;
-  businessFocus: string;
   website: string;
-  targetMarket: string;
+  companyProfile: string;
   capacityScale: string;
   trustEndorsement: string;
-  companyProfile: string;
-  // 产品知识
+  // 产品服务
+  mainProducts: string;
   productSelling: string;
   moqLeadtime: string;
-  // 业务规则（保留以兼容其他模块引用）
+  // 报价策略
   sampleRule: string;
   quoteRule: string;
   paymentRule: string;
+  // 市场情报
+  targetMarket: string;
+  competitorIntel: string;
+  marketTrend: string;
 }
 
 interface PreferenceItem {
@@ -91,18 +93,19 @@ const experts = [
 
 const initialCompanyForm: CompanyForm = {
   companyName: "宁波恒杯进出口有限公司",
-  mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
-  businessFocus: "高客单 DTC 品牌、定制 Logo、长周期复购订单",
   website: "https://www.example-trade.com",
-  targetMarket: "欧洲、北美、澳洲；DTC 品牌、垂直进口商",
+  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
   capacityScale: "自有工厂 12,000㎡，注塑+焊接+喷涂全链；月产能 50 万 pcs，员工 280 人",
   trustEndorsement: "BSCI / SEDEX 工厂审核；FDA、LFGB、CE 认证；服务 Stanley、Contigo 等品牌",
-  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
+  mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
   productSelling: "12h 长效保温、316 食品级内胆、防漏静音盖、可定制 Logo",
   moqLeadtime: "标准款 MOQ 1,000 pcs，交期 25 天；定制款 MOQ 3,000 pcs，交期 35–45 天",
   sampleRule: "免费样品 1–2 pcs，运费到付；定制样收 80–150 USD，可在大货中冲抵",
   quoteRule: "默认 FOB 宁波；MOQ 1,000 pcs；标准 / 定制 / 品牌三档报价",
   paymentRule: "T/T 30% 定金 + 70% 见提单副本；老客户支持 OA 30 天",
+  targetMarket: "欧洲、北美、澳洲；DTC 品牌、垂直进口商",
+  competitorIntel: "主要对标 Stanley、Contigo、YETI；价格带集中在 USD 12-28 FOB 区间",
+  marketTrend: "户外露营与通勤场景持续增长；环保材质与定制礼品需求上升明显",
 };
 
 const initialPreferences: PreferenceItem[] = [
