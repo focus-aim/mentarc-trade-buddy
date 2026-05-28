@@ -362,6 +362,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [retrainProgress, setRetrainProgress] = useState(0);
   const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
+  const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
   const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
@@ -478,7 +479,9 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
         {/* Module 1: 企业知识库 */}
         {activeTab === "company" && (
           <section className="mt-6 opacity-0 animate-fade-up" style={{ animationDelay: "220ms" }}>
-            <ModuleHeader
+            {detailModule === null ? (
+              <>
+                <ModuleHeader
               icon={BookOpen}
               title="企业知识库"
               sub="围绕公司实力、产品服务、报价策略、市场情报四大模块沉淀，AI 持续识别掌握程度"
@@ -492,25 +495,114 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {KB_MODULES.map((mod) => (
-                <KnowledgeModuleCard
+                <CondensedModuleCard
                   key={mod.key}
                   mod={mod}
-                  company={company}
-                  draft={draft}
-                  setDraft={setDraft}
-                  editing={editingModule === mod.key}
-                  retraining={retrainingModule === mod.key}
-                  retrainProgress={retrainProgress}
-                  materials={materials[mod.key]}
-                  onStartEdit={() => startEditModule(mod.key)}
-                  onCancelEdit={cancelEditModule}
-                  onSave={() => saveModule(mod.key)}
-                  onRetrain={() => triggerRetrain(mod.key)}
-                  onUpload={(file) => handleUpload(mod.key, file)}
-                  onRemoveMaterial={(idx) => handleRemoveMaterial(mod.key, idx)}
+                  materialCount={materials[mod.key].length}
+                  onOpen={() => setDetailModule(mod.key)}
                 />
               ))}
             </div>
+
+                {/* Unified materials list */}
+                <div className="mt-8 rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm backdrop-blur-sm">
+                  <header className="flex items-center justify-between gap-3 border-b border-border/40 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <FileText className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h3 className="text-[14px] font-bold text-foreground">已上传资料</h3>
+                        <p className="mt-0.5 text-[11.5px] text-muted-foreground">
+                          共 {Object.values(materials).reduce((s, arr) => s + arr.length, 0)} 份，按模块归类
+                        </p>
+                      </div>
+                    </div>
+                  </header>
+                  {Object.values(materials).reduce((s, arr) => s + arr.length, 0) === 0 ? (
+                    <div className="mt-4 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-6 text-center text-[12px] text-muted-foreground">
+                      暂无资料，进入任一模块上传后 AI 将自动学习
+                    </div>
+                  ) : (
+                    <ul className="mt-3 divide-y divide-border/30">
+                      {KB_MODULES.flatMap((mod) =>
+                        materials[mod.key].map((m, i) => ({ mod, file: m, idx: i }))
+                      ).map(({ mod, file, idx }) => (
+                        <li
+                          key={`${mod.key}-${file.name}-${idx}`}
+                          className="group/file flex items-center gap-3 py-2.5"
+                        >
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <FileText className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-[12.5px] font-medium text-foreground">
+                              {file.name}
+                            </div>
+                            <div className="mt-0.5 flex items-center gap-2 text-[10.5px] text-muted-foreground">
+                              <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 font-medium">
+                                {mod.title}
+                              </span>
+                              <span>{file.size}</span>
+                              <span>· {file.uploadedAt}</span>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setDetailModule(mod.key)}
+                            className="text-[11px] font-semibold text-primary opacity-0 transition-opacity group-hover/file:opacity-100"
+                          >
+                            管理
+                          </button>
+                          <button
+                            onClick={() => handleRemoveMaterial(mod.key, idx)}
+                            className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
+                            aria-label="删除"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </>
+            ) : (
+              (() => {
+                const mod = KB_MODULES.find((m) => m.key === detailModule)!;
+                return (
+                  <>
+                    <button
+                      onClick={() => {
+                        setDetailModule(null);
+                        cancelEditModule();
+                      }}
+                      className="inline-flex items-center gap-1 text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                      返回企业知识库
+                    </button>
+                    <div className="mt-4">
+                      <KnowledgeModuleCard
+                        mod={mod}
+                        company={company}
+                        draft={draft}
+                        setDraft={setDraft}
+                        editing={editingModule === mod.key}
+                        retraining={retrainingModule === mod.key}
+                        retrainProgress={retrainProgress}
+                        materials={materials[mod.key]}
+                        onStartEdit={() => startEditModule(mod.key)}
+                        onCancelEdit={cancelEditModule}
+                        onSave={() => saveModule(mod.key)}
+                        onRetrain={() => triggerRetrain(mod.key)}
+                        onUpload={(file) => handleUpload(mod.key, file)}
+                        onRemoveMaterial={(idx) => handleRemoveMaterial(mod.key, idx)}
+                      />
+                    </div>
+                  </>
+                );
+              })()
+            )}
           </section>
         )}
 
@@ -919,6 +1011,57 @@ const ModuleHeader = ({
 );
 
 export default AIProfileDetail;
+
+const CondensedModuleCard = ({
+  mod,
+  materialCount,
+  onOpen,
+}: {
+  mod: (typeof KB_MODULES)[number];
+  materialCount: number;
+  onOpen: () => void;
+}) => {
+  const Icon = mod.icon;
+  const style = masteryStyle(mod.mastery);
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md"
+    >
+      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+      <header className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon className="h-4.5 w-4.5" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
+          </div>
+        </div>
+        <span className={cn("shrink-0 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap", style.cls)}>
+          {style.label} · {mod.mastery}%
+        </span>
+      </header>
+
+      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      </div>
+
+      <div className="relative mt-4 flex items-center justify-between border-t border-border/40 pt-3">
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+          <FileText className="h-3.5 w-3.5" />
+          已上传 {materialCount} 份资料
+        </span>
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
+          查看详情
+          <ChevronRight className="h-3.5 w-3.5" />
+        </span>
+      </div>
+    </button>
+  );
+};
 
 interface KnowledgeModuleCardProps {
   mod: (typeof KB_MODULES)[number];
