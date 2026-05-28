@@ -1061,17 +1061,18 @@ const CondensedModuleCard = ({
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col rounded-2xl border border-border/70 bg-card/90 p-6 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_12px_32px_-16px_rgba(0,97,255,0.16)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/95 via-card/90 to-primary/[0.025] p-6 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_16px_40px_-20px_rgba(0,97,255,0.22)]"
     >
-      {/* Top meta row — small, subdued: icon + desc + mastery */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
-            <Icon className="h-3.5 w-3.5" strokeWidth={2} />
-          </div>
-          <span className="truncate text-[11.5px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
-            {mod.desc}
-          </span>
+      {/* Soft ambient accent */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-primary/[0.06] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.10]"
+      />
+
+      {/* Row 1: icon (left) + mastery dots (right) */}
+      <div className="relative flex items-center justify-between gap-3">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10 transition-all group-hover:from-primary/20 group-hover:to-primary/8">
+          <Icon className="h-4 w-4" strokeWidth={2} />
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <span className="text-[11px] font-medium text-muted-foreground">{masteryLabel}</span>
@@ -1081,7 +1082,7 @@ const CondensedModuleCard = ({
                 key={i}
                 className={cn(
                   "h-1.5 w-1.5 rounded-full transition-colors",
-                  i < filledDots ? "bg-primary" : "bg-muted-foreground/20",
+                  i < filledDots ? "bg-primary" : "bg-border",
                 )}
               />
             ))}
@@ -1089,26 +1090,31 @@ const CondensedModuleCard = ({
         </div>
       </div>
 
-      {/* Primary: module title */}
-      <h3 className="mt-3 text-[20px] font-bold tracking-tight text-foreground leading-tight">
+      {/* Row 2: title (primary) */}
+      <h3 className="relative mt-4 text-[20px] font-bold tracking-tight text-foreground leading-tight">
         {mod.title}
       </h3>
 
-      {/* Secondary: extracted insights — visual center */}
-      <ul className="mt-4 space-y-2.5">
+      {/* Row 3: subtitle (secondary, directly under title) */}
+      <p className="relative mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">
+        {mod.desc}
+      </p>
+
+      {/* Insights — main content body */}
+      <ul className="relative mt-5 space-y-2.5">
         {mod.insights.map((it, i) => (
           <li
             key={i}
-            className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-foreground/90"
+            className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-foreground/85"
           >
-            <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary/70" strokeWidth={2.5} />
+            <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2.5} />
             <span className="min-w-0 flex-1">{it}</span>
           </li>
         ))}
       </ul>
 
-      {/* Footer: stat (subdued) + CTA (primary) */}
-      <div className="mt-6 flex items-center justify-between border-t border-border/50 pt-3.5">
+      {/* Footer */}
+      <div className="relative mt-6 flex items-center justify-between border-t border-border/50 pt-3.5">
         <span className="text-[11.5px] text-muted-foreground">
           已识别 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 项关键信息
         </span>
