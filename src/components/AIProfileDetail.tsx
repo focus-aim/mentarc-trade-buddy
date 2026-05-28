@@ -263,13 +263,11 @@ interface AIProfileDetailProps {
 const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
-  const [companyEditing, setCompanyEditing] = useState(false);
-  
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
-  const [docName, setDocName] = useState<string>("产品手册-2024.pdf");
-  const [draftDocName, setDraftDocName] = useState<string>(docName);
-  const [retraining, setRetraining] = useState(false);
+  const [editingModule, setEditingModule] = useState<KBModuleKey | null>(null);
+  const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
+  const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
@@ -281,36 +279,46 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
   const newPreferenceCount = preferences.filter((p) => p.isNew).length;
 
-  const startEditCompany = () => {
+  const startEditModule = (key: KBModuleKey) => {
     setDraft(company);
-    setDraftDocName(docName);
-    setCompanyEditing(true);
+    setEditingModule(key);
   };
-  const cancelEditCompany = () => setCompanyEditing(false);
+  const cancelEditModule = () => setEditingModule(null);
 
-  const saveCompany = () => {
+  const saveModule = (key: KBModuleKey) => {
     setCompany(draft);
-    setDocName(draftDocName);
-    setCompanyEditing(false);
+    setEditingModule(null);
+    triggerRetrain(key);
+  };
+
+  const triggerRetrain = (key: KBModuleKey) => {
     setRetrainProgress(0);
-    setRetraining(true);
+    setRetrainingModule(key);
     const timer = setInterval(() => {
       setRetrainProgress((p) => {
         if (p >= 100) {
           clearInterval(timer);
-          setTimeout(() => setRetraining(false), 600);
+          setTimeout(() => setRetrainingModule(null), 600);
           return 100;
         }
-        return Math.min(100, p + 8);
+        return Math.min(100, p + 10);
       });
     }, 120);
   };
 
-
-  const toggleFocus = (chip: string) => {
-    const selected = draft.businessFocus.split(/[、,,\s]+/).filter(Boolean);
-    const next = selected.includes(chip) ? selected.filter((c) => c !== chip) : [...selected, chip];
-    setDraft({ ...draft, businessFocus: next.join("、") });
+  const handleUpload = (key: KBModuleKey, file: File) => {
+    const sizeKB = file.size / 1024;
+    const sizeLabel = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB.toFixed(0)} KB`;
+    setMaterials((prev) => ({
+      ...prev,
+      [key]: [...prev[key], { name: file.name, size: sizeLabel, uploadedAt: "刚刚" }],
+    }));
+  };
+  const handleRemoveMaterial = (key: KBModuleKey, idx: number) => {
+    setMaterials((prev) => ({
+      ...prev,
+      [key]: prev[key].filter((_, i) => i !== idx),
+    }));
   };
 
   const dismissPreference = (id: string) =>
