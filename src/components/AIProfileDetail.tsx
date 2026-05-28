@@ -1073,20 +1073,25 @@ const CondensedModuleCard = ({
 }) => {
   const Icon = mod.icon;
   const style = masteryStyle(mod.mastery);
+  const insightCount = mod.insights.length;
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-5 text-left shadow-sm backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 text-left shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(15,23,42,0.08)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_4px_8px_rgba(15,23,42,0.04),0_18px_44px_-18px_rgba(0,97,255,0.18)]"
     >
-      <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/[0.06] blur-3xl" />
+      {/* Ambient glow following accent */}
+      <div aria-hidden className={cn("pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full blur-3xl transition-opacity duration-500 opacity-70 group-hover:opacity-100", mod.accent.glow)} />
+      <div aria-hidden className={cn("pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r opacity-60 group-hover:opacity-100 transition-opacity", mod.accent.bar)} />
+
+      {/* Header */}
       <header className="relative flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon className="h-4.5 w-4.5" />
+          <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-sm ring-4 ring-offset-0 transition-transform duration-300 group-hover:scale-105", mod.accent.tile, mod.accent.ring)}>
+            <Icon className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-[14.5px] font-bold text-foreground leading-snug">{mod.title}</h3>
+            <h3 className="text-[15px] font-bold text-foreground leading-snug tracking-tight">{mod.title}</h3>
             <p className="mt-0.5 text-[11.5px] text-muted-foreground line-clamp-1">{mod.desc}</p>
           </div>
         </div>
@@ -1095,14 +1100,38 @@ const CondensedModuleCard = ({
         </span>
       </header>
 
-      <div className="relative mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
-        <div className={cn("h-full transition-all", style.bar)} style={{ width: `${mod.mastery}%` }} />
+      {/* Mastery bar with subtle gradient */}
+      <div className="relative mt-3.5 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
+        <div className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-500", mod.accent.bar)} style={{ width: `${mod.mastery}%` }} />
       </div>
 
+      {/* Extracted key insights */}
+      <div className="relative mt-4">
+        <div className="mb-2 flex items-center gap-1.5">
+          <Sparkles className="h-3 w-3 text-primary/70" />
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">AI 已提炼</span>
+        </div>
+        <ul className="space-y-1.5">
+          {mod.insights.map((it, i) => (
+            <li
+              key={i}
+              className={cn(
+                "flex items-start gap-2 rounded-xl border px-2.5 py-1.5 text-[12.5px] leading-snug text-foreground/85 transition-colors",
+                mod.accent.chip,
+              )}
+            >
+              <Check className="mt-0.5 h-3 w-3 shrink-0 opacity-70" />
+              <span className="min-w-0 flex-1">{it}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Footer */}
       <div className="relative mt-4 flex items-center justify-between border-t border-border/40 pt-3">
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-          <FileText className="h-3.5 w-3.5" />
-          已上传 {materialCount} 份资料
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-muted-foreground">
+          <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
+          已识别 <span className="font-bold text-foreground">{insightCount}</span> 项关键信息
         </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
