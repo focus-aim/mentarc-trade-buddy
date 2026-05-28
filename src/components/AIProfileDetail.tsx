@@ -85,6 +85,29 @@ interface ExpertSkillBlock {
   skills: ExpertSkillEntry[];
 }
 
+type KBModuleKey = "strength" | "product" | "pricing" | "market";
+
+interface MaterialFile {
+  name: string;
+  size: string;
+  uploadedAt: string;
+}
+
+const initialMaterials: Record<KBModuleKey, MaterialFile[]> = {
+  strength: [
+    { name: "公司简介-2024.pdf", size: "2.4 MB", uploadedAt: "3 天前" },
+    { name: "工厂实景与认证.zip", size: "18.6 MB", uploadedAt: "1 周前" },
+  ],
+  product: [
+    { name: "产品手册-2024.pdf", size: "5.8 MB", uploadedAt: "今天" },
+    { name: "SKU 清单.xlsx", size: "320 KB", uploadedAt: "5 天前" },
+  ],
+  pricing: [
+    { name: "三档报价模板.xlsx", size: "180 KB", uploadedAt: "2 周前" },
+  ],
+  market: [],
+};
+
 const experts = [
   { name: "业务专家", role: "询盘到成交全流程", avatar: businessAvatar, tasks: 17, tagline: "询盘到成交全流程" },
   { name: "运营专家", role: "选品·内容·转化", avatar: operationAvatar, tasks: 13, tagline: "选品·内容·转化" },
