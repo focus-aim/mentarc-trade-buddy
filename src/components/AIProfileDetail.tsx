@@ -114,6 +114,8 @@ const KB_MODULES: {
   desc: string;
   icon: typeof Package;
   mastery: number;
+  accent: { tile: string; ring: string; glow: string; bar: string; chip: string };
+  insights: string[];
   fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
 }[] = [
   {
@@ -122,6 +124,18 @@ const KB_MODULES: {
     desc: "公司背景、产能规模与资质背书",
     icon: Building2,
     mastery: 92,
+    accent: {
+      tile: "from-primary/90 to-[hsl(212,100%,62%)]",
+      ring: "ring-primary/20",
+      glow: "bg-primary/12",
+      bar: "from-primary to-[hsl(212,100%,62%)]",
+      chip: "bg-primary/8 text-primary border-primary/15",
+    },
+    insights: [
+      "工厂规模 12,000㎡，月产能 50 万 pcs",
+      "通过 BSCI / SEDEX / FDA / CE 认证",
+      "服务 Stanley、Contigo 等头部品牌",
+    ],
     fields: [
       { label: "公司名称", key: "companyName" },
       { label: "公司官网", key: "website" },
@@ -136,6 +150,18 @@ const KB_MODULES: {
     desc: "主营产品、卖点与交付条件",
     icon: Tags,
     mastery: 76,
+    accent: {
+      tile: "from-[hsl(174,72%,45%)] to-[hsl(186,88%,52%)]",
+      ring: "ring-[hsl(174,72%,45%)]/20",
+      glow: "bg-[hsl(174,72%,45%)]/12",
+      bar: "from-[hsl(174,72%,45%)] to-[hsl(186,88%,52%)]",
+      chip: "bg-[hsl(174,72%,45%)]/8 text-[hsl(174,72%,32%)] border-[hsl(174,72%,45%)]/15",
+    },
+    insights: [
+      "12 款双层不锈钢真空保温杯 SKU",
+      "核心卖点：12h 保温 · 316 食品级 · 防漏",
+      "MOQ 1,000 pcs，交期 25 天起",
+    ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
       { label: "产品卖点", key: "productSelling", textarea: true },
@@ -148,6 +174,18 @@ const KB_MODULES: {
     desc: "样品规则、报价框架与付款条件",
     icon: Wallet,
     mastery: 48,
+    accent: {
+      tile: "from-[hsl(28,92%,55%)] to-[hsl(40,96%,58%)]",
+      ring: "ring-[hsl(28,92%,55%)]/20",
+      glow: "bg-[hsl(28,92%,55%)]/14",
+      bar: "from-[hsl(28,92%,55%)] to-[hsl(40,96%,58%)]",
+      chip: "bg-[hsl(28,92%,55%)]/10 text-[hsl(24,78%,42%)] border-[hsl(28,92%,55%)]/20",
+    },
+    insights: [
+      "免费样品 1–2 pcs，运费到付",
+      "默认 FOB 宁波，三档报价框架",
+      "T/T 30% 定金 + 70% 见提单副本",
+    ],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
       { label: "报价规则", key: "quoteRule", textarea: true },
@@ -160,6 +198,18 @@ const KB_MODULES: {
     desc: "目标市场、对标对手与趋势洞察",
     icon: TrendingUp,
     mastery: 35,
+    accent: {
+      tile: "from-[hsl(262,82%,62%)] to-[hsl(286,86%,66%)]",
+      ring: "ring-[hsl(262,82%,62%)]/20",
+      glow: "bg-[hsl(262,82%,62%)]/14",
+      bar: "from-[hsl(262,82%,62%)] to-[hsl(286,86%,66%)]",
+      chip: "bg-[hsl(262,82%,62%)]/8 text-[hsl(262,72%,52%)] border-[hsl(262,82%,62%)]/18",
+    },
+    insights: [
+      "重点市场：欧洲 / 北美 / 澳洲",
+      "对标 Stanley、Contigo、YETI",
+      "户外露营与环保定制礼品趋势上升",
+    ],
     fields: [
       { label: "目标市场", key: "targetMarket", textarea: true },
       { label: "对标对手", key: "competitorIntel", textarea: true },
