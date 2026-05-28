@@ -88,25 +88,81 @@ interface ExpertSkillBlock {
 type KBModuleKey = "strength" | "product" | "pricing" | "market";
 
 interface MaterialFile {
+  id: string;
   name: string;
   size: string;
   uploadedAt: string;
+  /** Which modules AI dispatched insights to */
+  modules: KBModuleKey[];
+  /** AI summary of what was extracted */
+  summary: string;
+  /** Detailed extractions per module */
+  extractions: { module: KBModuleKey; points: string[] }[];
 }
 
-const initialMaterials: Record<KBModuleKey, MaterialFile[]> = {
-  strength: [
-    { name: "公司简介-2024.pdf", size: "2.4 MB", uploadedAt: "3 天前" },
-    { name: "工厂实景与认证.zip", size: "18.6 MB", uploadedAt: "1 周前" },
-  ],
-  product: [
-    { name: "产品手册-2024.pdf", size: "5.8 MB", uploadedAt: "今天" },
-    { name: "SKU 清单.xlsx", size: "320 KB", uploadedAt: "5 天前" },
-  ],
-  pricing: [
-    { name: "三档报价模板.xlsx", size: "180 KB", uploadedAt: "2 周前" },
-  ],
-  market: [],
-};
+const initialMaterials: MaterialFile[] = [
+  {
+    id: "m1",
+    name: "公司简介-2024.pdf",
+    size: "2.4 MB",
+    uploadedAt: "3 天前",
+    modules: ["strength", "product"],
+    summary: "公司发展历程、组织架构与主营品类介绍。",
+    extractions: [
+      { module: "strength", points: ["成立于 2008 年，员工 280 人", "服务全球 60+ 国家客户"] },
+      { module: "product", points: ["主营双层不锈钢真空保温杯"] },
+    ],
+  },
+  {
+    id: "m2",
+    name: "工厂实景与认证.zip",
+    size: "18.6 MB",
+    uploadedAt: "1 周前",
+    modules: ["strength"],
+    summary: "工厂车间实拍、产线说明及第三方认证报告。",
+    extractions: [
+      {
+        module: "strength",
+        points: ["自有工厂 12,000㎡，月产能 50 万 pcs", "通过 BSCI / SEDEX / FDA / CE 认证"],
+      },
+    ],
+  },
+  {
+    id: "m3",
+    name: "产品手册-2024.pdf",
+    size: "5.8 MB",
+    uploadedAt: "今天",
+    modules: ["product", "pricing"],
+    summary: "12 款 SKU 产品参数、卖点及标准报价。",
+    extractions: [
+      { module: "product", points: ["12 款 SKU，覆盖运动 / 商务 / 儿童系列", "核心卖点：12h 保温 · 316 食品级 · 防漏"] },
+      { module: "pricing", points: ["FOB 宁波 USD 4.8–5.6 / pc"] },
+    ],
+  },
+  {
+    id: "m4",
+    name: "SKU 清单.xlsx",
+    size: "320 KB",
+    uploadedAt: "5 天前",
+    modules: ["product"],
+    summary: "全 SKU 编码、规格、包装与海关编码清单。",
+    extractions: [{ module: "product", points: ["MOQ 1,000 pcs，交期 25 天起"] }],
+  },
+  {
+    id: "m5",
+    name: "三档报价模板.xlsx",
+    size: "180 KB",
+    uploadedAt: "2 周前",
+    modules: ["pricing"],
+    summary: "标准 / 定制 / 品牌三档报价框架与付款规则。",
+    extractions: [
+      {
+        module: "pricing",
+        points: ["默认 FOB 宁波，三档报价框架", "T/T 30% 定金 + 70% 见提单副本"],
+      },
+    ],
+  },
+];
 
 const KB_MODULES: {
   key: KBModuleKey;
