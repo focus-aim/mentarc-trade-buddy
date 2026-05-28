@@ -1153,8 +1153,7 @@ interface KnowledgeModuleCardProps {
   onCancelEdit: () => void;
   onSave: () => void;
   onRetrain: () => void;
-  onUpload: (file: File) => void;
-  onRemoveMaterial: (idx: number) => void;
+  onOpenMaterial: (m: MaterialFile) => void;
 }
 
 const KnowledgeModuleCard = ({
@@ -1170,8 +1169,7 @@ const KnowledgeModuleCard = ({
   onCancelEdit,
   onSave,
   onRetrain,
-  onUpload,
-  onRemoveMaterial,
+  onOpenMaterial,
 }: KnowledgeModuleCardProps) => {
   const Icon = mod.icon;
   const style = masteryStyle(mod.mastery);
