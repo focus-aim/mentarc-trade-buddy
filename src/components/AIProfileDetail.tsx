@@ -587,72 +587,17 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               ))}
             </div>
 
-                {/* Unified materials list */}
-                <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 shadow-sm backdrop-blur-sm">
-                  <div aria-hidden className="pointer-events-none absolute -left-16 -bottom-16 h-40 w-40 rounded-full bg-primary/[0.05] blur-3xl" />
-                  <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
-                        <FileText className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3 className="text-[14.5px] font-bold text-foreground tracking-tight">训练资料库</h3>
-                        <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                          共 <span className="font-semibold text-foreground">{Object.values(materials).reduce((s, arr) => s + arr.length, 0)}</span> 份资料，AI 持续从中提炼关键信息
-                        </p>
-                      </div>
-                    </div>
-                  </header>
-                  {Object.values(materials).reduce((s, arr) => s + arr.length, 0) === 0 ? (
-                    <div className="mt-4 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-6 text-center text-[12px] text-muted-foreground">
-                      暂无资料，进入任一模块上传后 AI 将自动学习
-                    </div>
-                  ) : (
-                    <ul className="mt-3 divide-y divide-border/30">
-                      {KB_MODULES.flatMap((mod) =>
-                        materials[mod.key].map((m, i) => ({ mod, file: m, idx: i }))
-                      ).map(({ mod, file, idx }) => (
-                        <li
-                          key={`${mod.key}-${file.name}-${idx}`}
-                          className="group/file flex items-center gap-3 py-2.5"
-                        >
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <FileText className="h-3.5 w-3.5" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="truncate text-[12.5px] font-medium text-foreground">
-                              {file.name}
-                            </div>
-                            <div className="mt-0.5 flex items-center gap-2 text-[10.5px] text-muted-foreground">
-                              <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 font-medium">
-                                {mod.title}
-                              </span>
-                              <span>{file.size}</span>
-                              <span>· {file.uploadedAt}</span>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => setDetailModule(mod.key)}
-                            className="text-[11px] font-semibold text-primary opacity-0 transition-opacity group-hover/file:opacity-100"
-                          >
-                            管理
-                          </button>
-                          <button
-                            onClick={() => handleRemoveMaterial(mod.key, idx)}
-                            className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
-                            aria-label="删除"
-                          >
-                            <X className="h-3.5 w-3.5" />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                <TrainingLibrary
+                  materials={materials}
+                  onUpload={handleUpload}
+                  onRemove={handleRemoveMaterial}
+                  onOpen={(m) => setActiveMaterial(m)}
+                />
               </>
             ) : (
               (() => {
                 const mod = KB_MODULES.find((m) => m.key === detailModule)!;
+                const moduleMaterials = materials.filter((m) => m.modules.includes(mod.key));
                 return (
                   <>
                     <button
@@ -674,13 +619,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                         editing={editingModule === mod.key}
                         retraining={retrainingModule === mod.key}
                         retrainProgress={retrainProgress}
-                        materials={materials[mod.key]}
+                        materials={moduleMaterials}
                         onStartEdit={() => startEditModule(mod.key)}
                         onCancelEdit={cancelEditModule}
                         onSave={() => saveModule(mod.key)}
                         onRetrain={() => triggerRetrain(mod.key)}
-                        onUpload={(file) => handleUpload(mod.key, file)}
-                        onRemoveMaterial={(idx) => handleRemoveMaterial(mod.key, idx)}
+                        onOpenMaterial={(m) => setActiveMaterial(m)}
                       />
                     </div>
                   </>
