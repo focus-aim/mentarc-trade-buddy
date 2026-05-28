@@ -362,6 +362,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [retrainProgress, setRetrainProgress] = useState(0);
   const [materials, setMaterials] = useState<Record<KBModuleKey, MaterialFile[]>>(initialMaterials);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
+  const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
   const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
