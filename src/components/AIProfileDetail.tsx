@@ -1061,64 +1061,71 @@ const CondensedModuleCard = ({
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/95 via-card/90 to-primary/[0.025] p-6 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_16px_40px_-20px_rgba(0,97,255,0.22)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-white via-card/95 to-primary/[0.04] p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_18px_44px_-22px_rgba(0,97,255,0.28)]"
+      title={`AI 训练进度：${masteryLabel}`}
     >
-      {/* Soft ambient accent */}
+      {/* Ambient accent */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-20 -top-20 h-44 w-44 rounded-full bg-primary/[0.06] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.10]"
+        className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-primary/[0.08] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.12]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-20 -bottom-24 h-44 w-44 rounded-full bg-secondary/[0.06] blur-3xl"
       />
 
-      {/* Row 1: icon (left) + mastery dots (right) */}
-      <div className="relative flex items-center justify-between gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10 transition-all group-hover:from-primary/20 group-hover:to-primary/8">
-          <Icon className="h-4 w-4" strokeWidth={2} />
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="text-[11px] font-medium text-muted-foreground">{masteryLabel}</span>
-          <div className="flex items-center gap-1">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <span
-                key={i}
-                className={cn(
-                  "h-1.5 w-1.5 rounded-full transition-colors",
-                  i < filledDots ? "bg-primary" : "bg-border",
-                )}
-              />
-            ))}
+      {/* Header: icon + title/subtitle (left), mastery dots (right, subdued) */}
+      <header className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10 transition-all group-hover:from-primary/20 group-hover:to-primary/8">
+            <Icon className="h-4 w-4" strokeWidth={2} />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-[17px] font-bold tracking-tight text-foreground leading-tight">
+              {mod.title}
+            </h3>
+            <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
+              {mod.desc}
+            </p>
           </div>
         </div>
-      </div>
 
-      {/* Row 2: title (primary) */}
-      <h3 className="relative mt-4 text-[20px] font-bold tracking-tight text-foreground leading-tight">
-        {mod.title}
-      </h3>
-
-      {/* Row 3: subtitle (secondary, directly under title) */}
-      <p className="relative mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">
-        {mod.desc}
-      </p>
+        {/* Mastery dots — discrete side indicator */}
+        <div
+          className="flex shrink-0 items-center gap-1 pt-1.5"
+          aria-label={`训练${masteryLabel}`}
+        >
+          {Array.from({ length: 4 }).map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "h-1.5 w-1.5 rounded-full transition-colors",
+                i < filledDots ? "bg-primary" : "bg-border",
+              )}
+            />
+          ))}
+        </div>
+      </header>
 
       {/* Insights — main content body */}
-      <ul className="relative mt-5 space-y-2.5">
+      <ul className="relative mt-4 space-y-2">
         {mod.insights.map((it, i) => (
           <li
             key={i}
-            className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-foreground/85"
+            className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/85"
           >
-            <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2.5} />
+            <Check className="mt-[3px] h-3 w-3 shrink-0 text-primary" strokeWidth={3} />
             <span className="min-w-0 flex-1">{it}</span>
           </li>
         ))}
       </ul>
 
       {/* Footer */}
-      <div className="relative mt-6 flex items-center justify-between border-t border-border/50 pt-3.5">
+      <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
         <span className="text-[11.5px] text-muted-foreground">
           已识别 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 项关键信息
         </span>
-        <span className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-primary transition-all group-hover:gap-1.5">
+        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
           <ChevronRight className="h-3.5 w-3.5" />
         </span>
