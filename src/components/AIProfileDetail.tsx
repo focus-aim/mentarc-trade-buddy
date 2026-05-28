@@ -1246,58 +1246,39 @@ const KnowledgeModuleCard = ({
         })}
       </div>
 
-      {/* Materials */}
+      {/* Source materials (read-only — managed globally in 训练资料库) */}
       <div className="relative mt-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-[12px] font-semibold text-foreground">已上传资料</span>
-            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-              {materials.length}
-            </span>
-          </div>
-          <label className="inline-flex cursor-pointer items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-1 text-[11px] font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">
-            <FileUp className="h-3 w-3" />
-            上传
-            <input
-              type="file"
-              className="hidden"
-              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.zip"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) onUpload(file);
-                e.target.value = "";
-              }}
-            />
-          </label>
+        <div className="flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <span className="text-[12px] font-semibold text-foreground">来源训练资料</span>
+          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {materials.length}
+          </span>
         </div>
         {materials.length > 0 ? (
           <ul className="mt-2 space-y-1.5">
-            {materials.map((m, i) => (
-              <li
-                key={`${m.name}-${i}`}
-                className="group/file flex items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5"
-              >
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <FileText className="h-3 w-3" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
-                  <div className="text-[10.5px] text-muted-foreground">{m.size} · {m.uploadedAt}</div>
-                </div>
+            {materials.map((m) => (
+              <li key={m.id}>
                 <button
-                  onClick={() => onRemoveMaterial(i)}
-                  className="opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
-                  aria-label="删除"
+                  type="button"
+                  onClick={() => onOpenMaterial(m)}
+                  className="flex w-full items-center gap-2 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1.5 text-left transition-all hover:border-primary/30 hover:bg-primary/[0.03]"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+                    <FileText className="h-3 w-3" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[12px] font-medium text-foreground">{m.name}</div>
+                    <div className="truncate text-[10.5px] text-muted-foreground">{m.summary}</div>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60" />
                 </button>
               </li>
             ))}
           </ul>
         ) : (
           <div className="mt-2 rounded-lg border border-dashed border-border/60 bg-background/30 px-3 py-3 text-center text-[11.5px] text-muted-foreground">
-            暂无资料,上传后 AI 将自动学习并提升掌握度
+            该模块暂无来源资料，请在底部「训练资料库」上传
           </div>
         )}
       </div>
