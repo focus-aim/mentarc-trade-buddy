@@ -1245,11 +1245,9 @@ const MaterialDetailDialog = ({
 
 const CondensedModuleCard = ({
   mod,
-  materialCount,
   onOpen,
 }: {
   mod: (typeof KB_MODULES)[number];
-  materialCount: number;
   onOpen: () => void;
 }) => {
   const Icon = mod.icon;
