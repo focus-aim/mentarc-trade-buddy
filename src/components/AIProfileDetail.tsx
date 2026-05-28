@@ -1045,19 +1045,17 @@ const CondensedModuleCard = ({
 }) => {
   const Icon = mod.icon;
   const insightCount = mod.insights.length;
-  const masteryTone =
-    mod.mastery >= 80
-      ? { label: "掌握度 高", text: "text-foreground" }
-      : mod.mastery >= 55
-        ? { label: "掌握度 中", text: "text-foreground" }
-        : { label: "待补充", text: "text-muted-foreground" };
-
-  // Circular progress ring
-  const size = 40;
-  const stroke = 3;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  const dash = (mod.mastery / 100) * c;
+  // Map mastery → 1–4 dots + label
+  const filledDots =
+    mod.mastery >= 80 ? 4 : mod.mastery >= 60 ? 3 : mod.mastery >= 40 ? 2 : 1;
+  const masteryLabel =
+    filledDots === 4
+      ? "训练完善"
+      : filledDots === 3
+        ? "训练良好"
+        : filledDots === 2
+          ? "初步成型"
+          : "尚需补充";
 
   return (
     <button
@@ -1065,7 +1063,7 @@ const CondensedModuleCard = ({
       onClick={onOpen}
       className="group relative flex flex-col rounded-2xl border border-border/70 bg-card/90 p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_12px_32px_-16px_rgba(0,97,255,0.16)]"
     >
-      {/* Header: icon + title + circular mastery ring */}
+      {/* Header: icon + title + dot-based mastery indicator */}
       <header className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-primary transition-colors group-hover:bg-primary/12">
@@ -1077,42 +1075,25 @@ const CondensedModuleCard = ({
           </div>
         </div>
 
-        {/* Circular mastery ring */}
-        <div className="relative shrink-0" style={{ width: size, height: size }}>
-          <svg width={size} height={size} className="-rotate-90">
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={r}
-              fill="none"
-              stroke="hsl(var(--muted))"
-              strokeWidth={stroke}
-            />
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={r}
-              fill="none"
-              stroke="hsl(var(--primary))"
-              strokeWidth={stroke}
-              strokeLinecap="round"
-              strokeDasharray={`${dash} ${c}`}
-              className="transition-[stroke-dasharray] duration-700"
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[10.5px] font-semibold tabular-nums text-foreground">{mod.mastery}</span>
+        {/* Dot-based mastery indicator */}
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          <div className="flex items-center gap-1">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "h-1.5 w-1.5 rounded-full transition-colors",
+                  i < filledDots ? "bg-primary" : "bg-muted-foreground/20",
+                )}
+              />
+            ))}
           </div>
+          <span className="text-[11px] font-medium text-muted-foreground">{masteryLabel}</span>
         </div>
       </header>
 
-      {/* Mastery label */}
-      <div className={cn("mt-3 text-[11px] font-medium tracking-wide", masteryTone.text)}>
-        {masteryTone.label}
-      </div>
-
       {/* Extracted key insights */}
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-4 space-y-2">
         {mod.insights.map((it, i) => (
           <li
             key={i}
