@@ -1061,22 +1061,20 @@ const CondensedModuleCard = ({
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col rounded-2xl border border-border/70 bg-card/90 p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_12px_32px_-16px_rgba(0,97,255,0.16)]"
+      className="group relative flex flex-col rounded-2xl border border-border/70 bg-card/90 p-6 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_12px_32px_-16px_rgba(0,97,255,0.16)]"
     >
-      {/* Header: icon + title + dot-based mastery indicator */}
-      <header className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-3 min-w-0">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-primary transition-colors group-hover:bg-primary/12">
-            <Icon className="h-[18px] w-[18px]" strokeWidth={1.75} />
+      {/* Top meta row — small, subdued: icon + desc + mastery */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary">
+            <Icon className="h-3.5 w-3.5" strokeWidth={2} />
           </div>
-          <div className="min-w-0">
-            <h3 className="text-[15px] font-semibold text-foreground leading-snug tracking-tight">{mod.title}</h3>
-            <p className="mt-1 text-[12px] text-muted-foreground line-clamp-1">{mod.desc}</p>
-          </div>
+          <span className="truncate text-[11.5px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+            {mod.desc}
+          </span>
         </div>
-
-        {/* Dot-based mastery indicator */}
-        <div className="flex shrink-0 flex-col items-end gap-1.5">
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="text-[11px] font-medium text-muted-foreground">{masteryLabel}</span>
           <div className="flex items-center gap-1">
             {Array.from({ length: 4 }).map((_, i) => (
               <span
@@ -1088,29 +1086,33 @@ const CondensedModuleCard = ({
               />
             ))}
           </div>
-          <span className="text-[11px] font-medium text-muted-foreground">{masteryLabel}</span>
         </div>
-      </header>
+      </div>
 
-      {/* Extracted key insights */}
-      <ul className="mt-4 space-y-2">
+      {/* Primary: module title */}
+      <h3 className="mt-3 text-[20px] font-bold tracking-tight text-foreground leading-tight">
+        {mod.title}
+      </h3>
+
+      {/* Secondary: extracted insights — visual center */}
+      <ul className="mt-4 space-y-2.5">
         {mod.insights.map((it, i) => (
           <li
             key={i}
-            className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/80"
+            className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-foreground/90"
           >
-            <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-primary/60" />
+            <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary/70" strokeWidth={2.5} />
             <span className="min-w-0 flex-1">{it}</span>
           </li>
         ))}
       </ul>
 
-      {/* Footer */}
-      <div className="mt-5 flex items-center justify-between border-t border-border/50 pt-3">
+      {/* Footer: stat (subdued) + CTA (primary) */}
+      <div className="mt-6 flex items-center justify-between border-t border-border/50 pt-3.5">
         <span className="text-[11.5px] text-muted-foreground">
           已识别 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 项关键信息
         </span>
-        <span className="inline-flex items-center gap-1 text-[12px] font-medium text-primary transition-all group-hover:gap-1.5">
+        <span className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
           <ChevronRight className="h-3.5 w-3.5" />
         </span>
