@@ -516,7 +516,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     }
     if (m.type === "followup-strategy-result") {
       return {
-        node: <FollowupStrategyResult />,
+        node: <FollowupStrategyResult onGenerateQuote={() => handleSend("买家 GreenLife 采购 5kW hybrid inverter with UL1741 要求 Need 300 units first, price target FOB <$380/unit，生成个性化报价单")} />,
         label: "跟进策略 · 节奏 / 话术 / 动作",
       };
     }

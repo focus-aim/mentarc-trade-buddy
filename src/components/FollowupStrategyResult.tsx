@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Compass, MessageSquareText, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Compass, MessageSquareText, Copy, Check, ChevronDown, ChevronUp, FileText } from "lucide-react";
 
 const ScriptCard = ({
   type,
@@ -64,7 +64,11 @@ const ScriptCard = ({
   );
 };
 
-const FollowupStrategyResult = () => {
+interface FollowupStrategyResultProps {
+  onGenerateQuote?: () => void;
+}
+
+const FollowupStrategyResult = ({ onGenerateQuote }: FollowupStrategyResultProps = {}) => {
   const scriptA = `Dear John,
 
 Thanks again for the inquiry on the 5kW UL1741 hybrid inverter. Just checking in to see if our quote and lead-time options align with your July rollout plan.
@@ -96,6 +100,16 @@ Best,
         <div className="flex items-center gap-1.5 mb-2.5">
           <Compass className="w-3.5 h-3.5 text-primary" />
           <h3 className="font-medium text-foreground text-[12.5px]">跟进诊断</h3>
+          {onGenerateQuote && (
+            <button
+              onClick={onGenerateQuote}
+              className="ml-auto inline-flex items-center gap-1 rounded-md border border-primary/30 bg-primary/10 hover:bg-primary/15 text-primary px-2 py-1 text-[11.5px] font-medium transition-colors"
+              title="发起生成报价单任务"
+            >
+              <FileText className="w-3 h-3" />
+              生成报价单
+            </button>
+          )}
         </div>
         <div className="space-y-2 text-[12.5px] leading-[1.7]">
           <p className="text-foreground/85">
