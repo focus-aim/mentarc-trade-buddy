@@ -16,6 +16,13 @@ import {
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 
 // ---------- Shared data ----------
 
@@ -76,6 +83,7 @@ export const QuoteConfirmStep = ({
 }) => {
   const [info, setInfo] = useState<QuoteInfo>(initialInfo || DEFAULT_QUOTE_INFO);
   const [collapsed, setCollapsed] = useState(false);
+  const [kbOpen, setKbOpen] = useState(false);
   const display = done && doneInfo ? doneInfo : info;
   const incotermOptions = ["FOB", "EXW", "DDP"];
 
@@ -206,9 +214,14 @@ export const QuoteConfirmStep = ({
             </div>
             <div className="flex-1 text-[12px] text-foreground/80 truncate">
               我的公司和产品信息
-              <span className="ml-1.5 inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary">
+              <button
+                type="button"
+                onClick={() => setKbOpen(true)}
+                className="ml-1.5 inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-medium text-primary hover:bg-primary/15 transition-colors"
+              >
                 已从知识库调取
-              </span>
+                <ChevronRight className="h-3 w-3" />
+              </button>
             </div>
           </div>
         </div>
@@ -225,6 +238,7 @@ export const QuoteConfirmStep = ({
         )}
       </div>
       )}
+      <CompanyStrengthSheet open={kbOpen} onOpenChange={setKbOpen} />
     </div>
   );
 };
