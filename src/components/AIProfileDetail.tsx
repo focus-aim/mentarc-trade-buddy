@@ -1144,6 +1144,65 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                 </div>
               </DialogContent>
             </Dialog>
+
+            {/* 新增经验弹窗 */}
+            <Dialog open={addSkillOpen} onOpenChange={(o) => !o && setAddSkillOpen(false)}>
+              <DialogContent className="sm:max-w-[560px] sm:rounded-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-[15px]">新增团队经验</DialogTitle>
+                  <DialogDescription className="text-[12px]">
+                    手动添加一条团队共享经验，审核通过后将沉淀到团队共享池
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">标题</p>
+                    <Input
+                      value={addDraft.headline}
+                      onChange={(e) => setAddDraft((d) => ({ ...d, headline: e.target.value }))}
+                      placeholder="请输入经验标题"
+                      className="text-[13px]"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">描述</p>
+                    <Textarea
+                      rows={4}
+                      value={addDraft.subtitle}
+                      onChange={(e) => setAddDraft((d) => ({ ...d, subtitle: e.target.value }))}
+                      placeholder="请输入经验描述"
+                      className="text-[13px]"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">标签（用顿号或逗号分隔）</p>
+                    <Input
+                      value={addDraft.tags}
+                      onChange={(e) => setAddDraft((d) => ({ ...d, tags: e.target.value }))}
+                      placeholder="例如：询价、报价跟进、需求不清"
+                      className="text-[13px]"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">贡献人</p>
+                    <Input
+                      value={addDraft.authors}
+                      onChange={(e) => setAddDraft((d) => ({ ...d, authors: e.target.value }))}
+                      placeholder="请输入贡献人姓名，留空则默认为“我”"
+                      className="text-[13px]"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/50 pt-4">
+                  <Button variant="outline" size="sm" onClick={() => setAddSkillOpen(false)}>
+                    取消
+                  </Button>
+                  <Button size="sm" onClick={handleAddSkill}>
+                    保存
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </section>
         )}
 
