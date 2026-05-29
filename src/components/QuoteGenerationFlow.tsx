@@ -197,6 +197,20 @@ export const QuoteConfirmStep = ({
               </div>
             </div>
           </div>
+
+          {/* 我的公司和产品信息 */}
+          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+            <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+              <Building2 className="h-3.5 w-3.5 text-primary" />
+              我的公司
+            </div>
+            <div className="flex-1 text-[12px] text-foreground/80 truncate">
+              我的公司和产品信息
+              <span className="ml-1.5 inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary">
+                已从知识库调取
+              </span>
+            </div>
+          </div>
         </div>
         {!done && (
           <div className="flex justify-end pt-1">
