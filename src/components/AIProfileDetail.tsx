@@ -611,9 +611,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
         {/* Module 1: 企业知识库 */}
         {activeTab === "company" && (
           <section className="mt-6 opacity-0 animate-fade-up" style={{ animationDelay: "220ms" }}>
-            {detailModule === null ? (
-              <>
-                <ModuleHeader
+            <ModuleHeader
               icon={BookOpen}
               title="企业知识库"
               sub="围绕公司实力、产品服务、报价策略、市场情报四大模块沉淀，AI 持续识别掌握程度"
@@ -641,44 +639,24 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               ))}
             </div>
 
-              </>
-            ) : (
-              (() => {
-                const mod = KB_MODULES.find((m) => m.key === detailModule)!;
-                const moduleMaterials = materials.filter((m) => m.modules.includes(mod.key));
-                return (
-                  <>
-                    <button
-                      onClick={() => {
-                        setDetailModule(null);
-                        cancelEditModule();
-                      }}
-                      className="inline-flex items-center gap-1 text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <ChevronLeft className="h-3.5 w-3.5" />
-                      返回企业知识库
-                    </button>
-                    <div className="mt-4">
-                      <KnowledgeModuleCard
-                        mod={mod}
-                        company={company}
-                        draft={draft}
-                        setDraft={setDraft}
-                        editing={editingModule === mod.key}
-                        retraining={retrainingModule === mod.key}
-                        retrainProgress={retrainProgress}
-                        materials={moduleMaterials}
-                        onStartEdit={() => startEditModule(mod.key)}
-                        onCancelEdit={cancelEditModule}
-                        onSave={() => saveModule(mod.key)}
-                        onRetrain={() => triggerRetrain(mod.key)}
-                        onOpenMaterial={(m) => setActiveMaterial(m)}
-                      />
-                    </div>
-                  </>
-                );
-              })()
-            )}
+            {/* Module detail drawer */}
+            <ModuleDetailSheet
+              moduleKey={detailModule}
+              company={company}
+              draft={draft}
+              setDraft={setDraft}
+              editing={editingModule}
+              retraining={retrainingModule}
+              retrainProgress={retrainProgress}
+              onClose={() => {
+                setDetailModule(null);
+                cancelEditModule();
+              }}
+              onStartEdit={() => detailModule && startEditModule(detailModule)}
+              onCancelEdit={cancelEditModule}
+              onSave={() => detailModule && saveModule(detailModule)}
+              onRetrain={() => detailModule && triggerRetrain(detailModule)}
+            />
           </section>
         )}
 
