@@ -645,6 +645,7 @@ type InquiryBuyer = {
   region: string;
   stage: string;
   stageTone: "primary" | "amber" | "emerald" | "muted";
+  nextAction: { label: string; due: string };
   analyses: { title: string; date: string }[];
 };
 
@@ -657,6 +658,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "德国 慕尼黑",
     stage: "深度跟进",
     stageTone: "primary",
+    nextAction: { label: "发送整店方案 PDF + 样机寄送安排", due: "04/26 前" },
     analyses: [
       { title: "慕尼黑展会名片清洗-0326", date: "03/26" },
       { title: "德国采购意向跟进-0402", date: "04/02" },
@@ -671,6 +673,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "美国 洛杉矶",
     stage: "已建档",
     stageTone: "emerald",
+    nextAction: { label: "回收 NDA 签字版，确认 ID 联合开发排期", due: "04/15 前" },
     analyses: [
       { title: "北美市场竞对背调-0328", date: "03/28" },
       { title: "DTC 品牌私域获客拆解-0405", date: "04/05" },
@@ -685,6 +688,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "阿联酋 迪拜",
     stage: "待报价",
     stageTone: "amber",
+    nextAction: { label: "递交整店报价单 + 3 年质保承诺函", due: "本周内" },
     analyses: [{ title: "迪拜健身展线索整理-0331", date: "03/31" }],
   },
   {
@@ -695,6 +699,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "美国 德州",
     stage: "首次询盘",
     stageTone: "primary",
+    nextAction: { label: "回复首封询盘，附 UL1741 认证 + 阶梯报价", due: "明日 18:00 前" },
     analyses: [
       { title: "保温啤酒杯阶梯报价询盘分析", date: "04/22" },
       { title: "买家 TechSol US 背调", date: "04/24" },
