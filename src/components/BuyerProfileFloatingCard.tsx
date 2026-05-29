@@ -93,25 +93,22 @@ export const BuyerProfileSheetContent = ({
   updated: boolean;
   onClose: () => void;
 }) => {
-  const followUps = [
+  const analyses = [
     {
       date: "今日",
-      channel: "二次跟进",
-      summary: "结合质保政策与大客户案例化解低价竞品顾虑",
-      tone: "info" as const,
+      channel: "二次跟进策略",
+      summary: "Bergmann 二次跟进 · 化解低价竞品顾虑",
       active: updated,
     },
     {
       date: "14 天前",
-      channel: "邮件",
-      summary: "首轮报价：SKU-123，FOB $3.80 / pc，附阶梯方案",
-      tone: "success" as const,
+      channel: "报价单生成",
+      summary: "Bergmann 双层啤酒杯 · 首轮个性化报价",
     },
     {
       date: "15 天前",
-      channel: "邮件",
-      summary: "询盘解析：500ml 双层保温啤酒杯，5,000 pcs 试单",
-      tone: "success" as const,
+      channel: "询盘分析",
+      summary: "Bergmann 500ml 双层保温啤酒杯询盘解析",
     },
   ];
 
@@ -176,31 +173,14 @@ export const BuyerProfileSheetContent = ({
         </div>
       </section>
 
-      {/* Follow-up stage */}
-      <section className="px-5 py-4 space-y-3 border-b border-border">
-        <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5">
-          <Workflow className="w-3.5 h-3.5 text-primary" />
-          跟进阶段
-        </h3>
-        <div className="rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2.5">
-          <p className="text-[11px] text-muted-foreground mb-1">当前阶段</p>
-          <p className="text-[13.5px] font-semibold text-primary">{stage}</p>
-          {updated && (
-            <p className="text-[11.5px] text-muted-foreground mt-1.5 leading-relaxed">
-              已识别买家从「价格敏感」转向「交付与履约保障」诉求，进入决策摇摆期。
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Follow-up timeline */}
+      {/* Analysis records */}
       <section className="px-5 py-4">
         <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5 mb-3">
           <Clock className="w-3.5 h-3.5 text-primary" />
-          跟进记录
+          分析记录
         </h3>
         <div className="space-y-2">
-          {followUps.map((it, i) => (
+          {analyses.map((it, i) => (
             <div
               key={i}
               className={`rounded-lg border px-3 py-2.5 ${
