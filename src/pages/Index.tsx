@@ -1184,9 +1184,6 @@ const Index = () => {
                               <span className="font-semibold text-primary">下次动作 · </span>
                               <span className="text-foreground/85">{buyer.nextAction.label}</span>
                             </div>
-                            <span className="shrink-0 rounded-md bg-card/80 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              {buyer.nextAction.due}
-                            </span>
                             <button
                               onClick={() => handleDirectFollowup(buyer)}
                               className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
@@ -2271,9 +2268,6 @@ const Index = () => {
                       <span className="font-semibold text-primary">下次动作 · </span>
                       <span className="text-foreground/85">{buyer.nextAction.label}</span>
                     </div>
-                    <span className="shrink-0 rounded-md bg-card/80 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-                      {buyer.nextAction.due}
-                    </span>
                     <button
                       onClick={() => {
                         handleDirectFollowup(buyer);
