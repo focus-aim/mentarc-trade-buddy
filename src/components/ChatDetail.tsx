@@ -614,6 +614,23 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
 
 
   const sideArchive = useMemo(() => {
+    return null as never;
+  }, []);
+  // Buyer profile floating card state (业务专家 only)
+  const buyerCardState = useMemo(() => {
+    if (moduleTitle !== "业务专家") return { visible: false, updated: false, stage: "" };
+    const hasInquiryResult = messages.some((m) => m.type === "inquiry-result");
+    const hasSecondFollowup = messages.some(
+      (m) => m.type === "second-followup-prompt" || (m.role === "user" && /二次跟进|二轮跟进|再次跟进/.test(m.content))
+    );
+    return {
+      visible: hasInquiryResult,
+      updated: hasSecondFollowup,
+      stage: hasSecondFollowup ? "二次跟进 · 决策摇摆期" : "首轮报价已发出",
+    };
+  }, [messages, moduleTitle]);
+
+  const _unusedSideArchive = useMemo(() => {
     if (moduleTitle === "业务专家") {
       return { title: "买家档案", subtitle: "Bergmann Home Supplies GmbH", icon: UserRound, recordsTitle: "历史询盘记录", records: BUYER_INQUIRY_RECORDS };
     }
