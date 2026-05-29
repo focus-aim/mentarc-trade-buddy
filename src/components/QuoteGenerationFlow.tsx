@@ -436,7 +436,7 @@ export const QuoteResultCard = ({
             <div className="flex items-center justify-between">
               <span className="text-[11px] text-muted-foreground">数量 × 单价</span>
               <span className="text-[12.5px] font-medium text-foreground">
-                {info.qty} pcs × ${info.unitPrice}
+                {items[1].qty} pcs{info.qtyBasis === "moq" ? "（MOQ）" : "（采购量）"} × ${info.unitPrice}
               </span>
             </div>
             <div className="flex items-center justify-between">
