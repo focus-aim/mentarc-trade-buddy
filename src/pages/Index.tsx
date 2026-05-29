@@ -187,12 +187,6 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         prompt: "生成报价单",
         isNew: true,
       },
-      {
-        title: "买家跟进节点",
-        desc: "AI 智能分析过往买家进程，给出下一步跟进建议",
-        prompt: "",
-        isNew: true,
-      },
     ],
   },
   {
@@ -496,28 +490,6 @@ const StepPreview = ({ title }: { title: string }) => {
                 <span className="ml-auto text-[8px] text-muted-foreground">{n}</span>
               </div>
             ))}
-          </div>
-        </div>
-      );
-    case "买家跟进节点":
-      return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/8 to-secondary/15 p-3")}>
-          <div className="space-y-1.5">
-            {[
-              { tag: "高优", tone: "bg-rose-500/15 text-rose-600", w: 78 },
-              { tag: "中优", tone: "bg-amber-500/15 text-amber-600", w: 60 },
-              { tag: "常规", tone: "bg-primary/15 text-primary", w: 45 },
-            ].map((it, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-md bg-card/85 px-2 py-1 shadow-sm">
-                <span className={cn("rounded px-1 py-0.5 text-[8px] font-bold", it.tone)}>{it.tag}</span>
-                <div className="h-1.5 rounded-full bg-foreground/10" style={{ width: `${it.w}%` }} />
-                <ArrowRight className="ml-auto h-2.5 w-2.5 text-primary/70" />
-              </div>
-            ))}
-          </div>
-          <div className="absolute bottom-2 right-3 flex items-center gap-1 text-[9px] font-medium text-primary">
-            <Sparkles className="h-2.5 w-2.5" />
-            下一步建议
           </div>
         </div>
       );
@@ -2216,7 +2188,6 @@ const Index = () => {
                 {selectedTaskTab.steps.map((step) => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
-                  const isFollowup = step.title === "买家跟进节点";
                   const stepAny = step as { soon?: boolean; isNew?: boolean };
                   return (
                     <article
@@ -2226,14 +2197,12 @@ const Index = () => {
                           ? handleOpenProfile
                           : isPromptFill
                             ? () => handleUseCasePrompt(step.prompt)
-                            : isFollowup
-                              ? () => setFollowupDialogOpen(true)
-                              : undefined
+                            : undefined
                       }
                       className={cn(
                         "group relative overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-4 shadow-sm shadow-primary/3",
                         stepAny.soon && "bg-muted/40 opacity-75",
-                        (isProfileLink || isPromptFill || isFollowup) &&
+                        (isProfileLink || isPromptFill) &&
                           "cursor-pointer transition-all hover:border-primary/50 hover:shadow-md hover:shadow-primary/10",
                       )}
                     >
@@ -2254,7 +2223,7 @@ const Index = () => {
                       <div className="mt-4">
                         <StepPreview title={step.title} />
                       </div>
-                      {!stepAny.soon && !isProfileLink && !isPromptFill && !isFollowup && (
+                      {!stepAny.soon && !isProfileLink && !isPromptFill && (
                         <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center justify-center gap-2 bg-card/90 px-4 py-4 opacity-0 backdrop-blur-sm transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
                           <button
                             onClick={() => {
