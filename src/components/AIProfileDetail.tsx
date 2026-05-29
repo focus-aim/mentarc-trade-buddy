@@ -568,6 +568,13 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
     subtitle: "",
     tags: "",
   });
+  const [addSkillOpen, setAddSkillOpen] = useState(false);
+  const [addDraft, setAddDraft] = useState<{ headline: string; subtitle: string; tags: string; authors: string }>({
+    headline: "",
+    subtitle: "",
+    tags: "",
+    authors: "",
+  });
 
   const currentList: TeamSkillItem[] = expTab === "shared" ? sharedSkills : aiDiscoveries;
   const teamSkillTotalPages = Math.max(1, Math.ceil(currentList.length / TEAM_SKILLS_PER_PAGE));
