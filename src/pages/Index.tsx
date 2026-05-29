@@ -184,7 +184,7 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
       {
         title: "生成报价单",
         desc: "智能生成报价单",
-        prompt: "生成报价单",
+        prompt: "买家GreenLife 采购 5kW hybrid inverter with UL1741，要求 Need 300 units first, price target FOB <$380/unit，生成个性化报价单",
         isNew: true,
       },
     ],
