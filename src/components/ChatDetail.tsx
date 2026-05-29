@@ -20,6 +20,7 @@ import DetailImageResult from "./DetailImageResult";
 import InquiryResultMessage, { ChatQuote, InquiryFollowUpResult, BuyerBackgroundReport } from "./InquiryResultMessage";
 import MessageFeedback from "./MessageFeedback";
 import InquiryStrategyPrompt, { InquiryStrategyChoice } from "./InquiryStrategyPrompt";
+import SecondFollowupPrompt, { SecondFollowupChoice } from "./SecondFollowupPrompt";
 import KeywordGuidancePrompt, { KeywordGuidanceChoice } from "./KeywordGuidancePrompt";
 import InquiryDetailSection from "./InquiryDetailSection";
 import OperationGreeting from "./OperationGreeting";
@@ -103,12 +104,13 @@ interface ChatDetailProps {
 interface Message {
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-summary" | "quote-mindflow" | "quote-result";
+  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-summary" | "quote-mindflow" | "quote-result" | "second-followup-prompt";
   mindflowSteps?: string[];
   detailTypes?: string[];
   images?: string[];
   quote?: ChatQuote;
   strategy?: InquiryStrategyChoice;
+  secondChoice?: SecondFollowupChoice;
   keywordChoice?: KeywordGuidanceChoice;
   quoteInfo?: QuoteInfo;
   quoteTemplate?: QuoteTemplate;
@@ -317,6 +319,11 @@ const isBuyerBackgroundPrompt = (text?: string) => {
 const isFollowupStrategyPrompt = (text?: string) => {
   if (!text) return false;
   return /跟进策略|生成两版询盘回复邮件|节奏.*话术|话术.*下一步|跟进.*节奏|制定.*跟进/.test(text);
+};
+
+const isSecondFollowupPrompt = (text?: string) => {
+  if (!text) return false;
+  return /二次跟进|二轮跟进|再次跟进/.test(text);
 };
 
 const FOLLOWUP_STRATEGY_RICH_STEPS: RichStep[] = [
@@ -673,6 +680,20 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     }
   }, []);
 
+  const handleSecondFollowupConfirm = useCallback((choice: SecondFollowupChoice, label: string) => {
+    setMessages((prev) => {
+      const next = prev.map((m) =>
+        m.type === "second-followup-prompt" && !m.secondChoice ? { ...m, secondChoice: choice } : m
+      );
+      return [
+        ...next,
+        { role: "user" as const, content: `确认应对方式：${label}，请生成下一步跟进话术。`, type: "text" as const },
+        { role: "assistant" as const, content: "", type: "followup-strategy-mindflow" as const },
+      ];
+    });
+    setShowingFollowupStrategyMindFlow(true);
+  }, []);
+
   const handleBackgroundCheck = useCallback(() => {
     setMessages((prev) => [
       ...prev,
@@ -904,6 +925,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         } else if (isBuyerBackgroundPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
           setShowingBuyerBgMindFlow(true);
+        } else if (isSecondFollowupPrompt(text)) {
+          newMessages.push({ role: "assistant", content: "", type: "second-followup-prompt" });
         } else if (isFollowupStrategyPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
           setShowingFollowupStrategyMindFlow(true);
@@ -938,6 +961,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     } else if (moduleTitle === "业务专家" && isBuyerBackgroundPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
       setShowingBuyerBgMindFlow(true);
+    } else if (moduleTitle === "业务专家" && isSecondFollowupPrompt(text)) {
+      newMessages.push({ role: "assistant", content: "", type: "second-followup-prompt" });
     } else if (moduleTitle === "业务专家" && isFollowupStrategyPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
       setShowingFollowupStrategyMindFlow(true);
@@ -1080,6 +1105,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={IMAGE_MINDFLOW_STEPS} onComplete={handleImageMindFlowComplete} />
                   ) : msg.type === "inquiry-strategy-prompt" ? (
                     <InquiryStrategyPrompt onPick={handleStrategyPick} selected={msg.strategy || null} />
+                  ) : msg.type === "second-followup-prompt" ? (
+                    <SecondFollowupPrompt onConfirm={handleSecondFollowupConfirm} selected={msg.secondChoice || null} />
                   ) : msg.type === "detail-type-select" ? (
                     <DetailTypeSelector onSubmit={handleDetailTypeSubmit} />
                   ) : msg.type === "detail-mindflow" ? (
