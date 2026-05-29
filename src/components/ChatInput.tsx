@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Image, Send, X, Link, MessageSquareQuote } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Paperclip, Send, X, Link, MessageSquareQuote } from "lucide-react";
 import type { ChatQuote } from "./InquiryResultMessage";
 
 export interface ChatAttachment {
