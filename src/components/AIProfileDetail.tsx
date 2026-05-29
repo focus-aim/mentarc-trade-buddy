@@ -33,6 +33,24 @@ import {
   ChevronRight,
 } from "lucide-react";
 import {
+  MoreHorizontal,
+  Power,
+  PowerOff,
+  Trash2,
+  Pencil,
+  Brain,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -389,53 +407,90 @@ const expertExperienceGroups: {
 
 // 团队经验技巧：标题 + 副标题 + 标签 + 来自业务员
 interface TeamSkillItem {
+  id: string;
   headline: string;
   subtitle: string;
   tags: string[];
-  author: string;
+  authors: string[];
+  status: "active" | "disabled";
 }
-const teamSkillItems: TeamSkillItem[] = [
+const initialSharedSkills: TeamSkillItem[] = [
   {
+    id: "s-1",
     headline: "刚询价且需求不清时先拆应用场景再引预算区间",
     subtitle: "客户刚询价但需求不明确时，不直接报完整价格，先用应用场景拆需求并引出预算区间再推进报价。",
-    tags: ["询价", "报价跟进", "需求不清", "比价", "压价"],
-    author: "Rita",
+    tags: ["询价", "报价跟进", "需求不清", "比价"],
+    authors: ["Rita", "Jason"],
+    status: "active",
   },
   {
+    id: "s-2",
     headline: "首封回复先抛 3 个澄清问题，再给方案概览",
     subtitle: "首封回复不堆产品参数，先用 3 个高价值澄清问题锁定客户真实场景，再附上方案概览引导深聊。",
-    tags: ["首封回复", "澄清问题", "意图判断", "节奏控制"],
-    author: "Jason",
+    tags: ["首封回复", "澄清问题", "意图判断"],
+    authors: ["Jason"],
+    status: "active",
   },
   {
+    id: "s-3",
     headline: "报价用「标准 / 定制 / 品牌」三档组合替代单价",
     subtitle: "面对不确定预算的客户，用三档组合报价替代单一报价，引导客户主动选档，降低议价压力。",
-    tags: ["报价策略", "三档组合", "议价", "客单价"],
-    author: "Jason",
+    tags: ["报价策略", "三档组合", "议价"],
+    authors: ["Jason", "Cody"],
+    status: "active",
   },
   {
+    id: "s-4",
     headline: "详情页用使用场景替代技术参数堆砌",
     subtitle: "在详情页前两屏用真实使用场景图与短句替代参数列表，提升非专业买家的转化率。",
-    tags: ["详情页", "使用场景", "转化率", "首屏"],
-    author: "Cody",
+    tags: ["详情页", "使用场景", "转化率"],
+    authors: ["Cody"],
+    status: "active",
   },
   {
-    headline: "差异化卖点放首屏，认证背书收尾建立信任",
-    subtitle: "首屏直击差异化卖点，结尾集中放置认证、检测报告与合作品牌，形成「卖点 → 信任」闭环。",
-    tags: ["卖点", "首屏", "认证背书", "信任建立"],
-    author: "Cody",
-  },
-  {
+    id: "s-5",
     headline: "未回复客户 D+3 改用「样品图 + 同类案例」",
     subtitle: "对 3 天未回复的客户切换沟通角度，用样品实拍 + 同类客户成交案例，回复率可提升 2 倍。",
-    tags: ["跟进策略", "未回复", "样品", "案例触达"],
-    author: "Rita",
+    tags: ["跟进策略", "未回复", "样品"],
+    authors: ["Rita"],
+    status: "active",
+  },
+];
+
+interface AIDiscoveredItem extends TeamSkillItem {
+  confidence: number;
+  discoveredAt: string;
+}
+const initialAIDiscoveries: AIDiscoveredItem[] = [
+  {
+    id: "ai-1",
+    headline: "客户提到 \"lead time\" 时优先给排产档期而非笼统天数",
+    subtitle: "从 23 段会话中发现：当买家明确提及交期，业务员给出具体排产档期（如 W42/W45）成单率较平均水平高 38%。",
+    tags: ["交期", "排产", "成单率"],
+    authors: ["Rita", "Jason"],
+    status: "active",
+    confidence: 0.86,
+    discoveredAt: "今天 11:20",
   },
   {
-    headline: "高意向客户走「样品 → 合同 → 试单」三步锁单",
-    subtitle: "识别高意向信号后用三步流程压缩决策周期，2 周内可推进试单，避免反复议价。",
-    tags: ["高意向", "锁单", "试单", "周期压缩"],
-    author: "Jason",
+    id: "ai-2",
+    headline: "提供 3 张同行业落地图比单纯发产品图回复率高 2.1×",
+    subtitle: "AI 在跟进话术中识别出「同行业案例图集」这一隐性打法，建议沉淀为团队标准动作。",
+    tags: ["跟进话术", "案例图", "复用"],
+    authors: ["Cody"],
+    status: "active",
+    confidence: 0.79,
+    discoveredAt: "昨天 18:05",
+  },
+  {
+    id: "ai-3",
+    headline: "中东客户首次询盘附送斋月营销日历可显著提升回复",
+    subtitle: "近 30 天 4 位业务员对中东客户附带营销节奏建议后，平均回复速度从 36h 缩短到 9h。",
+    tags: ["中东", "节庆营销", "首次询盘"],
+    authors: ["Rita", "Cody", "Jason"],
+    status: "active",
+    confidence: 0.72,
+    discoveredAt: "2 天前",
   },
 ];
 const TEAM_SKILLS_PER_PAGE = 5;
@@ -490,13 +545,62 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
+  const [sharedSkills, setSharedSkills] = useState<TeamSkillItem[]>(initialSharedSkills);
+  const [aiDiscoveries, setAiDiscoveries] = useState<AIDiscoveredItem[]>(initialAIDiscoveries);
+  const [expTab, setExpTab] = useState<"shared" | "ai">("shared");
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
-  const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
-  const teamSkillPageItems = teamSkillItems.slice(
+  const [editingSkill, setEditingSkill] = useState<
+    | { kind: "shared" | "ai"; item: TeamSkillItem | AIDiscoveredItem }
+    | null
+  >(null);
+  const [editDraft, setEditDraft] = useState<{ headline: string; subtitle: string; tags: string }>({
+    headline: "",
+    subtitle: "",
+    tags: "",
+  });
+
+  const currentList: TeamSkillItem[] = expTab === "shared" ? sharedSkills : aiDiscoveries;
+  const teamSkillTotalPages = Math.max(1, Math.ceil(currentList.length / TEAM_SKILLS_PER_PAGE));
+  const teamSkillPageItems = currentList.slice(
     (teamSkillPage - 1) * TEAM_SKILLS_PER_PAGE,
     teamSkillPage * TEAM_SKILLS_PER_PAGE,
   );
+
+  const openEdit = (kind: "shared" | "ai", item: TeamSkillItem) => {
+    setEditingSkill({ kind, item });
+    setEditDraft({ headline: item.headline, subtitle: item.subtitle, tags: item.tags.join("、") });
+  };
+  const saveEdit = () => {
+    if (!editingSkill) return;
+    const next = {
+      headline: editDraft.headline.trim() || editingSkill.item.headline,
+      subtitle: editDraft.subtitle.trim() || editingSkill.item.subtitle,
+      tags: editDraft.tags.split(/[、,，\s]+/).filter(Boolean),
+    };
+    if (editingSkill.kind === "shared") {
+      setSharedSkills((prev) => prev.map((s) => (s.id === editingSkill.item.id ? { ...s, ...next } : s)));
+    } else {
+      setAiDiscoveries((prev) => prev.map((s) => (s.id === editingSkill.item.id ? { ...s, ...next } : s)));
+    }
+    setEditingSkill(null);
+  };
+  const toggleSharedStatus = (id: string) =>
+    setSharedSkills((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: s.status === "active" ? "disabled" : "active" } : s)),
+    );
+  const adoptDiscovery = (id: string) => {
+    setAiDiscoveries((prev) => {
+      const found = prev.find((s) => s.id === id);
+      if (found) {
+        const { confidence: _c, discoveredAt: _d, ...base } = found;
+        setSharedSkills((cur) => [{ ...base, status: "active" }, ...cur]);
+      }
+      return prev.filter((s) => s.id !== id);
+    });
+  };
+  const discardDiscovery = (id: string) =>
+    setAiDiscoveries((prev) => prev.filter((s) => s.id !== id));
 
   const newPreferenceCount = preferences.filter((p) => p.isNew).length;
 
@@ -554,7 +658,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
   const tabs: { key: TabKey; label: string; badge?: number }[] = [
     { key: "company", label: "企业知识" },
-    { key: "preference", label: "团队经验", badge: newPreferenceCount },
+    { key: "preference", label: "团队经验", badge: aiDiscoveries.length },
     { key: "skills", label: "AI 技能" },
   ];
 
@@ -664,105 +768,213 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
         {activeTab === "preference" && (
           <section className="mt-6 opacity-0 animate-fade-up" style={{ animationDelay: "220ms" }}>
             <div className="flex items-end justify-between gap-3">
-              <p className="text-[12px] text-muted-foreground">AI 从历史会话中沉淀的市场认知与团队打法</p>
+              <p className="text-[12px] text-muted-foreground">已审核共享的团队经验，以及 AI 持续挖掘的隐性经验</p>
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
                 <Sparkles className="h-3 w-3" />
                 本周持续学习中
               </span>
             </div>
 
-            {/* 上：团队经验技巧 — 可新增；下：专家实战经验 */}
-            <div className="mt-4 space-y-4">
-              {/* 团队经验技巧 */}
-              <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card via-card to-secondary/[0.04] shadow-sm transition-all hover:shadow-md">
-                <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-secondary/8 blur-3xl" />
-                <header className="relative flex items-center justify-between gap-3 border-b border-border/40 px-4 py-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-secondary/20 text-secondary">
-                      <Lightbulb className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h3 className="text-[13.5px] font-bold text-foreground">团队经验技巧</h3>
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-success/10 px-1.5 py-0.5 text-[10px] font-semibold text-success">
-                          <Check className="h-2.5 w-2.5" />
-                          共 {teamSkillItems.length} 条
-                        </span>
-                      </div>
-                      <p className="mt-0.5 text-[10.5px] text-muted-foreground">来自团队业务员沉淀</p>
-                    </div>
-                  </div>
-                </header>
-
-                <ul className="relative flex-1 divide-y divide-border/30 px-4 py-1">
-                  {teamSkillPageItems.map((it) => (
-                    <li
-                      key={`team-${it.headline}`}
-                      className="py-5"
+            {/* 子 Tab 切换 */}
+            <div className="mt-4 inline-flex items-center gap-1 rounded-xl border border-border/60 bg-card/60 p-1 shadow-sm">
+              {([
+                { key: "shared", label: "团队共享经验", icon: Users, count: sharedSkills.length, accent: "secondary" },
+                { key: "ai", label: "AI 经验发现", icon: Brain, count: aiDiscoveries.length, accent: "primary" },
+              ] as const).map((t) => {
+                const Icon = t.icon;
+                const active = expTab === t.key;
+                return (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => {
+                      setExpTab(t.key);
+                      setTeamSkillPage(1);
+                    }}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12.5px] font-semibold transition-all",
+                      active
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {t.label}
+                    <span
+                      className={cn(
+                        "ml-0.5 inline-flex min-w-[18px] items-center justify-center rounded-full px-1.5 py-0 text-[10px] font-bold",
+                        active ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted text-muted-foreground",
+                      )}
                     >
-                      <button
-                        type="button"
-                        onClick={() => setActiveTeamSkill(it)}
-                        className="group/item flex w-full items-start justify-between gap-3 text-left focus:outline-none"
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[12.5px] font-bold text-foreground group-hover/item:text-primary transition-colors">
-                              {it.headline}
-                            </span>
-                            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/40 transition-all group-hover/item:translate-x-0.5 group-hover/item:text-primary" />
-                          </div>
-                          <p className="mt-2.5 text-[12px] leading-relaxed text-muted-foreground line-clamp-2">
-                            {it.subtitle}
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-1.5">
-                            {it.tags.map((t) => (
-                              <span
-                                key={t}
-                                className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"
-                              >
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="mt-0.5 shrink-0 whitespace-nowrap text-[10.5px] text-muted-foreground/70">
-                          来自 {it.author}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-
-                {teamSkillTotalPages > 1 && (
-                  <footer className="relative flex items-center justify-between gap-2 border-t border-border/40 px-4 py-2.5">
-                    <span className="text-[11px] text-muted-foreground">
-                      第 {teamSkillPage} / {teamSkillTotalPages} 页
+                      {t.count}
                     </span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => setTeamSkillPage((p) => Math.max(1, p - 1))}
-                        disabled={teamSkillPage === 1}
-                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background text-muted-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label="上一页"
-                      >
-                        <ChevronLeft className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setTeamSkillPage((p) => Math.min(teamSkillTotalPages, p + 1))}
-                        disabled={teamSkillPage === teamSkillTotalPages}
-                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background text-muted-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                        aria-label="下一页"
-                      >
-                        <ChevronRight className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </footer>
-                )}
-              </div>
+                    {t.key === "ai" && t.count > 0 && (
+                      <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" aria-hidden />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
+            {/* 列表卡片 */}
+            <div className="mt-3 group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card via-card to-secondary/[0.04] shadow-sm">
+              <div aria-hidden className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-secondary/8 blur-3xl" />
+
+              {expTab === "ai" && (
+                <div className="relative flex items-center gap-2 border-b border-border/40 bg-primary/[0.04] px-4 py-2.5">
+                  <Brain className="h-3.5 w-3.5 text-primary" />
+                  <p className="text-[11.5px] text-foreground/80">
+                    AI 从 <span className="font-bold text-primary">238 段</span> 会话中挖掘的隐性经验，审核启用后将沉淀到团队共享池。
+                  </p>
+                </div>
+              )}
+
+              {teamSkillPageItems.length === 0 ? (
+                <div className="relative flex flex-col items-center justify-center gap-2 px-4 py-12 text-center">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                    {expTab === "shared" ? <Lightbulb className="h-4 w-4 text-muted-foreground" /> : <Brain className="h-4 w-4 text-muted-foreground" />}
+                  </div>
+                  <p className="text-[12px] text-muted-foreground">
+                    {expTab === "shared" ? "暂无已共享的团队经验" : "暂无待审核的 AI 发现"}
+                  </p>
+                </div>
+              ) : (
+                <ul className="relative flex-1 divide-y divide-border/30 px-4 py-1">
+                  {teamSkillPageItems.map((it) => {
+                    const isShared = expTab === "shared";
+                    const ai = !isShared ? (it as AIDiscoveredItem) : null;
+                    const disabled = isShared && (it as TeamSkillItem).status === "disabled";
+                    return (
+                      <li key={it.id} className={cn("py-4 transition-opacity", disabled && "opacity-55")}>
+                        <div className="flex items-start justify-between gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setActiveTeamSkill(it)}
+                            className="group/item min-w-0 flex-1 text-left focus:outline-none"
+                          >
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-[12.5px] font-bold text-foreground group-hover/item:text-primary transition-colors">
+                                {it.headline}
+                              </span>
+                              {disabled && (
+                                <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                                  已停用
+                                </span>
+                              )}
+                              {ai && (
+                                <span className="inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                                  置信 {(ai.confidence * 100).toFixed(0)}%
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground line-clamp-2">
+                              {it.subtitle}
+                            </p>
+                            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                              <div className="flex flex-wrap gap-1.5">
+                                {it.tags.map((t) => (
+                                  <span
+                                    key={t}
+                                    className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"
+                                  >
+                                    {t}
+                                  </span>
+                                ))}
+                              </div>
+                              <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/80">
+                                <Users className="h-3 w-3" />
+                                {it.authors.length > 1
+                                  ? `${it.authors.slice(0, 2).join("、")}${it.authors.length > 2 ? ` 等 ${it.authors.length} 人` : ""}`
+                                  : it.authors[0]}
+                              </span>
+                              {ai && (
+                                <span className="text-[10.5px] text-muted-foreground/70">{ai.discoveredAt}</span>
+                              )}
+                            </div>
+                          </button>
+
+                          {/* 操作菜单 */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button
+                                type="button"
+                                className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
+                                aria-label="更多操作"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-36">
+                              <DropdownMenuItem onClick={() => openEdit(isShared ? "shared" : "ai", it)}>
+                                <Pencil className="mr-2 h-3.5 w-3.5" />
+                                编辑
+                              </DropdownMenuItem>
+                              {isShared ? (
+                                <DropdownMenuItem onClick={() => toggleSharedStatus(it.id)}>
+                                  {disabled ? (
+                                    <>
+                                      <Power className="mr-2 h-3.5 w-3.5" />
+                                      启用
+                                    </>
+                                  ) : (
+                                    <>
+                                      <PowerOff className="mr-2 h-3.5 w-3.5" />
+                                      停用
+                                    </>
+                                  )}
+                                </DropdownMenuItem>
+                              ) : (
+                                <>
+                                  <DropdownMenuItem onClick={() => adoptDiscovery(it.id)}>
+                                    <Check className="mr-2 h-3.5 w-3.5 text-primary" />
+                                    启用（共享）
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    className="text-destructive focus:text-destructive"
+                                    onClick={() => discardDiscovery(it.id)}
+                                  >
+                                    <Trash2 className="mr-2 h-3.5 w-3.5" />
+                                    丢弃
+                                  </DropdownMenuItem>
+                                </>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+
+              {teamSkillTotalPages > 1 && (
+                <footer className="relative flex items-center justify-between gap-2 border-t border-border/40 px-4 py-2.5">
+                  <span className="text-[11px] text-muted-foreground">
+                    第 {teamSkillPage} / {teamSkillTotalPages} 页
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setTeamSkillPage((p) => Math.max(1, p - 1))}
+                      disabled={teamSkillPage === 1}
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background text-muted-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label="上一页"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setTeamSkillPage((p) => Math.min(teamSkillTotalPages, p + 1))}
+                      disabled={teamSkillPage === teamSkillTotalPages}
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-border/60 bg-background text-muted-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                      aria-label="下一页"
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </footer>
+              )}
             </div>
 
             {/* 详情弹窗 */}
@@ -795,18 +1007,32 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                       </div>
                       <div className="flex items-center gap-2 rounded-xl border border-border/50 bg-muted/40 px-3 py-2 text-[12px] text-muted-foreground">
                         <Users className="h-3.5 w-3.5" />
-                        <span>来自 <span className="font-semibold text-foreground">{activeTeamSkill.author}</span> 的实战沉淀</span>
+                        <span>
+                          贡献人：<span className="font-semibold text-foreground">{activeTeamSkill.authors.join("、")}</span>
+                        </span>
                       </div>
                     </div>
 
-                    <div className="mt-6 flex items-center justify-end border-t border-border/50 pt-5">
+                    <div className="mt-6 flex items-center justify-end gap-2 border-t border-border/50 pt-5">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const kind = sharedSkills.some((s) => s.id === activeTeamSkill.id) ? "shared" : "ai";
+                          openEdit(kind, activeTeamSkill);
+                          setActiveTeamSkill(null);
+                        }}
+                      >
+                        <Pencil className="mr-1.5 h-3.5 w-3.5" />
+                        编辑
+                      </Button>
                       <button
                         onClick={() => {
-                          const prompt = `参考团队经验技巧「${activeTeamSkill.headline}」：${activeTeamSkill.subtitle}\n\n请帮我把这个打法应用到当前的客户场景中。`;
+                          const prompt = `参考团队经验「${activeTeamSkill.headline}」：${activeTeamSkill.subtitle}\n\n请帮我把这个打法应用到当前的客户场景中。`;
                           onTrySimilar?.(prompt);
                           setActiveTeamSkill(null);
                         }}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-[13px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2 text-[13px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90 active:scale-[0.98]"
                       >
                         <Sparkles className="h-3.5 w-3.5" />
                         体验同款
@@ -814,6 +1040,53 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                     </div>
                   </>
                 )}
+              </DialogContent>
+            </Dialog>
+
+            {/* 编辑弹窗 */}
+            <Dialog open={!!editingSkill} onOpenChange={(o) => !o && setEditingSkill(null)}>
+              <DialogContent className="sm:max-w-[560px] sm:rounded-2xl">
+                <DialogHeader>
+                  <DialogTitle className="text-[15px]">编辑经验</DialogTitle>
+                  <DialogDescription className="text-[12px]">
+                    修改后将更新到{editingSkill?.kind === "shared" ? "团队共享池" : "AI 发现池"}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">标题</p>
+                    <Input
+                      value={editDraft.headline}
+                      onChange={(e) => setEditDraft((d) => ({ ...d, headline: e.target.value }))}
+                      className="text-[13px]"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">描述</p>
+                    <Textarea
+                      rows={4}
+                      value={editDraft.subtitle}
+                      onChange={(e) => setEditDraft((d) => ({ ...d, subtitle: e.target.value }))}
+                      className="text-[13px]"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1 text-[11.5px] font-semibold text-muted-foreground">标签（用顿号或逗号分隔）</p>
+                    <Input
+                      value={editDraft.tags}
+                      onChange={(e) => setEditDraft((d) => ({ ...d, tags: e.target.value }))}
+                      className="text-[13px]"
+                    />
+                  </div>
+                </div>
+                <div className="mt-4 flex items-center justify-end gap-2 border-t border-border/50 pt-4">
+                  <Button variant="outline" size="sm" onClick={() => setEditingSkill(null)}>
+                    取消
+                  </Button>
+                  <Button size="sm" onClick={saveEdit}>
+                    保存
+                  </Button>
+                </div>
               </DialogContent>
             </Dialog>
           </section>
