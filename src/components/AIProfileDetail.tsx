@@ -290,24 +290,6 @@ const KB_MODULES: {
       { label: "付款条件", key: "paymentRule", textarea: true },
     ],
   },
-  {
-    key: "market",
-    title: "市场情报",
-    desc: "目标市场、对标对手与趋势洞察",
-    icon: TrendingUp,
-    mastery: 35,
-    insights: [
-      { label: "目标市场", filled: true },
-      { label: "对标对手", filled: false },
-      { label: "趋势洞察", filled: false },
-      { label: "价格带", filled: false },
-    ],
-    fields: [
-      { label: "目标市场", key: "targetMarket", textarea: true },
-      { label: "对标对手", key: "competitorIntel", textarea: true },
-      { label: "趋势洞察", key: "marketTrend", textarea: true },
-    ],
-  },
 ];
 
 const masteryStyle = (m: number) => {
@@ -767,7 +749,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               onOpen={() => setLibraryOpen(true)}
             />
 
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div className="mt-4 grid gap-4 md:grid-cols-3">
               {KB_MODULES.map((mod) => (
                 <CondensedModuleCard
                   key={mod.key}
@@ -1889,11 +1871,7 @@ const CondensedModuleCard = ({
       </div>
 
       {/* Footer */}
-      <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
-        <span className="text-[11.5px] text-muted-foreground">
-          已沉淀 <span className="font-semibold text-foreground tabular-nums">{filledInsights}</span>
-          <span className="text-muted-foreground/70"> / {totalInsights}</span> 项
-        </span>
+      <div className="relative mt-4 flex items-center justify-end border-t border-border/50 pt-3">
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
           <ChevronRight className="h-3.5 w-3.5" />
