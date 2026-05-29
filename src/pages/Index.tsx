@@ -300,6 +300,32 @@ const StepPreview = ({ title }: { title: string }) => {
           </div>
         </div>
       );
+    case "生成报价单":
+      return (
+        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/15 to-primary/5 p-3")}>
+          <div className="rounded-md bg-card/90 p-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="h-1.5 w-12 rounded-full bg-primary/50" />
+              <div className="h-1 w-6 rounded-full bg-foreground/15" />
+            </div>
+            <div className="mt-1.5 space-y-1">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="flex items-center gap-1">
+                  <div className="h-1 flex-1 rounded-full bg-foreground/10" />
+                  <div className="h-1 w-6 rounded-full bg-primary/30" />
+                </div>
+              ))}
+              <div className="flex items-center justify-between pt-0.5">
+                <span className="text-[8px] text-muted-foreground">Total</span>
+                <span className="text-[9px] font-bold text-primary">$112,920</span>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-2 right-3 flex items-center gap-1 rounded-md bg-card/90 px-1.5 py-0.5 text-[9px] font-medium text-primary shadow-sm">
+            .xlsx
+          </div>
+        </div>
+      );
     case "热门产品词":
       return (
         <div className={cn(baseWrap, "bg-gradient-to-br from-primary/5 to-secondary/10 p-3")}>
