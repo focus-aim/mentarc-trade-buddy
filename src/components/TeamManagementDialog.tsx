@@ -270,16 +270,7 @@ const MembersPanel = ({
         <TableBody>
           {subAccounts.map((a) => (
             <TableRow key={a.id} className="hover:bg-muted/20">
-              <TableCell className="font-medium text-sm py-3">
-                <div className="flex items-center gap-2">
-                  <Avatar className="w-7 h-7 border border-primary/10">
-                    <AvatarFallback className="bg-gradient-to-br from-primary/10 to-accent/30 text-primary text-[11px] font-semibold">
-                      {a.name.slice(0, 1)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{a.name}</span>
-                </div>
-              </TableCell>
+              <TableCell className="font-medium text-sm py-3">{a.name}</TableCell>
               <TableCell className="text-sm text-muted-foreground py-3">{a.phone}</TableCell>
               <TableCell className="text-xs text-muted-foreground py-3">{a.addedAt}</TableCell>
               <TableCell className="py-3">
@@ -329,7 +320,16 @@ const UsagePanel = () => {
               <TableRow key={r.id} className="hover:bg-muted/20">
                 <TableCell className="text-xs text-muted-foreground whitespace-nowrap py-2.5">{r.date}</TableCell>
                 <TableCell className="text-sm py-2.5">{r.task}</TableCell>
-                <TableCell className="text-sm text-muted-foreground py-2.5">{r.user}</TableCell>
+                <TableCell className="text-sm text-muted-foreground py-2.5">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-6 h-6 border border-primary/10">
+                      <AvatarFallback className="bg-gradient-to-br from-primary/15 to-accent/30 text-primary text-[10px] font-semibold">
+                        {r.user.slice(0, 1)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-foreground">{r.user}</span>
+                  </div>
+                </TableCell>
                 <TableCell className="text-right font-medium text-sm py-2.5">-{r.cost}</TableCell>
               </TableRow>
             ))}
