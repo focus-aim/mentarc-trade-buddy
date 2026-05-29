@@ -859,7 +859,7 @@ const Index = () => {
   const [caseDialogOpen, setCaseDialogOpen] = useState(false);
   const [casePrompt, setCasePrompt] = useState("");
   const [activeTaskTab, setActiveTaskTab] = useState(TASK_TABS[0].label);
-  const [activeResultTab, setActiveResultTab] = useState<"all" | ResultCategory>("all");
+  
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
   const [bgReportBuyerId, setBgReportBuyerId] = useState<string | null>(null);
@@ -1131,42 +1131,6 @@ const Index = () => {
                 </p>
               </section>
 
-              <section className="mt-7 opacity-0 animate-fade-up" style={{ animationDelay: "140ms" }}>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 p-1 backdrop-blur-sm">
-                  {([
-                    { key: "inquiry", label: "买家档案", count: INQUIRY_BUYERS.length },
-                    { key: "product", label: "产品素材", count: GENERATED_PRODUCTS.length },
-                  ] as const).map((tab) => {
-                    const isActive =
-                      (tab.key === "inquiry" && activeResultTab !== "product") ||
-                      (tab.key === "product" && activeResultTab === "product");
-                    return (
-                      <button
-                        key={tab.key}
-                        onClick={() => setActiveResultTab(tab.key === "product" ? "product" : "buyer")}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all",
-                          isActive
-                            ? "bg-gradient-primary text-primary-foreground shadow-glow"
-                            : "text-muted-foreground hover:text-foreground hover:bg-accent/60",
-                        )}
-                      >
-                        <span>{tab.label}</span>
-                        <span
-                          className={cn(
-                            "rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                            isActive
-                              ? "bg-primary-foreground/20 text-primary-foreground"
-                              : "bg-muted text-muted-foreground",
-                          )}
-                        >
-                          {tab.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </section>
 
               {activeResultTab !== "product" ? (
                 <section
