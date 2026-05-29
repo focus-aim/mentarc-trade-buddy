@@ -898,7 +898,7 @@ const Index = () => {
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
-  const [activeResultsTab, setActiveResultsTab] = useState<"buyer" | "templates">("buyer");
+  
   const [bgReportBuyerId, setBgReportBuyerId] = useState<string | null>(null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(null);
   const [imageGalleryProductId, setImageGalleryProductId] = useState<string | null>(null);
