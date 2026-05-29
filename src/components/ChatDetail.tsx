@@ -282,6 +282,28 @@ const TREND_MINDFLOW_STEPS = [
   "生成热点趋势采集报告",
 ];
 
+const QUOTE_RICH_STEPS: RichStep[] = [
+  {
+    label: "信息整合",
+    subSteps: [
+      { plugin: "知识库", query: "调取产品规格、价格区间与认证清单", description: "汇总产品默认报价信息。" },
+      { plugin: "买家画像", query: "读取 TechSol US 采购背景与目标价", description: "匹配最适合的报价策略。" },
+    ],
+  },
+  {
+    label: "条款 & 数据校验",
+    subSteps: [
+      { plugin: "校验引擎", query: "贸易术语 / 付款方式 / 交期一致性检查", description: "确认无遗漏字段。" },
+    ],
+  },
+  {
+    label: "模板渲染",
+    subSteps: [
+      { plugin: "模板引擎", query: "按所选模板排版生成报价单", description: "生成可下载的 Excel 报价单。" },
+    ],
+  },
+];
+
 const isTrendCollectionPrompt = (text?: string) => {
   if (!text) return false;
   return /热点趋势采集|采集.*海外社媒|海外社媒.*趋势|社媒.*商机|采集.*热点趋势/.test(text);
@@ -449,6 +471,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingBuyerBgMindFlow, setShowingBuyerBgMindFlow] = useState(initialIsBuyerBg);
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
+  const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
