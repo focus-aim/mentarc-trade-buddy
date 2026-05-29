@@ -21,6 +21,7 @@ import InquiryResultMessage, { ChatQuote, InquiryFollowUpResult, BuyerBackground
 import MessageFeedback from "./MessageFeedback";
 import InquiryStrategyPrompt, { InquiryStrategyChoice } from "./InquiryStrategyPrompt";
 import SecondFollowupPrompt, { SecondFollowupChoice } from "./SecondFollowupPrompt";
+import BuyerProfileFloatingCard from "./BuyerProfileFloatingCard";
 import KeywordGuidancePrompt, { KeywordGuidanceChoice } from "./KeywordGuidancePrompt";
 import InquiryDetailSection from "./InquiryDetailSection";
 import OperationGreeting from "./OperationGreeting";
@@ -625,6 +626,20 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     return null;
   }, [moduleTitle]);
 
+  // Buyer profile floating card state (业务专家 only)
+  const buyerCardState = useMemo(() => {
+    if (moduleTitle !== "业务专家") return { visible: false, updated: false, stage: "" };
+    const hasInquiryResult = messages.some((m) => m.type === "inquiry-result");
+    const hasSecondFollowup = messages.some(
+      (m) => m.type === "second-followup-prompt" || (m.role === "user" && /二次跟进|二轮跟进|再次跟进/.test(m.content))
+    );
+    return {
+      visible: hasInquiryResult,
+      updated: hasSecondFollowup,
+      stage: hasSecondFollowup ? "二次跟进 · 决策摇摆期" : "首轮报价已发出",
+    };
+  }, [messages, moduleTitle]);
+
   const COMPETITOR_HIGHLIGHTS = [
     { title: "价格策略", desc: "阶梯报价清晰：1-9台 $899、10-49台 $829、50+台 $769，支持整柜议价" },
     { title: "认证优势", desc: "CE、ROHS、EN15194、FCC 四证齐全，附 SGS 检测报告链接" },
@@ -1036,6 +1051,12 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         </div>
       </div>
       <TeamManagementDialog open={teamDialogOpen} onOpenChange={setTeamDialogOpen} />
+
+      <BuyerProfileFloatingCard
+        visible={buyerCardState.visible}
+        updated={buyerCardState.updated}
+        stage={buyerCardState.stage}
+      />
 
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="mx-auto w-full max-w-4xl px-6 pt-2 pb-4 space-y-4">
