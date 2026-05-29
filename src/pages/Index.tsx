@@ -1128,7 +1128,7 @@ const Index = () => {
                 </p>
               </section>
                 <section
-                  className="mt-5 space-y-3 opacity-0 animate-fade-up"
+                  className="mt-6 space-y-4 opacity-0 animate-fade-up"
                   style={{ animationDelay: "220ms" }}
                 >
                   {INQUIRY_BUYERS.map((buyer, idx) => {
@@ -1143,7 +1143,7 @@ const Index = () => {
                           aria-hidden
                           className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-aurora opacity-10 blur-2xl transition-opacity group-hover:opacity-25"
                         />
-                        <div className="relative px-4 py-3 sm:px-5 sm:py-3.5">
+                        <div className="relative px-5 py-4 sm:px-6 sm:py-5">
                           <div className="flex items-start justify-between gap-3">
                             <button
                               onClick={() => setActiveBuyerId(buyer.id)}
@@ -1161,37 +1161,9 @@ const Index = () => {
                                 {buyer.stage}
                               </span>
                             </button>
-
-                            <div className="shrink-0 flex items-center gap-1.5">
-                              <button
-                                onClick={() => setBgReportBuyerId(buyer.id)}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-[12px] font-semibold text-primary transition-all hover:bg-primary/15"
-                              >
-                                <FileSearch className="h-3.5 w-3.5" />
-                                背调结果
-                              </button>
-                              <button
-                                onClick={() => setExpandedBuyerId(isExpanded ? null : buyer.id)}
-                                className={cn(
-                                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-all",
-                                  isExpanded
-                                    ? "border-primary/30 bg-primary/10 text-primary"
-                                    : "border-border/70 bg-card/70 text-foreground/80 hover:border-primary/30 hover:text-primary",
-                                )}
-                                aria-expanded={isExpanded}
-                              >
-                                历史任务
-                                <ChevronDown
-                                  className={cn(
-                                    "h-3.5 w-3.5 transition-transform duration-200",
-                                    isExpanded && "rotate-180",
-                                  )}
-                                />
-                              </button>
-                            </div>
                           </div>
 
-                          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12.5px] text-muted-foreground">
+                          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px] text-muted-foreground">
                             <span className="inline-flex items-center gap-1.5">
                               <Boxes className="h-3.5 w-3.5 text-primary/70" />
                               <span className="text-foreground/80">{buyer.products}</span>
@@ -1206,7 +1178,7 @@ const Index = () => {
                             </span>
                           </div>
 
-                          <div className="mt-2.5 flex items-start gap-2 rounded-lg border border-primary/15 bg-primary/[0.04] px-2.5 py-1.5">
+                          <div className="mt-3.5 flex items-start gap-2 rounded-lg border border-primary/15 bg-primary/[0.04] px-3 py-2">
                             <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
                             <div className="min-w-0 flex-1 text-[12.5px]">
                               <span className="font-semibold text-primary">下次动作 · </span>
