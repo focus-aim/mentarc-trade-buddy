@@ -60,9 +60,9 @@ export const DEFAULT_QUOTE_INFO: QuoteInfo = {
   leadTime: "样品 5 天空运 / 量产 35 天",
   freight: "",
   payTerms: "30% T/T 预付，70% 见提单副本",
-  buyerCompany: "TechSol US Renewable Distribution",
-  buyerContact: "John Carter · Procurement Lead",
-  buyerCountry: "美国 / 德州",
+  buyerCompany: "GreenLife",
+  buyerContact: "Procurement Lead",
+  buyerCountry: "美国",
   validUntil: "2026-06-30",
   qtyBasis: "purchase",
 };
