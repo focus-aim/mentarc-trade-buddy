@@ -54,6 +54,7 @@ import AIProfileDetail from "@/components/AIProfileDetail";
 import TeamManagementDialog from "@/components/TeamManagementDialog";
 import InquiryResultMessage, { BuyerBackgroundReport } from "@/components/InquiryResultMessage";
 import BuyerProfileDetail from "@/components/BuyerProfileDetail";
+import { QUOTE_TEMPLATES } from "@/components/QuoteGenerationFlow";
 import { cn } from "@/lib/utils";
 import operationAvatar from "@/assets/expert-operation.jpg";
 import businessAvatar from "@/assets/expert-business.jpg";
