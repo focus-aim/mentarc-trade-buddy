@@ -839,69 +839,38 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                   </p>
                 </div>
               ) : (
-                <ul className="relative flex-1 divide-y divide-border/30 px-4 py-1">
+                <div className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2">
                   {teamSkillPageItems.map((it) => {
                     const isShared = expTab === "shared";
                     const ai = !isShared ? (it as AIDiscoveredItem) : null;
                     const disabled = isShared && (it as TeamSkillItem).status === "disabled";
                     return (
-                      <li key={it.id} className={cn("py-4 transition-opacity", disabled && "opacity-55")}>
-                        <div className="flex items-start justify-between gap-3">
+                      <div
+                        key={it.id}
+                        className={cn(
+                          "group/card relative flex flex-col rounded-2xl border border-border/40 bg-card/70 p-4 backdrop-blur-sm shadow-card transition-all hover:border-primary/25 hover:shadow-glow/30",
+                          disabled && "opacity-50"
+                        )}
+                      >
+                        {/* Top row: headline + badges + menu */}
+                        <div className="flex items-start justify-between gap-2">
                           <button
                             type="button"
                             onClick={() => setActiveTeamSkill(it)}
-                            className="group/item min-w-0 flex-1 text-left focus:outline-none"
+                            className="min-w-0 flex-1 text-left focus:outline-none"
                           >
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-[12.5px] font-bold text-foreground group-hover/item:text-primary transition-colors">
-                                {it.headline}
-                              </span>
-                              {disabled && (
-                                <span className="inline-flex items-center rounded-md bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
-                                  已停用
-                                </span>
-                              )}
-                              {ai && (
-                                <span className="inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
-                                  置信 {(ai.confidence * 100).toFixed(0)}%
-                                </span>
-                              )}
-                            </div>
-                            <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground line-clamp-2">
-                              {it.subtitle}
-                            </p>
-                            <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                              <div className="flex flex-wrap gap-1.5">
-                                {it.tags.map((t) => (
-                                  <span
-                                    key={t}
-                                    className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                              <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/80">
-                                <Users className="h-3 w-3" />
-                                {it.authors.length > 1
-                                  ? `${it.authors.slice(0, 2).join("、")}${it.authors.length > 2 ? ` 等 ${it.authors.length} 人` : ""}`
-                                  : it.authors[0]}
-                              </span>
-                              {ai && (
-                                <span className="text-[10.5px] text-muted-foreground/70">{ai.discoveredAt}</span>
-                              )}
-                            </div>
+                            <h4 className="text-[13px] font-bold leading-snug text-foreground group-hover/card:text-primary transition-colors line-clamp-2">
+                              {it.headline}
+                            </h4>
                           </button>
-
-                          {/* 操作菜单 */}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <button
                                 type="button"
-                                className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground/70 transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
+                                className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground/50 transition-colors hover:bg-muted hover:text-foreground focus:outline-none"
                                 aria-label="更多操作"
                               >
-                                <MoreHorizontal className="h-4 w-4" />
+                                <MoreHorizontal className="h-3.5 w-3.5" />
                               </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-36">
@@ -942,10 +911,45 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
-                      </li>
+
+                        {/* Tags */}
+                        <div className="mt-2.5 flex flex-wrap gap-1.5">
+                          {it.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="inline-flex items-center rounded-full bg-secondary/60 px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Bottom meta */}
+                        <div className="mt-auto flex items-center gap-3 pt-3">
+                          <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/70">
+                            <Users className="h-3 w-3" />
+                            {it.authors.length > 1
+                              ? `${it.authors[0]} 等`
+                              : it.authors[0]}
+                          </span>
+                          {disabled && (
+                            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                              已停用
+                            </span>
+                          )}
+                          {ai && (
+                            <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-bold text-primary">
+                              置信 {(ai.confidence * 100).toFixed(0)}%
+                            </span>
+                          )}
+                          {ai && (
+                            <span className="ml-auto text-[10px] text-muted-foreground/50">{ai.discoveredAt}</span>
+                          )}
+                        </div>
+                      </div>
                     );
                   })}
-                </ul>
+                </div>
               )}
 
               {teamSkillTotalPages > 1 && (
