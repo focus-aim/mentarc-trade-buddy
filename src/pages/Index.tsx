@@ -2267,7 +2267,7 @@ const Index = () => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
                   const isFollowup = step.title === "买家跟进节点";
-                  const stepAny = step as { soon?: boolean };
+                  const stepAny = step as { soon?: boolean; isNew?: boolean };
                   return (
                     <article
                       key={step.title}
