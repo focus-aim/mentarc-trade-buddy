@@ -435,6 +435,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const initialIsTrend = moduleTitle === "市场专家" && isTrendCollectionPrompt(initialUserMessage);
   const initialIsBuyerBg = moduleTitle === "业务专家" && isBuyerBackgroundPrompt(initialUserMessage);
   const initialIsFollowup = moduleTitle === "业务专家" && isFollowupStrategyPrompt(initialUserMessage);
+  const initialIsQuoteGen = moduleTitle === "业务专家" && isQuoteGenPrompt(initialUserMessage);
   const initialAssistantType: Message["type"] = initialIsMarket
     ? "market-mindflow"
     : initialIsTrend
@@ -448,10 +449,20 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
             : initialIsKeyword
               ? "keyword-mindflow"
               : "mindflow";
-  const [messages, setMessages] = useState<Message[]>(() => initialUserMessage?.trim() ? [
-    { role: "user", content: initialMessage, type: "text" },
-    { role: "assistant", content: "", type: initialAssistantType },
-  ] : [
+  const [messages, setMessages] = useState<Message[]>(() => initialUserMessage?.trim() ? (
+    initialIsQuoteGen ? [
+      { role: "user", content: initialMessage, type: "text" },
+      {
+        role: "assistant",
+        content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
+        type: "plain-text",
+      },
+      { role: "assistant", content: "", type: "quote-confirm" },
+    ] : [
+      { role: "user", content: initialMessage, type: "text" },
+      { role: "assistant", content: "", type: initialAssistantType },
+    ]
+  ) : [
     { role: "user", content: initialMessage, type: "text" },
     { role: "assistant", content: config.guidedReply, type: moduleTitle === "运营专家" ? "operation-greeting" : "text" },
   ]);
@@ -459,7 +470,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [productImages, setProductImages] = useState<string[]>([]);
   const [prefillValue, setPrefillValue] = useState(config.defaultValue || "");
   const [prefillKey, setPrefillKey] = useState(0);
-  const [showingMindFlow, setShowingMindFlow] = useState(!!initialUserMessage?.trim() && moduleTitle !== "培训专家" && !initialIsBuyerBg && !initialIsFollowup);
+  const [showingMindFlow, setShowingMindFlow] = useState(!!initialUserMessage?.trim() && moduleTitle !== "培训专家" && !initialIsBuyerBg && !initialIsFollowup && !initialIsQuoteGen);
   const [showingImageMindFlow, setShowingImageMindFlow] = useState(false);
   const [showingDetailMindFlow, setShowingDetailMindFlow] = useState(false);
   const [pendingDetailTypes, setPendingDetailTypes] = useState<string[]>([]);
