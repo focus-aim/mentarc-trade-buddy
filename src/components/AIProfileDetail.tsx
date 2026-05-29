@@ -39,6 +39,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import operationAvatar from "@/assets/expert-operation.jpg";
 import businessAvatar from "@/assets/expert-business.jpg";
@@ -99,6 +106,42 @@ interface MaterialFile {
   /** Detailed extractions per module */
   extractions: { module: KBModuleKey; points: string[] }[];
 }
+
+interface PublicLink {
+  id: string;
+  title: string;
+  url: string;
+  addedAt: string;
+  modules: KBModuleKey[];
+  summary: string;
+}
+
+const initialPublicLinks: PublicLink[] = [
+  {
+    id: "l1",
+    title: "公司官网 · About",
+    url: "https://www.example-trade.com/about",
+    addedAt: "1 周前",
+    modules: ["strength"],
+    summary: "公司发展历程、团队规模与全球客户分布。",
+  },
+  {
+    id: "l2",
+    title: "天猫国际店铺主页",
+    url: "https://example.tmall.com",
+    addedAt: "3 天前",
+    modules: ["product", "market"],
+    summary: "线上 SKU 矩阵、定价与热销榜单。",
+  },
+  {
+    id: "l3",
+    title: "行业报告 · 2024 户外保温杯白皮书",
+    url: "https://example.com/report-2024",
+    addedAt: "2 周前",
+    modules: ["market"],
+    summary: "欧美主要市场容量、品牌格局与趋势数据。",
+  },
+];
 
 const initialMaterials: MaterialFile[] = [
   {
@@ -179,11 +222,7 @@ const KB_MODULES: {
     desc: "公司背景、产能规模与资质背书",
     icon: Building2,
     mastery: 92,
-    insights: [
-      "工厂规模 12,000㎡，月产能 50 万 pcs",
-      "通过 BSCI / SEDEX / FDA / CE 认证",
-      "服务 Stanley、Contigo 等头部品牌",
-    ],
+    insights: ["基础信息", "资质与实力", "客户案例", "售后与服务"],
     fields: [
       { label: "公司名称", key: "companyName" },
       { label: "公司官网", key: "website" },
@@ -198,11 +237,7 @@ const KB_MODULES: {
     desc: "主营产品、卖点与交付条件",
     icon: Tags,
     mastery: 76,
-    insights: [
-      "12 款双层不锈钢真空保温杯 SKU",
-      "核心卖点：12h 保温 · 316 食品级 · 防漏",
-      "MOQ 1,000 pcs，交期 25 天起",
-    ],
+    insights: ["主营品类", "核心卖点", "起订与交期", "定制能力"],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
       { label: "产品卖点", key: "productSelling", textarea: true },
@@ -215,11 +250,7 @@ const KB_MODULES: {
     desc: "样品规则、报价框架与付款条件",
     icon: Wallet,
     mastery: 48,
-    insights: [
-      "免费样品 1–2 pcs，运费到付",
-      "默认 FOB 宁波，三档报价框架",
-      "T/T 30% 定金 + 70% 见提单副本",
-    ],
+    insights: ["样品规则", "报价框架", "付款条件", "价格区间"],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
       { label: "报价规则", key: "quoteRule", textarea: true },
@@ -232,11 +263,7 @@ const KB_MODULES: {
     desc: "目标市场、对标对手与趋势洞察",
     icon: TrendingUp,
     mastery: 35,
-    insights: [
-      "重点市场：欧洲 / 北美 / 澳洲",
-      "对标 Stanley、Contigo、YETI",
-      "户外露营与环保定制礼品趋势上升",
-    ],
+    insights: ["目标市场", "对标对手", "趋势洞察", "价格带"],
     fields: [
       { label: "目标市场", key: "targetMarket", textarea: true },
       { label: "对标对手", key: "competitorIntel", textarea: true },
