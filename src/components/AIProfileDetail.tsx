@@ -1793,84 +1793,137 @@ const CondensedModuleCard = ({
   const Icon = mod.icon;
   const filledInsights = mod.insights.filter((i) => i.filled).length;
   const totalInsights = mod.insights.length;
-  // Map mastery → 1–4 dots + label
-  const filledDots =
-    mod.mastery >= 80 ? 4 : mod.mastery >= 60 ? 3 : mod.mastery >= 40 ? 2 : 1;
+  // Per-module accent palette for clearer visual differentiation
+  const accents: Record<string, {
+    iconBg: string; iconText: string; ring: string; bar: string;
+    chipOn: string; pill: string; glow: string; hoverShadow: string;
+  }> = {
+    strength: {
+      iconBg: "bg-gradient-to-br from-sky-500/15 to-sky-500/5",
+      iconText: "text-sky-600", ring: "ring-sky-500/15",
+      bar: "bg-gradient-to-r from-sky-500 to-sky-400",
+      chipOn: "bg-sky-500/8 text-sky-700 border-sky-500/20",
+      pill: "bg-sky-500/10 text-sky-700 border-sky-500/20",
+      glow: "bg-sky-500/10",
+      hoverShadow: "hover:shadow-[0_18px_44px_-22px_rgba(14,165,233,0.35)]",
+    },
+    product: {
+      iconBg: "bg-gradient-to-br from-violet-500/15 to-violet-500/5",
+      iconText: "text-violet-600", ring: "ring-violet-500/15",
+      bar: "bg-gradient-to-r from-violet-500 to-violet-400",
+      chipOn: "bg-violet-500/8 text-violet-700 border-violet-500/20",
+      pill: "bg-violet-500/10 text-violet-700 border-violet-500/20",
+      glow: "bg-violet-500/10",
+      hoverShadow: "hover:shadow-[0_18px_44px_-22px_rgba(139,92,246,0.35)]",
+    },
+    pricing: {
+      iconBg: "bg-gradient-to-br from-amber-500/15 to-amber-500/5",
+      iconText: "text-amber-600", ring: "ring-amber-500/15",
+      bar: "bg-gradient-to-r from-amber-500 to-amber-400",
+      chipOn: "bg-amber-500/8 text-amber-700 border-amber-500/20",
+      pill: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+      glow: "bg-amber-500/10",
+      hoverShadow: "hover:shadow-[0_18px_44px_-22px_rgba(245,158,11,0.35)]",
+    },
+    market: {
+      iconBg: "bg-gradient-to-br from-emerald-500/15 to-emerald-500/5",
+      iconText: "text-emerald-600", ring: "ring-emerald-500/15",
+      bar: "bg-gradient-to-r from-emerald-500 to-emerald-400",
+      chipOn: "bg-emerald-500/8 text-emerald-700 border-emerald-500/20",
+      pill: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20",
+      glow: "bg-emerald-500/10",
+      hoverShadow: "hover:shadow-[0_18px_44px_-22px_rgba(16,185,129,0.35)]",
+    },
+  };
+  const a = accents[mod.key] ?? accents.strength;
+
   const masteryLabel =
-    filledDots === 4
-      ? "训练完善"
-      : filledDots === 3
-        ? "训练良好"
-        : filledDots === 2
-          ? "初步成型"
-          : "尚需补充";
+    mod.mastery >= 80 ? "训练完善"
+    : mod.mastery >= 60 ? "训练良好"
+    : mod.mastery >= 40 ? "初步成型"
+    : "尚需补充";
 
   return (
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-white via-card/95 to-primary/[0.04] p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_18px_44px_-22px_rgba(0,97,255,0.28)]"
-      title={`AI 训练进度：${masteryLabel}`}
+      className={cn(
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/85 p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/15",
+        a.hoverShadow,
+      )}
+      title={`AI 训练进度：${masteryLabel} · ${mod.mastery}%`}
     >
       {/* Ambient accent */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-primary/[0.08] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.12]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-20 -bottom-24 h-44 w-44 rounded-full bg-secondary/[0.06] blur-3xl"
+        className={cn(
+          "pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full blur-3xl transition-opacity duration-500 opacity-70 group-hover:opacity-100",
+          a.glow,
+        )}
       />
 
-      {/* Header: icon + title/subtitle (left), mastery dots (right, subdued) */}
+      {/* Header: icon + title/subtitle (left), mastery pill (right) */}
       <header className="relative flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10 transition-all group-hover:from-primary/20 group-hover:to-primary/8">
-            <Icon className="h-4 w-4" strokeWidth={2} />
+          <div className={cn(
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 transition-transform group-hover:scale-105",
+            a.iconBg, a.iconText, a.ring,
+          )}>
+            <Icon className="h-[18px] w-[18px]" strokeWidth={2} />
           </div>
           <div className="min-w-0">
             <h3 className="text-[17px] font-bold tracking-tight text-foreground leading-tight">
               {mod.title}
             </h3>
-            <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
+            <p className="mt-1 text-[12px] leading-snug text-muted-foreground line-clamp-1">
               {mod.desc}
             </p>
           </div>
         </div>
 
-        {/* Mastery dots — discrete side indicator */}
-        <div
-          className="flex shrink-0 items-center gap-1 pt-1.5"
-          aria-label={`训练${masteryLabel}`}
+        <span
+          className={cn(
+            "shrink-0 inline-flex items-baseline gap-0.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold tabular-nums",
+            a.pill,
+          )}
+          aria-label={`训练${masteryLabel} ${mod.mastery}%`}
         >
-          {Array.from({ length: 4 }).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1.5 w-1.5 rounded-full transition-colors",
-                i < filledDots ? "bg-primary" : "bg-border",
-              )}
-            />
-          ))}
-        </div>
+          <span className="text-[13px] font-bold leading-none">{mod.mastery}</span>
+          <span className="text-[10px] leading-none opacity-70">%</span>
+        </span>
       </header>
 
-      {/* Insights — main content body */}
-      <div className="relative mt-4 grid grid-cols-2 gap-1.5">
+      {/* Mastery progress bar */}
+      <div className="relative mt-4 flex items-center gap-2.5">
+        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted/70">
+          <div
+            className={cn("h-full rounded-full transition-all duration-500", a.bar)}
+            style={{ width: `${mod.mastery}%` }}
+          />
+        </div>
+        <span className="shrink-0 text-[10.5px] font-medium text-muted-foreground">
+          {masteryLabel}
+        </span>
+      </div>
+
+      {/* Insights — chip grid */}
+      <div className="relative mt-3.5 grid grid-cols-2 gap-1.5">
         {mod.insights.map((it, i) => (
           <div
             key={i}
             className={cn(
-              "inline-flex items-center gap-1.5 px-1 py-1 text-[12.5px] transition-colors",
-              it.filled ? "text-foreground/85" : "text-muted-foreground/60",
+              "inline-flex items-center gap-1.5 rounded-lg border px-2 py-1.5 text-[12px] transition-colors",
+              it.filled
+                ? a.chipOn
+                : "border-dashed border-border bg-muted/30 text-muted-foreground/70",
             )}
           >
             {it.filled ? (
-              <Check className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={3} />
+              <Check className={cn("h-3.5 w-3.5 shrink-0", a.iconText)} strokeWidth={3} />
             ) : (
-              <span className="h-3 w-3 shrink-0 rounded-full border border-dashed border-muted-foreground/35" />
+              <span className="h-3 w-3 shrink-0 rounded-full border border-dashed border-muted-foreground/40" />
             )}
-            <span className="truncate">{it.label}</span>
+            <span className="truncate font-medium">{it.label}</span>
           </div>
         ))}
       </div>
