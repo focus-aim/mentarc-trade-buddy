@@ -2223,7 +2223,7 @@ const Index = () => {
                       <div className="mt-4">
                         <StepPreview title={step.title} />
                       </div>
-                      {!stepAny.soon && !isProfileLink && !isPromptFill && !isFollowup && (
+                      {!stepAny.soon && !isProfileLink && !isPromptFill && (
                         <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center justify-center gap-2 bg-card/90 px-4 py-4 opacity-0 backdrop-blur-sm transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
                           <button
                             onClick={() => {
