@@ -413,6 +413,7 @@ interface TeamSkillItem {
   tags: string[];
   authors: string[];
   status: "active" | "disabled";
+  callCount: number;
 }
 const initialSharedSkills: TeamSkillItem[] = [
   {
