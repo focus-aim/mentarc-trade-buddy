@@ -228,62 +228,6 @@ export const QuoteConfirmStep = ({
             />
           </div>
 
-          {/* 报价参数 */}
-          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 space-y-2">
-            <div className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground">
-              <Truck className="h-3.5 w-3.5 text-primary" />
-              报价参数
-            </div>
-            <div className="grid gap-2 md:grid-cols-2">
-              <div className="flex items-center gap-2">
-                <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">贸易术语</label>
-                <div className="flex gap-1">
-                  {incotermOptions.map((opt) => {
-                    const active = display.incoterm === opt;
-                    return (
-                      <button
-                        key={opt}
-                        disabled={done}
-                        onClick={() => setInfo({ ...info, incoterm: opt })}
-                        className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
-                          active
-                            ? "border-primary/60 bg-primary/10 text-primary"
-                            : "border-border/70 bg-background text-foreground hover:bg-muted"
-                        } disabled:cursor-default`}
-                      >
-                        {opt}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">预估数量</label>
-                <div className="flex gap-1">
-                  {([
-                    { v: "moq", label: "按 MOQ" },
-                    { v: "purchase", label: "按采购量" },
-                  ] as const).map((opt) => {
-                    const active = display.qtyBasis === opt.v;
-                    return (
-                      <button
-                        key={opt.v}
-                        disabled={done}
-                        onClick={() => setInfo({ ...info, qtyBasis: opt.v })}
-                        className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
-                          active
-                            ? "border-primary/60 bg-primary/10 text-primary"
-                            : "border-border/70 bg-background text-foreground hover:bg-muted"
-                        } disabled:cursor-default`}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* 我的公司和产品信息 */}
           <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
