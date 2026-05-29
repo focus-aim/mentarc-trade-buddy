@@ -2188,7 +2188,6 @@ const Index = () => {
                 {selectedTaskTab.steps.map((step) => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
-                  const isFollowup = step.title === "买家跟进节点";
                   const stepAny = step as { soon?: boolean; isNew?: boolean };
                   return (
                     <article
@@ -2198,14 +2197,12 @@ const Index = () => {
                           ? handleOpenProfile
                           : isPromptFill
                             ? () => handleUseCasePrompt(step.prompt)
-                            : isFollowup
-                              ? () => setFollowupDialogOpen(true)
-                              : undefined
+                            : undefined
                       }
                       className={cn(
                         "group relative overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-4 shadow-sm shadow-primary/3",
                         stepAny.soon && "bg-muted/40 opacity-75",
-                        (isProfileLink || isPromptFill || isFollowup) &&
+                        (isProfileLink || isPromptFill) &&
                           "cursor-pointer transition-all hover:border-primary/50 hover:shadow-md hover:shadow-primary/10",
                       )}
                     >
