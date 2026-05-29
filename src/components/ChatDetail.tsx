@@ -30,8 +30,8 @@ import MarketResearchResult from "./MarketResearchResult";
 import TrendCollectionResult from "./TrendCollectionResult";
 import FollowupStrategyResult from "./FollowupStrategyResult";
 import {
-  QuoteConfirmStep,
-  QuoteTemplateStep,
+  QuoteWizard,
+  QuoteSummaryCard,
   QuoteResultCard,
   isQuoteGenPrompt,
   type QuoteInfo,
