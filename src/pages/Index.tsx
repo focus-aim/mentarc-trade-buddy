@@ -2394,9 +2394,7 @@ const Index = () => {
                     </span>
                     <button
                       onClick={() => {
-                        handleUseCasePrompt(
-                          `立即跟进买家「${buyer.company}」（${buyer.contact}）：${buyer.nextAction.label}。请基于该买家档案，帮我起草本次跟进的话术与下一步执行计划。`
-                        );
+                        handleDirectFollowup(buyer);
                         setFollowupDialogOpen(false);
                       }}
                       className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
