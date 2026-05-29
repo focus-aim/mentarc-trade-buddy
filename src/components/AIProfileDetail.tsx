@@ -423,7 +423,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["询价", "报价跟进", "需求不清", "比价"],
     authors: ["Rita", "Jason"],
     status: "active",
-    callCount: 124,
+    callCount: 0,
   },
   {
     id: "s-2",
@@ -432,7 +432,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["首封回复", "澄清问题", "意图判断"],
     authors: ["Jason"],
     status: "active",
-    callCount: 86,
+    callCount: 0,
   },
   {
     id: "s-3",
@@ -441,7 +441,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["报价策略", "三档组合", "议价"],
     authors: ["Jason", "Cody"],
     status: "active",
-    callCount: 210,
+    callCount: 0,
   },
   {
     id: "s-4",
@@ -450,7 +450,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["详情页", "使用场景", "转化率"],
     authors: ["Cody"],
     status: "active",
-    callCount: 56,
+    callCount: 0,
   },
   {
     id: "s-5",
@@ -459,7 +459,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["跟进策略", "未回复", "样品"],
     authors: ["Rita"],
     status: "active",
-    callCount: 38,
+    callCount: 0,
   },
 ];
 
