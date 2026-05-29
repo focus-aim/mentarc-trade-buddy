@@ -925,6 +925,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         } else if (isBuyerBackgroundPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
           setShowingBuyerBgMindFlow(true);
+        } else if (isSecondFollowupPrompt(text)) {
+          newMessages.push({ role: "assistant", content: "", type: "second-followup-prompt" });
         } else if (isFollowupStrategyPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
           setShowingFollowupStrategyMindFlow(true);
@@ -959,6 +961,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     } else if (moduleTitle === "业务专家" && isBuyerBackgroundPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
       setShowingBuyerBgMindFlow(true);
+    } else if (moduleTitle === "业务专家" && isSecondFollowupPrompt(text)) {
+      newMessages.push({ role: "assistant", content: "", type: "second-followup-prompt" });
     } else if (moduleTitle === "业务专家" && isFollowupStrategyPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
       setShowingFollowupStrategyMindFlow(true);
