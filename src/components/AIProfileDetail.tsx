@@ -493,7 +493,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     discoveredAt: "2 天前",
   },
 ];
-const TEAM_SKILLS_PER_PAGE = 5;
+const TEAM_SKILLS_PER_PAGE = 6;
 
 const expertSkillBlocks: ExpertSkillBlock[] = [
   {
