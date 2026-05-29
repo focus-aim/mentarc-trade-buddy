@@ -277,7 +277,7 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
       <main className="ambient-bg flex-1 h-screen overflow-y-auto bg-background">
         <div className="mx-auto max-w-3xl px-6 py-10">
           <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="w-4 h-4" /> 返回任务成果
+            <ArrowLeft className="w-4 h-4" /> 返回买家档案
           </button>
           <p className="mt-6 text-sm text-muted-foreground">未找到该买家档案。</p>
         </div>
@@ -324,7 +324,7 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
     <main className="ambient-bg relative flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
       <div className="relative z-10 mx-auto w-full max-w-5xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
         <button onClick={onBack} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="w-3.5 h-3.5" /> 返回任务成果
+          <ArrowLeft className="w-3.5 h-3.5" /> 返回买家档案
         </button>
 
         <section className="mt-4 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm p-5 opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
@@ -348,7 +348,7 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
 
         <div className="mt-6 mb-3 flex items-center gap-2 opacity-0 animate-fade-up" style={{ animationDelay: "120ms" }}>
           <Archive className="w-3.5 h-3.5 text-muted-foreground" />
-          <h2 className="text-sm font-bold text-foreground">历史任务成果</h2>
+          <h2 className="text-sm font-bold text-foreground">历史买家档案</h2>
           <span className="text-[11px] text-muted-foreground">{taskCards.length} 类沉淀结果</span>
         </div>
 
