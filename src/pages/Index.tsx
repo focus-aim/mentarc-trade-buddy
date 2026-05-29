@@ -2326,6 +2326,78 @@ const Index = () => {
         </main>
       )}
       <TeamManagementDialog open={teamDialogOpen} onOpenChange={setTeamDialogOpen} />
+      <Dialog open={followupDialogOpen} onOpenChange={setFollowupDialogOpen}>
+        <DialogContent className="flex max-h-[86vh] max-w-2xl flex-col gap-0 overflow-hidden rounded-2xl p-0">
+          <DialogHeader className="shrink-0 border-b border-border/70 bg-card/95 px-6 py-4 text-left backdrop-blur-md">
+            <DialogTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
+              <Sparkles className="h-4 w-4 text-primary" />
+              买家跟进节点 · 优先跟进建议
+            </DialogTitle>
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
+              AI 已基于买家档案分析跟进进度，以下 3 位买家需要优先动作。
+            </p>
+          </DialogHeader>
+          <div className="flex-1 space-y-3 overflow-y-auto px-6 py-5">
+            {INQUIRY_BUYERS.slice(0, 3).map((buyer, idx) => {
+              const priority = ["高优", "中优", "常规"][idx] ?? "常规";
+              const priorityClass = idx === 0
+                ? "border-rose-500/30 bg-rose-500/10 text-rose-600"
+                : idx === 1
+                  ? "border-amber-500/30 bg-amber-500/10 text-amber-600"
+                  : "border-primary/30 bg-primary/10 text-primary";
+              return (
+                <div
+                  key={buyer.id}
+                  className="rounded-2xl border border-border/60 bg-card/85 px-4 py-3 shadow-sm backdrop-blur-sm transition-colors hover:border-primary/30"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={cn("rounded-full border px-2 py-0.5 text-[10.5px] font-semibold", priorityClass)}>
+                          {priority}
+                        </span>
+                        <p className="truncate text-[14px] font-semibold text-foreground">{buyer.company}</p>
+                      </div>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
+                        <span className="inline-flex items-center gap-1">
+                          <UserRound className="h-3 w-3" />
+                          {buyer.contact}
+                        </span>
+                        <span className="inline-flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          {buyer.region}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2 rounded-lg border border-primary/15 bg-primary/[0.04] px-3 py-2">
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary" />
+                    <div className="min-w-0 flex-1 text-[12.5px]">
+                      <span className="font-semibold text-primary">下次动作 · </span>
+                      <span className="text-foreground/85">{buyer.nextAction.label}</span>
+                    </div>
+                    <span className="shrink-0 rounded-md bg-card/80 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      {buyer.nextAction.due}
+                    </span>
+                    <button
+                      onClick={() => {
+                        handleUseCasePrompt(
+                          `立即跟进买家「${buyer.company}」（${buyer.contact}）：${buyer.nextAction.label}。请基于该买家档案，帮我起草本次跟进的话术与下一步执行计划。`
+                        );
+                        setFollowupDialogOpen(false);
+                      }}
+                      className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
+                    >
+                      <Sparkles className="h-3 w-3" />
+                      立即跟进
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog open={caseDialogOpen} onOpenChange={setCaseDialogOpen}>
         <DialogContent className="flex max-h-[86vh] max-w-3xl flex-col gap-0 overflow-hidden rounded-2xl p-0">
           <DialogHeader className="shrink-0 border-b border-border/70 bg-card/95 px-6 py-4 text-left backdrop-blur-md">
