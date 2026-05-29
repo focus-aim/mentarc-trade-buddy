@@ -1019,13 +1019,13 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               )}
 
               {expTab === "shared" && (
-                <div className="relative flex items-center justify-center border-t border-border/40 px-4 py-3">
+                <div className="relative flex items-center justify-start border-t border-border/40 px-4 py-2.5">
                   <button
                     type="button"
                     onClick={() => setAddSkillOpen(true)}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-primary/40 bg-primary/[0.04] px-4 py-2 text-[12.5px] font-semibold text-primary transition-all hover:border-primary/60 hover:bg-primary/[0.08]"
+                    className="inline-flex items-center gap-1 rounded-lg border border-dashed border-primary/40 bg-primary/[0.04] px-2.5 py-1 text-[11.5px] font-medium text-primary transition-all hover:border-primary/60 hover:bg-primary/[0.08]"
                   >
-                    <Plus className="h-3.5 w-3.5" />
+                    <Plus className="h-3 w-3" />
                     新增
                   </button>
                 </div>
