@@ -1470,22 +1470,22 @@ const CondensedModuleCard = ({
       </header>
 
       {/* Insights — main content body */}
-      <ul className="relative mt-4 space-y-2">
+      <div className="relative mt-4 grid grid-cols-2 gap-1.5">
         {mod.insights.map((it, i) => (
-          <li
+          <div
             key={i}
-            className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/85"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border/50 bg-background/60 px-2.5 py-1.5 text-[12px] font-medium text-foreground/85"
           >
-            <Check className="mt-[3px] h-3 w-3 shrink-0 text-primary" strokeWidth={3} />
-            <span className="min-w-0 flex-1">{it}</span>
-          </li>
+            <span className="h-1 w-1 shrink-0 rounded-full bg-primary/70" />
+            <span className="truncate">{it}</span>
+          </div>
         ))}
-      </ul>
+      </div>
 
       {/* Footer */}
       <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
         <span className="text-[11.5px] text-muted-foreground">
-          已识别 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 项关键信息
+          已涵盖 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 个维度
         </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
