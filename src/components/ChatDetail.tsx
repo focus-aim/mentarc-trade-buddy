@@ -1052,6 +1052,12 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       </div>
       <TeamManagementDialog open={teamDialogOpen} onOpenChange={setTeamDialogOpen} />
 
+      <BuyerProfileFloatingCard
+        visible={buyerCardState.visible}
+        updated={buyerCardState.updated}
+        stage={buyerCardState.stage}
+      />
+
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="mx-auto w-full max-w-4xl px-6 pt-2 pb-4 space-y-4">
             {messages.map((msg, i) => {
