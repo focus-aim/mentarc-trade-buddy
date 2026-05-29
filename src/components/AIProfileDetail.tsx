@@ -39,6 +39,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import operationAvatar from "@/assets/expert-operation.jpg";
 import businessAvatar from "@/assets/expert-business.jpg";
@@ -99,6 +106,42 @@ interface MaterialFile {
   /** Detailed extractions per module */
   extractions: { module: KBModuleKey; points: string[] }[];
 }
+
+interface PublicLink {
+  id: string;
+  title: string;
+  url: string;
+  addedAt: string;
+  modules: KBModuleKey[];
+  summary: string;
+}
+
+const initialPublicLinks: PublicLink[] = [
+  {
+    id: "l1",
+    title: "公司官网 · About",
+    url: "https://www.example-trade.com/about",
+    addedAt: "1 周前",
+    modules: ["strength"],
+    summary: "公司发展历程、团队规模与全球客户分布。",
+  },
+  {
+    id: "l2",
+    title: "天猫国际店铺主页",
+    url: "https://example.tmall.com",
+    addedAt: "3 天前",
+    modules: ["product", "market"],
+    summary: "线上 SKU 矩阵、定价与热销榜单。",
+  },
+  {
+    id: "l3",
+    title: "行业报告 · 2024 户外保温杯白皮书",
+    url: "https://example.com/report-2024",
+    addedAt: "2 周前",
+    modules: ["market"],
+    summary: "欧美主要市场容量、品牌格局与趋势数据。",
+  },
+];
 
 const initialMaterials: MaterialFile[] = [
   {
@@ -179,11 +222,7 @@ const KB_MODULES: {
     desc: "公司背景、产能规模与资质背书",
     icon: Building2,
     mastery: 92,
-    insights: [
-      "工厂规模 12,000㎡，月产能 50 万 pcs",
-      "通过 BSCI / SEDEX / FDA / CE 认证",
-      "服务 Stanley、Contigo 等头部品牌",
-    ],
+    insights: ["基础信息", "资质与实力", "客户案例", "售后与服务"],
     fields: [
       { label: "公司名称", key: "companyName" },
       { label: "公司官网", key: "website" },
@@ -198,11 +237,7 @@ const KB_MODULES: {
     desc: "主营产品、卖点与交付条件",
     icon: Tags,
     mastery: 76,
-    insights: [
-      "12 款双层不锈钢真空保温杯 SKU",
-      "核心卖点：12h 保温 · 316 食品级 · 防漏",
-      "MOQ 1,000 pcs，交期 25 天起",
-    ],
+    insights: ["主营品类", "核心卖点", "起订与交期", "定制能力"],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
       { label: "产品卖点", key: "productSelling", textarea: true },
@@ -215,11 +250,7 @@ const KB_MODULES: {
     desc: "样品规则、报价框架与付款条件",
     icon: Wallet,
     mastery: 48,
-    insights: [
-      "免费样品 1–2 pcs，运费到付",
-      "默认 FOB 宁波，三档报价框架",
-      "T/T 30% 定金 + 70% 见提单副本",
-    ],
+    insights: ["样品规则", "报价框架", "付款条件", "价格区间"],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
       { label: "报价规则", key: "quoteRule", textarea: true },
@@ -232,11 +263,7 @@ const KB_MODULES: {
     desc: "目标市场、对标对手与趋势洞察",
     icon: TrendingUp,
     mastery: 35,
-    insights: [
-      "重点市场：欧洲 / 北美 / 澳洲",
-      "对标 Stanley、Contigo、YETI",
-      "户外露营与环保定制礼品趋势上升",
-    ],
+    insights: ["目标市场", "对标对手", "趋势洞察", "价格带"],
     fields: [
       { label: "目标市场", key: "targetMarket", textarea: true },
       { label: "对标对手", key: "competitorIntel", textarea: true },
@@ -438,6 +465,8 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
   const [materials, setMaterials] = useState<MaterialFile[]>(initialMaterials);
+  const [publicLinks, setPublicLinks] = useState<PublicLink[]>(initialPublicLinks);
+  const [libraryOpen, setLibraryOpen] = useState(false);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
@@ -576,6 +605,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               }
             />
 
+            <TrainingLibraryBar
+              fileCount={materials.length}
+              linkCount={publicLinks.length}
+              onOpen={() => setLibraryOpen(true)}
+            />
+
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {KB_MODULES.map((mod) => (
                 <CondensedModuleCard
@@ -586,12 +621,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               ))}
             </div>
 
-                <TrainingLibrary
-                  materials={materials}
-                  onUpload={handleUpload}
-                  onRemove={handleRemoveMaterial}
-                  onOpen={(m) => setActiveMaterial(m)}
-                />
               </>
             ) : (
               (() => {
@@ -853,6 +882,18 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
           material={activeMaterial}
           onClose={() => setActiveMaterial(null)}
         />
+
+        {/* Training library drawer */}
+        <TrainingLibrarySheet
+          open={libraryOpen}
+          onOpenChange={setLibraryOpen}
+          materials={materials}
+          links={publicLinks}
+          onUpload={handleUpload}
+          onRemoveMaterial={handleRemoveMaterial}
+          onRemoveLink={(id) => setPublicLinks((prev) => prev.filter((l) => l.id !== id))}
+          onOpenMaterial={(m) => setActiveMaterial(m)}
+        />
       </div>
     </main>
   );
@@ -1047,44 +1088,94 @@ export default AIProfileDetail;
 
 // ===================== Training material library =====================
 
-const TrainingLibrary = ({
-  materials,
-  onUpload,
-  onRemove,
+const TrainingLibraryBar = ({
+  fileCount,
+  linkCount,
   onOpen,
 }: {
+  fileCount: number;
+  linkCount: number;
+  onOpen: () => void;
+}) => (
+  <button
+    type="button"
+    onClick={onOpen}
+    className="group relative mt-4 flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-r from-card/90 via-card/95 to-primary/[0.04] px-4 py-3 text-left backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_14px_36px_-20px_rgba(0,97,255,0.25)]"
+  >
+    <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-primary/[0.06] blur-3xl" />
+    <div className="relative flex items-center gap-3 min-w-0">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
+        <FileText className="h-4 w-4" />
+      </div>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <h3 className="text-[14px] font-bold tracking-tight text-foreground">训练资料库</h3>
+          <span className="text-[11px] text-muted-foreground">统一投喂 · AI 自动归类到四大模块</span>
+        </div>
+        <div className="mt-1 flex items-center gap-3 text-[12px] text-muted-foreground">
+          <span className="inline-flex items-center gap-1">
+            <FileText className="h-3 w-3 text-primary/70" />
+            已提供
+            <span className="font-semibold text-foreground tabular-nums">{fileCount}</span>
+            份文档
+          </span>
+          <span className="h-3 w-px bg-border/70" />
+          <span className="inline-flex items-center gap-1">
+            <Globe className="h-3 w-3 text-primary/70" />
+            <span className="font-semibold text-foreground tabular-nums">{linkCount}</span>
+            条公开链接
+          </span>
+        </div>
+      </div>
+    </div>
+    <span className="relative inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-[12px] font-semibold text-primary transition-all group-hover:bg-primary/15 group-hover:gap-1.5">
+      查看详情
+      <ChevronRight className="h-3.5 w-3.5" />
+    </span>
+  </button>
+);
+
+const TrainingLibrarySheet = ({
+  open,
+  onOpenChange,
+  materials,
+  links,
+  onUpload,
+  onRemoveMaterial,
+  onRemoveLink,
+  onOpenMaterial,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   materials: MaterialFile[];
+  links: PublicLink[];
   onUpload: (file: File) => void;
-  onRemove: (id: string) => void;
-  onOpen: (m: MaterialFile) => void;
+  onRemoveMaterial: (id: string) => void;
+  onRemoveLink: (id: string) => void;
+  onOpenMaterial: (m: MaterialFile) => void;
 }) => {
   const moduleTitle = (k: KBModuleKey) =>
     KB_MODULES.find((m) => m.key === k)?.title ?? k;
 
   return (
-    <div className="relative mt-8 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-card/95 via-card/90 to-primary/[0.03] p-5 shadow-sm backdrop-blur-sm">
-      <div aria-hidden className="pointer-events-none absolute -left-20 -bottom-20 h-44 w-44 rounded-full bg-primary/[0.05] blur-3xl" />
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-[520px]">
+        <SheetHeader>
+          <SheetTitle className="flex items-center gap-2 text-[16px]">
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <FileText className="h-3.5 w-3.5" />
+            </span>
+            训练资料库
+          </SheetTitle>
+          <SheetDescription className="text-[12.5px]">
+            统一投喂，AI 自动识别并入库到「公司实力 / 产品服务 / 报价策略 / 市场情报」四大模块。
+          </SheetDescription>
+        </SheetHeader>
 
-      <header className="relative flex items-center justify-between gap-3 border-b border-border/40 pb-3.5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
-            <FileText className="h-4 w-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-[15px] font-bold tracking-tight text-foreground">训练资料库</h3>
-              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10.5px] font-semibold text-muted-foreground tabular-nums">
-                {materials.length}
-              </span>
-            </div>
-            <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-              统一投喂，AI 自动识别并入库到四大模块
-            </p>
-          </div>
-        </div>
-        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90">
+        {/* Upload */}
+        <label className="mt-4 inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-dashed border-primary/30 bg-primary/[0.04] px-3 py-3 text-[12.5px] font-semibold text-primary transition-all hover:border-primary/50 hover:bg-primary/[0.07]">
           <FileUp className="h-3.5 w-3.5" />
-          上传资料
+          上传文档资料（PDF / Word / Excel / 图片 / 压缩包）
           <input
             type="file"
             className="hidden"
@@ -1096,71 +1187,135 @@ const TrainingLibrary = ({
             }}
           />
         </label>
-      </header>
 
-      {materials.length === 0 ? (
-        <div className="relative mt-4 rounded-xl border border-dashed border-border/60 bg-background/40 px-3 py-8 text-center text-[12.5px] text-muted-foreground">
-          暂无训练资料，上传后 AI 会自动解析并归类到对应模块
-        </div>
-      ) : (
-        <ul className="relative mt-3 grid gap-2.5 sm:grid-cols-2">
-          {materials.map((m) => (
-            <li key={m.id}>
-              <button
-                type="button"
-                onClick={() => onOpen(m)}
-                className="group/file relative flex w-full items-start gap-3 rounded-xl border border-border/50 bg-background/70 p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_28px_-18px_rgba(0,97,255,0.25)]"
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <FileText className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate text-[13px] font-semibold text-foreground">
-                      {m.name}
+        {/* Documents */}
+        <section className="mt-6">
+          <div className="flex items-center justify-between">
+            <h4 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
+              文档资料
+            </h4>
+            <span className="text-[11px] text-muted-foreground tabular-nums">{materials.length} 份</span>
+          </div>
+          {materials.length === 0 ? (
+            <p className="mt-2 rounded-xl border border-dashed border-border/60 bg-background/40 px-3 py-6 text-center text-[12px] text-muted-foreground">
+              暂无文档资料
+            </p>
+          ) : (
+            <ul className="mt-2 space-y-2">
+              {materials.map((m) => (
+                <li key={m.id}>
+                  <button
+                    type="button"
+                    onClick={() => onOpenMaterial(m)}
+                    className="group/file relative flex w-full items-start gap-3 rounded-xl border border-border/50 bg-background/70 p-3 text-left transition-all hover:border-primary/30 hover:bg-card hover:shadow-[0_10px_28px_-18px_rgba(0,97,255,0.25)]"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <FileText className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[13px] font-semibold text-foreground">{m.name}</div>
+                      <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-muted-foreground">
+                        {m.summary}
+                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-1">
+                        {m.modules.length > 0 ? (
+                          m.modules.map((k) => (
+                            <span
+                              key={k}
+                              className="inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary"
+                            >
+                              {moduleTitle(k)}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10.5px] font-medium text-amber-600">
+                            <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                            分析中
+                          </span>
+                        )}
+                        <span className="ml-auto text-[10.5px] text-muted-foreground/80">
+                          {m.size} · {m.uploadedAt}
+                        </span>
+                      </div>
+                    </div>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemoveMaterial(m.id);
+                      }}
+                      className="absolute right-2 top-2 cursor-pointer text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover/file:opacity-100"
+                      aria-label="删除"
+                    >
+                      <X className="h-3.5 w-3.5" />
                     </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        {/* Public Links */}
+        <section className="mt-6">
+          <div className="flex items-center justify-between">
+            <h4 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
+              公开链接
+            </h4>
+            <span className="text-[11px] text-muted-foreground tabular-nums">{links.length} 条</span>
+          </div>
+          {links.length === 0 ? (
+            <p className="mt-2 rounded-xl border border-dashed border-border/60 bg-background/40 px-3 py-6 text-center text-[12px] text-muted-foreground">
+              暂无公开链接
+            </p>
+          ) : (
+            <ul className="mt-2 space-y-2">
+              {links.map((l) => (
+                <li key={l.id} className="group/link relative flex items-start gap-3 rounded-xl border border-border/50 bg-background/70 p-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/15 text-secondary">
+                    <Globe className="h-4 w-4" />
                   </div>
-                  <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-muted-foreground">
-                    {m.summary}
-                  </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-1">
-                    {m.modules.length > 0 ? (
-                      m.modules.map((k) => (
+                  <div className="min-w-0 flex-1">
+                    <a
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block truncate text-[13px] font-semibold text-foreground hover:text-primary"
+                    >
+                      {l.title}
+                    </a>
+                    <p className="mt-0.5 truncate text-[11px] text-muted-foreground/80">{l.url}</p>
+                    <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-muted-foreground">
+                      {l.summary}
+                    </p>
+                    <div className="mt-2 flex flex-wrap items-center gap-1">
+                      {l.modules.map((k) => (
                         <span
                           key={k}
                           className="inline-flex items-center rounded-md bg-primary/8 px-1.5 py-0.5 text-[10.5px] font-medium text-primary"
                         >
                           {moduleTitle(k)}
                         </span>
-                      ))
-                    ) : (
-                      <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-1.5 py-0.5 text-[10.5px] font-medium text-amber-600">
-                        <Loader2 className="h-2.5 w-2.5 animate-spin" />
-                        分析中
-                      </span>
-                    )}
-                    <span className="ml-auto text-[10.5px] text-muted-foreground/80">
-                      {m.size} · {m.uploadedAt}
-                    </span>
+                      ))}
+                      <span className="ml-auto text-[10.5px] text-muted-foreground/80">{l.addedAt}</span>
+                    </div>
                   </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onRemove(m.id);
-                  }}
-                  className="absolute right-2 top-2 opacity-0 transition-opacity group-hover/file:opacity-100 text-muted-foreground hover:text-destructive"
-                  aria-label="删除"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+                  <button
+                    type="button"
+                    onClick={() => onRemoveLink(l.id)}
+                    className="absolute right-2 top-2 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover/link:opacity-100"
+                    aria-label="删除"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </SheetContent>
+    </Sheet>
   );
 };
 
@@ -1315,22 +1470,22 @@ const CondensedModuleCard = ({
       </header>
 
       {/* Insights — main content body */}
-      <ul className="relative mt-4 space-y-2">
+      <div className="relative mt-4 grid grid-cols-2 gap-1.5">
         {mod.insights.map((it, i) => (
-          <li
+          <div
             key={i}
-            className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/85"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border/50 bg-background/60 px-2.5 py-1.5 text-[12px] font-medium text-foreground/85"
           >
-            <Check className="mt-[3px] h-3 w-3 shrink-0 text-primary" strokeWidth={3} />
-            <span className="min-w-0 flex-1">{it}</span>
-          </li>
+            <span className="h-1 w-1 shrink-0 rounded-full bg-primary/70" />
+            <span className="truncate">{it}</span>
+          </div>
         ))}
-      </ul>
+      </div>
 
       {/* Footer */}
       <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
         <span className="text-[11.5px] text-muted-foreground">
-          已识别 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 项关键信息
+          已涵盖 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 个维度
         </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
