@@ -468,11 +468,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [messages, setMessages] = useState<Message[]>(() => initialUserMessage?.trim() ? (
     initialIsQuoteGen ? [
       { role: "user", content: initialMessage, type: "text" },
-      {
-        role: "assistant",
-        content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
-        type: "plain-text",
-      },
+      { role: "assistant", content: "", type: "quote-gen-prep-mindflow" },
     ] : [
       { role: "user", content: initialMessage, type: "text" },
       { role: "assistant", content: "", type: initialAssistantType },
@@ -498,7 +494,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
   const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
-  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(initialIsQuoteGen);
+  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(false);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
