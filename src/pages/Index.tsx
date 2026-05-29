@@ -2182,7 +2182,9 @@ const Index = () => {
               <div
                 className={cn(
                   "grid gap-4",
-                  selectedTaskTab.steps.length >= 4 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3",
+                  selectedTaskTab.label === "跟单成交"
+                    ? "md:grid-cols-2 lg:grid-cols-4"
+                    : "md:grid-cols-3",
                 )}
               >
                 {selectedTaskTab.steps.map((step) => {
