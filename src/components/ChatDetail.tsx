@@ -680,6 +680,20 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     }
   }, []);
 
+  const handleSecondFollowupConfirm = useCallback((choice: SecondFollowupChoice, label: string) => {
+    setMessages((prev) => {
+      const next = prev.map((m) =>
+        m.type === "second-followup-prompt" && !m.secondChoice ? { ...m, secondChoice: choice } : m
+      );
+      return [
+        ...next,
+        { role: "user" as const, content: `确认应对方式：${label}，请生成下一步跟进话术。`, type: "text" as const },
+        { role: "assistant" as const, content: "", type: "followup-strategy-mindflow" as const },
+      ];
+    });
+    setShowingFollowupStrategyMindFlow(true);
+  }, []);
+
   const handleBackgroundCheck = useCallback(() => {
     setMessages((prev) => [
       ...prev,
