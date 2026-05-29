@@ -2269,7 +2269,12 @@ const Index = () => {
                 <Sparkles className="h-4 w-4 text-primary" />
                 AI专家建议行动：
               </p>
-              <div className="grid gap-4 md:grid-cols-3">
+              <div
+                className={cn(
+                  "grid gap-4",
+                  selectedTaskTab.steps.length >= 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3",
+                )}
+              >
                 {selectedTaskTab.steps.map((step) => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
