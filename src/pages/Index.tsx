@@ -1299,34 +1299,6 @@ const Index = () => {
                     );
                   })}
                 </section>
-              ) : (
-                <section className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 opacity-0 animate-fade-up" style={{ animationDelay: "220ms" }}>
-                  {QUOTE_TEMPLATES.map((tpl, idx) => (
-                    <div
-                      key={tpl.id}
-                      className="hover-glow group relative overflow-hidden rounded-2xl border border-border/60 bg-card/85 backdrop-blur-sm shadow-card p-4 transition-all hover:border-primary/40 opacity-0 animate-fade-up"
-                      style={{ animationDelay: `${260 + idx * 60}ms` }}
-                    >
-                      <span aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-aurora opacity-10 blur-2xl transition-opacity group-hover:opacity-25" />
-                      <div className="relative flex items-start gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
-                          <FileText className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-[14px] font-semibold text-foreground leading-tight">{tpl.name}</h3>
-                          <p className="mt-1 text-[12px] text-muted-foreground leading-snug">{tpl.tagline}</p>
-                          <div className="mt-3 flex items-center gap-2">
-                            <span className="inline-flex items-center rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10.5px] text-muted-foreground">默认模板</span>
-                            <button className="ml-auto inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">
-                              预览 <ChevronRight className="h-3 w-3" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </section>
-              )}
             </div>
           </main>
         )
