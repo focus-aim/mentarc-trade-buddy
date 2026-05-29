@@ -29,6 +29,15 @@ import KeywordTrendResult from "./KeywordTrendResult";
 import MarketResearchResult from "./MarketResearchResult";
 import TrendCollectionResult from "./TrendCollectionResult";
 import FollowupStrategyResult from "./FollowupStrategyResult";
+import {
+  QuoteConfirmStep,
+  QuoteTemplateStep,
+  QuoteResultCard,
+  isQuoteGenPrompt,
+  type QuoteInfo,
+  type QuoteTemplate,
+  DEFAULT_QUOTE_INFO,
+} from "./QuoteGenerationFlow";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -94,13 +103,15 @@ interface ChatDetailProps {
 interface Message {
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result";
+  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-confirm" | "quote-template" | "quote-mindflow" | "quote-result";
   mindflowSteps?: string[];
   detailTypes?: string[];
   images?: string[];
   quote?: ChatQuote;
   strategy?: InquiryStrategyChoice;
   keywordChoice?: KeywordGuidanceChoice;
+  quoteInfo?: QuoteInfo;
+  quoteTemplate?: QuoteTemplate;
 }
 
 const INQUIRY_EMAIL = `Subject: Inquiry for Double Wall Insulated Beer Mug
