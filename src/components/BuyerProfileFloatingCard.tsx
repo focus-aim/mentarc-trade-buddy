@@ -93,25 +93,22 @@ export const BuyerProfileSheetContent = ({
   updated: boolean;
   onClose: () => void;
 }) => {
-  const followUps = [
+  const analyses = [
     {
       date: "今日",
-      channel: "二次跟进",
-      summary: "结合质保政策与大客户案例化解低价竞品顾虑",
-      tone: "info" as const,
+      channel: "二次跟进策略",
+      summary: "Bergmann 二次跟进 · 化解低价竞品顾虑",
       active: updated,
     },
     {
       date: "14 天前",
-      channel: "邮件",
-      summary: "首轮报价：SKU-123，FOB $3.80 / pc，附阶梯方案",
-      tone: "success" as const,
+      channel: "报价单生成",
+      summary: "Bergmann 双层啤酒杯 · 首轮个性化报价",
     },
     {
       date: "15 天前",
-      channel: "邮件",
-      summary: "询盘解析：500ml 双层保温啤酒杯，5,000 pcs 试单",
-      tone: "success" as const,
+      channel: "询盘分析",
+      summary: "Bergmann 500ml 双层保温啤酒杯询盘解析",
     },
   ];
 
