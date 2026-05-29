@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import {
   FileSpreadsheet,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
   Check,
   Download,
   Building2,
@@ -38,14 +40,15 @@ export interface QuoteInfo {
   buyerContact: string;
   buyerCountry: string;
   validUntil: string;
+  qtyBasis: "moq" | "purchase";
 }
 
 export const DEFAULT_QUOTE_INFO: QuoteInfo = {
-  productName: "5kW Hybrid Solar Inverter",
+  productName: "5kW Hybrid Solar Inverter · UL1741 认证 · 含 WiFi 模块",
   spec: "UL1741 认证 / MPPT / 单相 / 含 WiFi 模块",
   unitPrice: "375",
   qty: "300",
-  incoterm: "FOB Shanghai",
+  incoterm: "FOB",
   leadTime: "样品 5 天空运 / 量产 35 天",
   freight: "",
   payTerms: "30% T/T 预付，70% 见提单副本",
@@ -53,6 +56,7 @@ export const DEFAULT_QUOTE_INFO: QuoteInfo = {
   buyerContact: "John Carter · Procurement Lead",
   buyerCountry: "美国 / 德州",
   validUntil: "2026-06-30",
+  qtyBasis: "purchase",
 };
 
 // ---------- Step 1: confirm info ----------
@@ -62,98 +66,137 @@ export const QuoteConfirmStep = ({
   initialInfo,
   done,
   doneInfo,
+  collapsible,
 }: {
   onNext: (info: QuoteInfo) => void;
   initialInfo?: QuoteInfo;
   done?: boolean;
   doneInfo?: QuoteInfo;
+  collapsible?: boolean;
 }) => {
   const [info, setInfo] = useState<QuoteInfo>(initialInfo || DEFAULT_QUOTE_INFO);
+  const [collapsed, setCollapsed] = useState(false);
   const display = done && doneInfo ? doneInfo : info;
-
-  const fieldGroups: { icon: typeof Package; title: string; fields: { key: keyof QuoteInfo; label: string; placeholder?: string; missing?: boolean }[] }[] = [
-    {
-      icon: Package,
-      title: "产品参数",
-      fields: [
-        { key: "productName", label: "产品名称" },
-        { key: "spec", label: "规格 / 认证" },
-        { key: "unitPrice", label: "默认单价 (USD)" },
-        { key: "qty", label: "数量 (PCS)" },
-      ],
-    },
-    {
-      icon: UserRound,
-      title: "买家信息",
-      fields: [
-        { key: "buyerCompany", label: "公司名称" },
-        { key: "buyerContact", label: "联系人" },
-        { key: "buyerCountry", label: "国家 / 地区" },
-      ],
-    },
-    {
-      icon: Truck,
-      title: "贸易条款",
-      fields: [
-        { key: "incoterm", label: "贸易术语" },
-        { key: "leadTime", label: "交期" },
-        { key: "freight", label: "预估运费 (USD)", placeholder: "知识库未填，请补充", missing: true },
-        { key: "payTerms", label: "付款方式" },
-        { key: "validUntil", label: "报价有效期" },
-      ],
-    },
-  ];
+  const incotermOptions = ["FOB", "EXW", "DDP"];
 
   return (
     <div className="rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-sm shadow-sm">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
+      <div className={`flex items-center justify-between px-4 py-3 ${collapsed ? "" : "border-b border-border/60"}`}>
         <div className="flex items-center gap-2">
           <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/12 text-[11px] font-bold text-primary">1</span>
           <h4 className="text-[13.5px] font-semibold text-foreground">确认或补充关键信息（数据补漏）</h4>
         </div>
-        {done && (
-          <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-primary">
-            <Check className="h-3.5 w-3.5" />
-            已确认
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {done && (
+            <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-primary">
+              <Check className="h-3.5 w-3.5" />
+              已确认
+            </span>
+          )}
+          {collapsible && (
+            <button
+              onClick={() => setCollapsed((c) => !c)}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label={collapsed ? "展开" : "折叠"}
+            >
+              {collapsed ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronUp className="h-3.5 w-3.5" />}
+            </button>
+          )}
+        </div>
       </div>
+      {!collapsed && (
       <div className="px-4 py-3 space-y-3">
         <p className="text-[12.5px] text-muted-foreground leading-relaxed">
           以下信息已从知识库调取并自动填入，请<span className="text-foreground font-medium">确认或补充</span>缺失项。
         </p>
-        <div className="grid gap-3 md:grid-cols-3">
-          {fieldGroups.map((g) => {
-            const Icon = g.icon;
-            return (
-              <div key={g.title} className="rounded-xl border border-border/60 bg-background/60 p-3">
-                <div className="flex items-center gap-1.5 mb-2 text-[12px] font-semibold text-foreground">
-                  <Icon className="h-3.5 w-3.5 text-primary" />
-                  {g.title}
-                </div>
-                <div className="space-y-2">
-                  {g.fields.map((f) => (
-                    <div key={f.key} className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        <label className="text-[11px] text-muted-foreground">{f.label}</label>
-                        {f.missing && !display[f.key] && (
-                          <span className="text-[10px] px-1 py-px rounded bg-amber-500/15 text-amber-600">待补充</span>
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        value={display[f.key]}
+        <div className="space-y-2.5">
+          {/* 买家名称 */}
+          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+            <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+              <UserRound className="h-3.5 w-3.5 text-primary" />
+              买家名称
+            </div>
+            <input
+              type="text"
+              value={display.buyerCompany}
+              disabled={done}
+              onChange={(e) => setInfo({ ...info, buyerCompany: e.target.value })}
+              className="flex-1 rounded-md border border-border/70 bg-background px-2 py-1.5 text-[12px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:bg-muted/40 disabled:cursor-default"
+            />
+          </div>
+
+          {/* 采购产品 */}
+          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+            <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+              <Package className="h-3.5 w-3.5 text-primary" />
+              采购产品
+            </div>
+            <input
+              type="text"
+              value={display.productName}
+              disabled={done}
+              placeholder="产品名 + 基本要求"
+              onChange={(e) => setInfo({ ...info, productName: e.target.value })}
+              className="flex-1 rounded-md border border-border/70 bg-background px-2 py-1.5 text-[12px] text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:bg-muted/40 disabled:cursor-default truncate"
+            />
+          </div>
+
+          {/* 报价参数 */}
+          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 space-y-2">
+            <div className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground">
+              <Truck className="h-3.5 w-3.5 text-primary" />
+              报价参数
+            </div>
+            <div className="grid gap-2 md:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">贸易术语</label>
+                <div className="flex gap-1">
+                  {incotermOptions.map((opt) => {
+                    const active = display.incoterm === opt;
+                    return (
+                      <button
+                        key={opt}
                         disabled={done}
-                        placeholder={f.placeholder}
-                        onChange={(e) => setInfo({ ...info, [f.key]: e.target.value })}
-                        className="w-full rounded-md border border-border/70 bg-background px-2 py-1.5 text-[12px] text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/40 disabled:bg-muted/40 disabled:cursor-default"
-                      />
-                    </div>
-                  ))}
+                        onClick={() => setInfo({ ...info, incoterm: opt })}
+                        className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
+                          active
+                            ? "border-primary/60 bg-primary/10 text-primary"
+                            : "border-border/70 bg-background text-foreground hover:bg-muted"
+                        } disabled:cursor-default`}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            );
-          })}
+              <div className="flex items-center gap-2">
+                <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">预估数量</label>
+                <div className="flex gap-1">
+                  {([
+                    { v: "moq", label: "按 MOQ" },
+                    { v: "purchase", label: "按采购量" },
+                  ] as const).map((opt) => {
+                    const active = display.qtyBasis === opt.v;
+                    return (
+                      <button
+                        key={opt.v}
+                        disabled={done}
+                        onClick={() => setInfo({ ...info, qtyBasis: opt.v })}
+                        className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
+                          active
+                            ? "border-primary/60 bg-primary/10 text-primary"
+                            : "border-border/70 bg-background text-foreground hover:bg-muted"
+                        } disabled:cursor-default`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         {!done && (
           <div className="flex justify-end pt-1">
@@ -167,6 +210,7 @@ export const QuoteConfirmStep = ({
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };
@@ -230,28 +274,43 @@ export const QuoteTemplateStep = ({
   onConfirm,
   done,
   selected,
+  collapsible,
 }: {
   onConfirm: (template: QuoteTemplate) => void;
   done?: boolean;
   selected?: QuoteTemplate | null;
+  collapsible?: boolean;
 }) => {
   const [picked, setPicked] = useState<QuoteTemplate>(selected || "business");
+  const [collapsed, setCollapsed] = useState(false);
   const currentlySelected = done ? (selected as QuoteTemplate) : picked;
 
   return (
     <div className="rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-sm shadow-sm">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
+      <div className={`flex items-center justify-between px-4 py-3 ${collapsed ? "" : "border-b border-border/60"}`}>
         <div className="flex items-center gap-2">
           <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/12 text-[11px] font-bold text-primary">2</span>
           <h4 className="text-[13.5px] font-semibold text-foreground">选择模板与排版预览</h4>
         </div>
-        {done && (
-          <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-primary">
-            <Check className="h-3.5 w-3.5" />
-            已确认
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {done && (
+            <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-primary">
+              <Check className="h-3.5 w-3.5" />
+              已确认
+            </span>
+          )}
+          {collapsible && (
+            <button
+              onClick={() => setCollapsed((c) => !c)}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label={collapsed ? "展开" : "折叠"}
+            >
+              {collapsed ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronUp className="h-3.5 w-3.5" />}
+            </button>
+          )}
+        </div>
       </div>
+      {!collapsed && (
       <div className="px-4 py-3 space-y-3">
         <div className="grid gap-2.5 md:grid-cols-3">
           {QUOTE_TEMPLATES.map((t) => {
@@ -289,6 +348,7 @@ export const QuoteTemplateStep = ({
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };
