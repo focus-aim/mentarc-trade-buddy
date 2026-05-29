@@ -185,11 +185,13 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         title: "生成报价单",
         desc: "AI 自动汇总信息，按模板出具报价单",
         prompt: "生成报价单",
+        isNew: true,
       },
       {
         title: "买家跟进节点",
         desc: "AI 智能分析过往买家进程，给出下一步跟进建议",
         prompt: "",
+        isNew: true,
       },
     ],
   },
@@ -2265,7 +2267,7 @@ const Index = () => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
                   const isFollowup = step.title === "买家跟进节点";
-                  const stepAny = step as { soon?: boolean };
+                  const stepAny = step as { soon?: boolean; isNew?: boolean };
                   return (
                     <article
                       key={step.title}
@@ -2287,6 +2289,11 @@ const Index = () => {
                     >
                       <div className="flex items-center gap-2">
                         <h2 className="text-base font-bold text-foreground">{step.title}</h2>
+                        {stepAny.isNew && (
+                          <span className="rounded-full bg-[hsl(217,100%,50%)] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
+                            New
+                          </span>
+                        )}
                         {stepAny.soon && (
                           <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
                             即将上线
