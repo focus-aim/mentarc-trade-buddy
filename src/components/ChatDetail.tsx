@@ -482,6 +482,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
   const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
+  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(initialIsQuoteGen);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
