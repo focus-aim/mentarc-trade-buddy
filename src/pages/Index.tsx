@@ -1014,6 +1014,12 @@ const Index = () => {
     setInputKey((k) => k + 1);
   }, []);
 
+  const handleDirectFollowup = useCallback((buyer: InquiryBuyer) => {
+    const prompt = `立即跟进买家「${buyer.company}」（${buyer.contact}）：${buyer.nextAction.label}。请基于该买家档案，帮我起草本次跟进的话术与下一步执行计划。`;
+    setChatInitialMessage(prompt);
+    setActiveModule("业务专家");
+  }, []);
+
   const handleOpenProfile = useCallback(() => {
     setActiveModule(null);
     setShowResults(false);
