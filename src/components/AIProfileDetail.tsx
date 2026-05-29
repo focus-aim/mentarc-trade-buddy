@@ -954,11 +954,21 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
                         {/* Bottom meta */}
                         <div className="mt-auto flex items-center gap-3 pt-3">
-                          <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/70">
-                            <Users className="h-3 w-3" />
-                            {it.authors.length > 1
-                              ? `${it.authors[0]} 等`
-                              : it.authors[0]}
+                          <span className="inline-flex items-center gap-1.5 text-[10.5px] text-muted-foreground/80">
+                            <span className="flex -space-x-1.5">
+                              {it.authors.slice(0, 3).map((name) => (
+                                <span
+                                  key={name}
+                                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-background bg-gradient-to-br from-primary/15 to-accent/30 text-[9px] font-semibold text-primary"
+                                  title={name}
+                                >
+                                  {name.slice(0, 1)}
+                                </span>
+                              ))}
+                            </span>
+                            <span>
+                              {it.authors.length > 1 ? `${it.authors[0]} 等` : it.authors[0]}
+                            </span>
                           </span>
                           <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
                             <TrendingUp className="h-3 w-3" />
@@ -1055,10 +1065,17 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 rounded-xl border border-border/50 bg-muted/40 px-3 py-2 text-[12px] text-muted-foreground">
-                        <Users className="h-3.5 w-3.5" />
-                        <span>
-                          贡献人：<span className="font-semibold text-foreground">{activeTeamSkill.authors.join("、")}</span>
-                        </span>
+                        <span className="text-muted-foreground">贡献人：</span>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                          {activeTeamSkill.authors.map((name) => (
+                            <span key={name} className="inline-flex items-center gap-1.5">
+                              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-primary/15 to-accent/30 text-[10px] font-semibold text-primary">
+                                {name.slice(0, 1)}
+                              </span>
+                              <span className="text-[12px] font-semibold text-foreground">{name}</span>
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
