@@ -213,7 +213,7 @@ const KB_MODULES: {
   desc: string;
   icon: typeof Package;
   mastery: number;
-  insights: string[];
+  insights: { label: string; filled: boolean }[];
   fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
 }[] = [
   {
@@ -222,7 +222,12 @@ const KB_MODULES: {
     desc: "公司背景、产能规模与资质背书",
     icon: Building2,
     mastery: 92,
-    insights: ["基础信息", "资质与实力", "客户案例", "售后与服务"],
+    insights: [
+      { label: "基础信息", filled: true },
+      { label: "资质与实力", filled: true },
+      { label: "客户案例", filled: true },
+      { label: "售后与服务", filled: true },
+    ],
     fields: [
       { label: "公司名称", key: "companyName" },
       { label: "公司官网", key: "website" },
@@ -237,7 +242,12 @@ const KB_MODULES: {
     desc: "主营产品、卖点与交付条件",
     icon: Tags,
     mastery: 76,
-    insights: ["主营品类", "核心卖点", "起订与交期", "定制能力"],
+    insights: [
+      { label: "主营品类", filled: true },
+      { label: "核心卖点", filled: true },
+      { label: "起订与交期", filled: true },
+      { label: "定制能力", filled: false },
+    ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
       { label: "产品卖点", key: "productSelling", textarea: true },
@@ -250,7 +260,12 @@ const KB_MODULES: {
     desc: "样品规则、报价框架与付款条件",
     icon: Wallet,
     mastery: 48,
-    insights: ["样品规则", "报价框架", "付款条件", "价格区间"],
+    insights: [
+      { label: "样品规则", filled: true },
+      { label: "报价框架", filled: true },
+      { label: "付款条件", filled: false },
+      { label: "价格区间", filled: false },
+    ],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
       { label: "报价规则", key: "quoteRule", textarea: true },
@@ -263,7 +278,12 @@ const KB_MODULES: {
     desc: "目标市场、对标对手与趋势洞察",
     icon: TrendingUp,
     mastery: 35,
-    insights: ["目标市场", "对标对手", "趋势洞察", "价格带"],
+    insights: [
+      { label: "目标市场", filled: true },
+      { label: "对标对手", filled: false },
+      { label: "趋势洞察", filled: false },
+      { label: "价格带", filled: false },
+    ],
     fields: [
       { label: "目标市场", key: "targetMarket", textarea: true },
       { label: "对标对手", key: "competitorIntel", textarea: true },
