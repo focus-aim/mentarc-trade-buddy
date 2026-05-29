@@ -2290,7 +2290,7 @@ const Index = () => {
                       <div className="flex items-center gap-2">
                         <h2 className="text-base font-bold text-foreground">{step.title}</h2>
                         {stepAny.isNew && (
-                          <span className="rounded-full bg-[hsl(217,100%,50%)] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
+                          <span className="rounded-full bg-[hsl(0,90%,55%)] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
                             New
                           </span>
                         )}
