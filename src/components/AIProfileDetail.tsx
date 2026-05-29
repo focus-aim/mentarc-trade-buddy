@@ -465,6 +465,8 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [retrainingModule, setRetrainingModule] = useState<KBModuleKey | null>(null);
   const [retrainProgress, setRetrainProgress] = useState(0);
   const [materials, setMaterials] = useState<MaterialFile[]>(initialMaterials);
+  const [publicLinks, setPublicLinks] = useState<PublicLink[]>(initialPublicLinks);
+  const [libraryOpen, setLibraryOpen] = useState(false);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
@@ -603,6 +605,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               }
             />
 
+            <TrainingLibraryBar
+              fileCount={materials.length}
+              linkCount={publicLinks.length}
+              onOpen={() => setLibraryOpen(true)}
+            />
+
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {KB_MODULES.map((mod) => (
                 <CondensedModuleCard
@@ -613,12 +621,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               ))}
             </div>
 
-                <TrainingLibrary
-                  materials={materials}
-                  onUpload={handleUpload}
-                  onRemove={handleRemoveMaterial}
-                  onOpen={(m) => setActiveMaterial(m)}
-                />
               </>
             ) : (
               (() => {
