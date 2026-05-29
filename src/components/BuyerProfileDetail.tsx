@@ -324,7 +324,7 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
     <main className="ambient-bg relative flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
       <div className="relative z-10 mx-auto w-full max-w-5xl px-4 pb-10 pt-8 sm:px-6 lg:px-8">
         <button onClick={onBack} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="w-3.5 h-3.5" /> 返回买家档案
+          <ArrowLeft className="w-3.5 h-3.5" /> 返回任务成果
         </button>
 
         <section className="mt-4 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm p-5 opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
@@ -343,6 +343,42 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
               <span className="rounded-md border border-border bg-card px-2 py-0.5 text-[11px] font-medium text-muted-foreground">{data.status}</span>
               {data.meta && <span className="text-[11px] text-muted-foreground">{data.meta}</span>}
             </div>
+          </div>
+        </section>
+
+        <section className="mt-5 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm p-5 opacity-0 animate-fade-up" style={{ animationDelay: "90ms" }}>
+          <div className="mb-3 flex items-center gap-2">
+            <Clock className="w-3.5 h-3.5 text-primary" />
+            <h2 className="text-sm font-bold text-foreground">关键跟进节点</h2>
+            <span className="text-[11px] text-muted-foreground">共 {data.followUps.length} 个节点</span>
+          </div>
+          <div className="relative overflow-x-auto scrollbar-thin">
+            <div className="absolute left-0 right-0 top-[18px] h-px bg-gradient-to-r from-primary/40 via-border to-border" />
+            <ol className="relative flex min-w-full gap-4">
+              {[...data.followUps].reverse().map((it, i, arr) => {
+                const tone = it.tone === "success"
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-600"
+                  : it.tone === "warn"
+                    ? "border-amber-500/30 bg-amber-500/10 text-amber-600"
+                    : "border-primary/30 bg-primary/10 text-primary";
+                const isLast = i === arr.length - 1;
+                return (
+                  <li key={i} className="relative flex min-w-[180px] flex-1 flex-col">
+                    <div className="flex items-center gap-2">
+                      <span className={`relative z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border bg-background ${tone}`}>
+                        {isLast ? <Sparkles className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                      <span className="font-medium text-foreground">{it.date}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-muted text-[10px]">{it.channel}</span>
+                    </div>
+                    <p className="mt-1 text-[12.5px] font-medium text-foreground leading-snug">{it.summary}</p>
+                    <p className="mt-0.5 text-[11.5px] text-muted-foreground leading-snug">{it.outcome}</p>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
         </section>
 
