@@ -1105,6 +1105,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={IMAGE_MINDFLOW_STEPS} onComplete={handleImageMindFlowComplete} />
                   ) : msg.type === "inquiry-strategy-prompt" ? (
                     <InquiryStrategyPrompt onPick={handleStrategyPick} selected={msg.strategy || null} />
+                  ) : msg.type === "second-followup-prompt" ? (
+                    <SecondFollowupPrompt onConfirm={handleSecondFollowupConfirm} selected={msg.secondChoice || null} />
                   ) : msg.type === "detail-type-select" ? (
                     <DetailTypeSelector onSubmit={handleDetailTypeSubmit} />
                   ) : msg.type === "detail-mindflow" ? (
