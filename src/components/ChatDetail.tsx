@@ -756,6 +756,22 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     setShowingQuoteMindFlow(true);
   }, []);
 
+  const handleQuoteGenPrepComplete = useCallback(() => {
+    setMessages((prev) => {
+      const next = [...prev];
+      const idx = next.findIndex((m) => m.type === "quote-gen-prep-mindflow");
+      if (idx >= 0) {
+        next[idx] = {
+          role: "assistant",
+          content: QUOTE_GEN_STRATEGY_TEXT,
+          type: "plain-text",
+        };
+      }
+      return next;
+    });
+    setQuoteWizardActive(true);
+  }, []);
+
   const handleQuoteMindFlowComplete = useCallback(() => {
     setShowingQuoteMindFlow(false);
     setMessages((prev) => {
