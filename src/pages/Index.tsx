@@ -183,7 +183,7 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
       },
       {
         title: "生成报价单",
-        desc: "AI 自动汇总信息，按模板出具报价单",
+        desc: "智能生成报价单",
         prompt: "生成报价单",
         isNew: true,
       },
