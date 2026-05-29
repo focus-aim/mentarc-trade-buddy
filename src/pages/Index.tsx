@@ -493,28 +493,6 @@ const StepPreview = ({ title }: { title: string }) => {
           </div>
         </div>
       );
-    case "买家跟进节点":
-      return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/8 to-secondary/15 p-3")}>
-          <div className="space-y-1.5">
-            {[
-              { tag: "高优", tone: "bg-rose-500/15 text-rose-600", w: 78 },
-              { tag: "中优", tone: "bg-amber-500/15 text-amber-600", w: 60 },
-              { tag: "常规", tone: "bg-primary/15 text-primary", w: 45 },
-            ].map((it, i) => (
-              <div key={i} className="flex items-center gap-2 rounded-md bg-card/85 px-2 py-1 shadow-sm">
-                <span className={cn("rounded px-1 py-0.5 text-[8px] font-bold", it.tone)}>{it.tag}</span>
-                <div className="h-1.5 rounded-full bg-foreground/10" style={{ width: `${it.w}%` }} />
-                <ArrowRight className="ml-auto h-2.5 w-2.5 text-primary/70" />
-              </div>
-            ))}
-          </div>
-          <div className="absolute bottom-2 right-3 flex items-center gap-1 text-[9px] font-medium text-primary">
-            <Sparkles className="h-2.5 w-2.5" />
-            下一步建议
-          </div>
-        </div>
-      );
     default:
       return (
         <div className={cn(baseWrap, "bg-muted/40 p-4")}>
