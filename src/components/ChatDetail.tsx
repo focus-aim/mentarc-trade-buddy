@@ -1167,6 +1167,27 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
 
       <div className="px-6 pt-3 pb-2">
         <div className="mx-auto w-full max-w-4xl">
+          {(() => {
+            // Find the latest active (not-done) quote-confirm or quote-template message
+            for (let i = messages.length - 1; i >= 0; i--) {
+              const m = messages[i];
+              if (m.type === "quote-confirm" && !m.quoteInfo) {
+                return (
+                  <div key={`pinned-confirm-${i}`} className="mb-3">
+                    <QuoteConfirmStep onNext={handleQuoteConfirmNext} collapsible />
+                  </div>
+                );
+              }
+              if (m.type === "quote-template" && !m.quoteTemplate) {
+                return (
+                  <div key={`pinned-template-${i}`} className="mb-3">
+                    <QuoteTemplateStep onConfirm={handleQuoteTemplateConfirm} collapsible />
+                  </div>
+                );
+              }
+            }
+            return null;
+          })()}
           <ChatInput key={prefillKey} onSend={handleSend} placeholder={config.placeholder} defaultValue={prefillValue} attachment={config.attachment} attachments={config.attachments} quote={activeQuote} onClearQuote={() => setActiveQuote(null)} />
           <p className="text-[11px] text-muted-foreground text-center mt-1.5">
             AI 可能会产生错误信息，请核实重要内容。
