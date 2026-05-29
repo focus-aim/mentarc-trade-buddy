@@ -891,6 +891,7 @@ const Index = () => {
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
   const [caseDialogOpen, setCaseDialogOpen] = useState(false);
   const [casePrompt, setCasePrompt] = useState("");
+  const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
   const [activeTaskTab, setActiveTaskTab] = useState(TASK_TABS[0].label);
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
