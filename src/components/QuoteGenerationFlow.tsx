@@ -68,6 +68,84 @@ export const DEFAULT_QUOTE_INFO: QuoteInfo = {
 
 // ---------- Step 1: confirm info ----------
 
+// ---------- KB drawer: 公司实力 ----------
+
+const STRENGTH_FIELDS: { label: string; value: string }[] = [
+  { label: "公司名称", value: "宁波恒杯进出口有限公司" },
+  { label: "公司官网", value: "https://www.example-trade.com" },
+  {
+    label: "公司简介",
+    value: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
+  },
+  {
+    label: "产能与团队",
+    value: "自有工厂 12,000㎡，注塑+焊接+喷涂全链；月产能 50 万 pcs，员工 280 人",
+  },
+  {
+    label: "资质背书",
+    value: "BSCI / SEDEX 工厂审核；FDA、LFGB、CE 认证；服务 Stanley、Contigo 等品牌",
+  },
+];
+
+const STRENGTH_INSIGHTS = ["基础信息", "资质与实力", "客户案例", "售后与服务"];
+
+const CompanyStrengthSheet = ({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) => {
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-[520px]">
+        <SheetHeader className="space-y-2 pb-4 border-b border-border/60">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 text-primary ring-1 ring-primary/10">
+              <Building2 className="h-4.5 w-4.5" strokeWidth={2} />
+            </div>
+            <div className="min-w-0 text-left">
+              <SheetTitle className="text-[16px] font-bold tracking-tight">公司实力</SheetTitle>
+              <SheetDescription className="text-[12px] text-muted-foreground">
+                公司背景、产能规模与资质背书 · 来自企业知识库
+              </SheetDescription>
+            </div>
+            <span className="ml-auto inline-flex items-center rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-600 border border-emerald-500/20">
+              掌握度 高
+            </span>
+          </div>
+        </SheetHeader>
+
+        <div className="mt-5 space-y-5">
+          <div>
+            <div className="text-[12px] font-semibold text-foreground mb-2">已沉淀信息</div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {STRENGTH_INSIGHTS.map((it) => (
+                <div
+                  key={it}
+                  className="inline-flex items-center gap-1.5 px-1 py-1 text-[12.5px] text-foreground/85"
+                >
+                  <Check className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={3} />
+                  <span className="truncate">{it}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2.5">
+            {STRENGTH_FIELDS.map((f) => (
+              <div key={f.label} className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5">
+                <div className="text-[11.5px] font-medium text-muted-foreground mb-1">{f.label}</div>
+                <div className="text-[13px] text-foreground leading-relaxed">{f.value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
 export const QuoteConfirmStep = ({
   onNext,
   initialInfo,
