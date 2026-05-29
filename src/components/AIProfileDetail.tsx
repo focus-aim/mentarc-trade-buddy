@@ -882,6 +882,18 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
           material={activeMaterial}
           onClose={() => setActiveMaterial(null)}
         />
+
+        {/* Training library drawer */}
+        <TrainingLibrarySheet
+          open={libraryOpen}
+          onOpenChange={setLibraryOpen}
+          materials={materials}
+          links={publicLinks}
+          onUpload={handleUpload}
+          onRemoveMaterial={handleRemoveMaterial}
+          onRemoveLink={(id) => setPublicLinks((prev) => prev.filter((l) => l.id !== id))}
+          onOpenMaterial={(m) => setActiveMaterial(m)}
+        />
       </div>
     </main>
   );
