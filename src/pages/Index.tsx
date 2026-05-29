@@ -54,6 +54,7 @@ import AIProfileDetail from "@/components/AIProfileDetail";
 import TeamManagementDialog from "@/components/TeamManagementDialog";
 import InquiryResultMessage, { BuyerBackgroundReport } from "@/components/InquiryResultMessage";
 import BuyerProfileDetail from "@/components/BuyerProfileDetail";
+import { QUOTE_TEMPLATES } from "@/components/QuoteGenerationFlow";
 import { cn } from "@/lib/utils";
 import operationAvatar from "@/assets/expert-operation.jpg";
 import businessAvatar from "@/assets/expert-business.jpg";
@@ -644,6 +645,7 @@ type InquiryBuyer = {
   region: string;
   stage: string;
   stageTone: "primary" | "amber" | "emerald" | "muted";
+  nextAction: { label: string; due: string };
   analyses: { title: string; date: string }[];
 };
 
@@ -656,6 +658,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "德国 慕尼黑",
     stage: "深度跟进",
     stageTone: "primary",
+    nextAction: { label: "发送整店方案 PDF + 样机寄送安排", due: "04/26 前" },
     analyses: [
       { title: "慕尼黑展会名片清洗-0326", date: "03/26" },
       { title: "德国采购意向跟进-0402", date: "04/02" },
@@ -670,6 +673,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "美国 洛杉矶",
     stage: "已建档",
     stageTone: "emerald",
+    nextAction: { label: "回收 NDA 签字版，确认 ID 联合开发排期", due: "04/15 前" },
     analyses: [
       { title: "北美市场竞对背调-0328", date: "03/28" },
       { title: "DTC 品牌私域获客拆解-0405", date: "04/05" },
@@ -684,6 +688,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "阿联酋 迪拜",
     stage: "待报价",
     stageTone: "amber",
+    nextAction: { label: "递交整店报价单 + 3 年质保承诺函", due: "本周内" },
     analyses: [{ title: "迪拜健身展线索整理-0331", date: "03/31" }],
   },
   {
@@ -694,6 +699,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "美国 德州",
     stage: "首次询盘",
     stageTone: "primary",
+    nextAction: { label: "回复首封询盘，附 UL1741 认证 + 阶梯报价", due: "明日 18:00 前" },
     analyses: [
       { title: "保温啤酒杯阶梯报价询盘分析", date: "04/22" },
       { title: "买家 TechSol US 背调", date: "04/24" },
@@ -862,6 +868,7 @@ const Index = () => {
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
+  const [activeResultsTab, setActiveResultsTab] = useState<"buyer" | "templates">("buyer");
   const [bgReportBuyerId, setBgReportBuyerId] = useState<string | null>(null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(null);
   const [imageGalleryProductId, setImageGalleryProductId] = useState<string | null>(null);
@@ -1124,13 +1131,34 @@ const Index = () => {
             <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
               <section className="opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
                 <h1 className="text-2xl font-bold tracking-tight">
-                  <span className="text-aurora">买家档案</span>
+                  <span className="text-aurora">任务成果</span>
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground">
                   根据历史对话自动归档的业务资产，可随时溯源到原对话继续推进。
                 </p>
               </section>
 
+              <div className="mt-5 inline-flex items-center gap-1 rounded-xl border border-border/60 bg-card/70 p-1 backdrop-blur-sm opacity-0 animate-fade-up" style={{ animationDelay: "140ms" }}>
+                {[
+                  { key: "buyer" as const, label: "买家档案" },
+                  { key: "templates" as const, label: "报价单模板" },
+                ].map((t) => (
+                  <button
+                    key={t.key}
+                    onClick={() => setActiveResultsTab(t.key)}
+                    className={cn(
+                      "rounded-lg px-4 py-1.5 text-[13px] font-medium transition-colors",
+                      activeResultsTab === t.key
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
+              {activeResultsTab === "buyer" ? (
                 <section
                   className="mt-5 space-y-3 opacity-0 animate-fade-up"
                   style={{ animationDelay: "220ms" }}
@@ -1209,6 +1237,17 @@ const Index = () => {
                               {buyer.region}
                             </span>
                           </div>
+
+                          <div className="mt-2.5 flex items-start gap-2 rounded-lg border border-primary/15 bg-primary/[0.04] px-2.5 py-1.5">
+                            <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                            <div className="min-w-0 flex-1 text-[12.5px]">
+                              <span className="font-semibold text-primary">下次动作 · </span>
+                              <span className="text-foreground/85">{buyer.nextAction.label}</span>
+                            </div>
+                            <span className="shrink-0 rounded-md bg-card/80 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                              {buyer.nextAction.due}
+                            </span>
+                          </div>
                         </div>
 
 
@@ -1239,6 +1278,34 @@ const Index = () => {
                     );
                   })}
                 </section>
+              ) : (
+                <section className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 opacity-0 animate-fade-up" style={{ animationDelay: "220ms" }}>
+                  {QUOTE_TEMPLATES.map((tpl, idx) => (
+                    <div
+                      key={tpl.id}
+                      className="hover-glow group relative overflow-hidden rounded-2xl border border-border/60 bg-card/85 backdrop-blur-sm shadow-card p-4 transition-all hover:border-primary/40 opacity-0 animate-fade-up"
+                      style={{ animationDelay: `${260 + idx * 60}ms` }}
+                    >
+                      <span aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-aurora opacity-10 blur-2xl transition-opacity group-hover:opacity-25" />
+                      <div className="relative flex items-start gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                          <FileText className="h-4 w-4" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-[14px] font-semibold text-foreground leading-tight">{tpl.name}</h3>
+                          <p className="mt-1 text-[12px] text-muted-foreground leading-snug">{tpl.tagline}</p>
+                          <div className="mt-3 flex items-center gap-2">
+                            <span className="inline-flex items-center rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10.5px] text-muted-foreground">默认模板</span>
+                            <button className="ml-auto inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline">
+                              预览 <ChevronRight className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              )}
             </div>
           </main>
         )
