@@ -941,6 +941,10 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               ? `${it.authors[0]} 等`
                               : it.authors[0]}
                           </span>
+                          <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/70">
+                            <TrendingUp className="h-3 w-3" />
+                            调用 {it.callCount} 次
+                          </span>
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
