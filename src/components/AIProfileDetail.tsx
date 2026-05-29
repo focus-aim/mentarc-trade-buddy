@@ -981,7 +981,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               已停用
                             </span>
                           )}
-                          {ai && (
+                          {ai && ai.confidence > 0 && (
                             <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-bold text-primary">
                               置信 {(ai.confidence * 100).toFixed(0)}%
                             </span>
