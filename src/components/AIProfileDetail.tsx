@@ -1474,18 +1474,14 @@ const CondensedModuleCard = ({
           <div
             key={i}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-colors",
-              it.filled
-                ? "border-primary/20 bg-primary/[0.04] text-foreground"
-                : "border-dashed border-border/60 bg-background/40 text-muted-foreground/70",
+              "inline-flex items-center gap-1.5 px-1 py-1 text-[12.5px] transition-colors",
+              it.filled ? "text-foreground/85" : "text-muted-foreground/60",
             )}
           >
             {it.filled ? (
-              <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
-              </span>
+              <Check className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={3} />
             ) : (
-              <span className="h-3.5 w-3.5 shrink-0 rounded-full border border-dashed border-muted-foreground/40" />
+              <span className="h-3 w-3 shrink-0 rounded-full border border-dashed border-muted-foreground/35" />
             )}
             <span className="truncate">{it.label}</span>
           </div>
