@@ -321,6 +321,11 @@ const isFollowupStrategyPrompt = (text?: string) => {
   return /跟进策略|生成两版询盘回复邮件|节奏.*话术|话术.*下一步|跟进.*节奏|制定.*跟进/.test(text);
 };
 
+const isSecondFollowupPrompt = (text?: string) => {
+  if (!text) return false;
+  return /二次跟进|二轮跟进|再次跟进/.test(text);
+};
+
 const FOLLOWUP_STRATEGY_RICH_STEPS: RichStep[] = [
   {
     label: "买家阶段判定",
