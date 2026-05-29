@@ -12,13 +12,10 @@ interface HistoryItem {
 }
 
 const RECENT_CONVERSATIONS: HistoryItem[] = [
-  { title: "保温啤酒杯阶梯报价询盘分析", module: "业务专家", time: "今天 10:24" },
-  { title: "1000W Fat Tire 电助力车详情页生成", module: "运营专家", time: "今天 09:12" },
-  { title: "TikTok 户外露营趋势采集", module: "市场专家", time: "昨天 18:40" },
-  { title: "美国市场 FDA 认证流程咨询", module: "培训专家", time: "昨天 15:02" },
-  { title: "买家 TechSol US 背调", module: "业务专家", time: "昨天 11:28" },
-  { title: "欧洲电助力自行车市场调研报告", module: "市场专家", time: "前天 16:45" },
-  { title: "阿里国际站热门关键词挖掘", module: "运营专家", time: "前天 10:08" },
+  { title: "南美买家 TechSol US Renewable", module: "业务专家", time: "今天 10:24" },
+  { title: "中东商用健身房连锁 Desert Gym", module: "业务专家", time: "今天 09:12" },
+  { title: "询盘分析 1000W Fat Tire", module: "业务专家", time: "昨天 18:40" },
+  { title: "商用动感单车营销素材", module: "运营专家", time: "昨天 15:02" },
 ];
 
 const HistoryDropdown = () => {
