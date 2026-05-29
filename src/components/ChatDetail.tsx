@@ -21,6 +21,7 @@ import InquiryResultMessage, { ChatQuote, InquiryFollowUpResult, BuyerBackground
 import MessageFeedback from "./MessageFeedback";
 import InquiryStrategyPrompt, { InquiryStrategyChoice } from "./InquiryStrategyPrompt";
 import SecondFollowupPrompt, { SecondFollowupChoice } from "./SecondFollowupPrompt";
+import BuyerProfileFloatingCard from "./BuyerProfileFloatingCard";
 import KeywordGuidancePrompt, { KeywordGuidanceChoice } from "./KeywordGuidancePrompt";
 import InquiryDetailSection from "./InquiryDetailSection";
 import OperationGreeting from "./OperationGreeting";
