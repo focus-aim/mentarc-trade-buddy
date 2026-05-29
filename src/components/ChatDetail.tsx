@@ -30,8 +30,8 @@ import MarketResearchResult from "./MarketResearchResult";
 import TrendCollectionResult from "./TrendCollectionResult";
 import FollowupStrategyResult from "./FollowupStrategyResult";
 import {
-  QuoteConfirmStep,
-  QuoteTemplateStep,
+  QuoteWizard,
+  QuoteSummaryCard,
   QuoteResultCard,
   isQuoteGenPrompt,
   type QuoteInfo,
@@ -103,7 +103,7 @@ interface ChatDetailProps {
 interface Message {
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-confirm" | "quote-template" | "quote-mindflow" | "quote-result";
+  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-summary" | "quote-mindflow" | "quote-result";
   mindflowSteps?: string[];
   detailTypes?: string[];
   images?: string[];
@@ -457,7 +457,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
         type: "plain-text",
       },
-      { role: "assistant", content: "", type: "quote-confirm" },
     ] : [
       { role: "user", content: initialMessage, type: "text" },
       { role: "assistant", content: "", type: initialAssistantType },
@@ -483,6 +482,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
   const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
+  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(initialIsQuoteGen);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
@@ -706,45 +706,28 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     ]);
   }, []);
 
-  const handleQuoteConfirmNext = useCallback((info: QuoteInfo) => {
-    setMessages((prev) => {
-      const next = prev.map((m) =>
-        m.type === "quote-confirm" && !m.quoteInfo ? { ...m, quoteInfo: info } : m,
-      );
-      return [
-        ...next,
-        { role: "assistant" as const, content: "", type: "quote-template" as const },
-      ];
-    });
-  }, []);
-
-  const handleQuoteTemplateConfirm = useCallback((template: QuoteTemplate) => {
-    setMessages((prev) => {
-      const next = prev.map((m) =>
-        m.type === "quote-template" && !m.quoteTemplate ? { ...m, quoteTemplate: template } : m,
-      );
-      return [
-        ...next,
-        { role: "user" as const, content: "开始生成报价单", type: "text" as const },
-        { role: "assistant" as const, content: "", type: "quote-mindflow" as const, quoteTemplate: template },
-      ];
-    });
+  const handleQuoteWizardComplete = useCallback((info: QuoteInfo, template: QuoteTemplate) => {
+    setQuoteWizardActive(false);
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: "", type: "quote-summary", quoteInfo: info, quoteTemplate: template },
+      { role: "assistant", content: "", type: "quote-mindflow", quoteInfo: info, quoteTemplate: template },
+    ]);
     setShowingQuoteMindFlow(true);
   }, []);
 
   const handleQuoteMindFlowComplete = useCallback(() => {
     setShowingQuoteMindFlow(false);
     setMessages((prev) => {
-      const lastConfirm = [...prev].reverse().find((m) => m.type === "quote-confirm" && m.quoteInfo);
-      const lastTemplate = [...prev].reverse().find((m) => m.type === "quote-template" && m.quoteTemplate);
-      const info = lastConfirm?.quoteInfo || DEFAULT_QUOTE_INFO;
-      const template = lastTemplate?.quoteTemplate || "business";
+      const lastMindflow = [...prev].reverse().find((m) => m.type === "quote-mindflow");
+      const info = lastMindflow?.quoteInfo || DEFAULT_QUOTE_INFO;
+      const template = lastMindflow?.quoteTemplate || "business";
       return [
         ...prev,
         {
-          role: "assistant" as const,
+          role: "assistant",
           content: "",
-          type: "quote-result" as const,
+          type: "quote-result",
           quoteInfo: info,
           quoteTemplate: template,
         },
@@ -917,7 +900,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
             content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
             type: "plain-text",
           });
-          newMessages.push({ role: "assistant", content: "", type: "quote-confirm" });
+          setQuoteWizardActive(true);
         } else if (isBuyerBackgroundPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
           setShowingBuyerBgMindFlow(true);
@@ -951,7 +934,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
         type: "plain-text",
       });
-      newMessages.push({ role: "assistant", content: "", type: "quote-confirm" });
+      setQuoteWizardActive(true);
     } else if (moduleTitle === "业务专家" && isBuyerBackgroundPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
       setShowingBuyerBgMindFlow(true);
@@ -1032,14 +1015,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="mx-auto w-full max-w-4xl px-6 pt-2 pb-4 space-y-4">
             {messages.map((msg, i) => {
-              // Skip inline render for active (not-done) quote-confirm/template
-              // — they are pinned above the input area.
-              if (
-                (msg.type === "quote-confirm" && !msg.quoteInfo) ||
-                (msg.type === "quote-template" && !msg.quoteTemplate)
-              ) {
-                return null;
-              }
               const isResult =
                 msg.type === "operation-result" ||
                 msg.type === "inquiry-result" ||
@@ -1067,6 +1042,16 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                   <div key={i} className="w-full">
                     {built.node}
                     {feedbackNode}
+                  </div>
+                );
+              }
+              if (msg.type === "quote-summary") {
+                return (
+                  <div key={i} className="w-full">
+                    <QuoteSummaryCard
+                      info={msg.quoteInfo || DEFAULT_QUOTE_INFO}
+                      template={msg.quoteTemplate || "business"}
+                    />
                   </div>
                 );
               }
@@ -1111,18 +1096,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={TREND_MINDFLOW_STEPS} onComplete={handleTrendMindFlowComplete} />
                   ) : msg.type === "quote-mindflow" ? (
                     <MindFlowMessage richSteps={QUOTE_RICH_STEPS} onComplete={handleQuoteMindFlowComplete} />
-                  ) : msg.type === "quote-confirm" ? (
-                    <QuoteConfirmStep
-                      onNext={handleQuoteConfirmNext}
-                      done={!!msg.quoteInfo}
-                      doneInfo={msg.quoteInfo}
-                    />
-                  ) : msg.type === "quote-template" ? (
-                    <QuoteTemplateStep
-                      onConfirm={handleQuoteTemplateConfirm}
-                      done={!!msg.quoteTemplate}
-                      selected={msg.quoteTemplate || null}
-                    />
                   ) : msg.type === "quote-result" ? (
                     <QuoteResultCard
                       template={msg.quoteTemplate || "business"}
@@ -1167,27 +1140,11 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
 
       <div className="px-6 pt-3 pb-2">
         <div className="mx-auto w-full max-w-4xl">
-          {(() => {
-            // Find the latest active (not-done) quote-confirm or quote-template message
-            for (let i = messages.length - 1; i >= 0; i--) {
-              const m = messages[i];
-              if (m.type === "quote-confirm" && !m.quoteInfo) {
-                return (
-                  <div key={`pinned-confirm-${i}`} className="mb-3">
-                    <QuoteConfirmStep onNext={handleQuoteConfirmNext} collapsible />
-                  </div>
-                );
-              }
-              if (m.type === "quote-template" && !m.quoteTemplate) {
-                return (
-                  <div key={`pinned-template-${i}`} className="mb-3">
-                    <QuoteTemplateStep onConfirm={handleQuoteTemplateConfirm} collapsible />
-                  </div>
-                );
-              }
-            }
-            return null;
-          })()}
+          {quoteWizardActive && (
+            <div className="mb-3">
+              <QuoteWizard onComplete={handleQuoteWizardComplete} />
+            </div>
+          )}
           <ChatInput key={prefillKey} onSend={handleSend} placeholder={config.placeholder} defaultValue={prefillValue} attachment={config.attachment} attachments={config.attachments} quote={activeQuote} onClearQuote={() => setActiveQuote(null)} />
           <p className="text-[11px] text-muted-foreground text-center mt-1.5">
             AI 可能会产生错误信息，请核实重要内容。
