@@ -180,6 +180,11 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         desc: "制定跟进节奏与话术路径",
         prompt: "帮我为这个买家制定一套跟进策略，包括节奏、话术和下一步动作",
       },
+      {
+        title: "生成报价单",
+        desc: "AI 自动汇总信息，按模板出具报价单",
+        prompt: "生成报价单",
+      },
     ],
   },
   {
@@ -292,6 +297,32 @@ const StepPreview = ({ title }: { title: string }) => {
                 <Clock className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
             ))}
+          </div>
+        </div>
+      );
+    case "生成报价单":
+      return (
+        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/15 to-primary/5 p-3")}>
+          <div className="rounded-md bg-card/90 p-2 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="h-1.5 w-12 rounded-full bg-primary/50" />
+              <div className="h-1 w-6 rounded-full bg-foreground/15" />
+            </div>
+            <div className="mt-1.5 space-y-1">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="flex items-center gap-1">
+                  <div className="h-1 flex-1 rounded-full bg-foreground/10" />
+                  <div className="h-1 w-6 rounded-full bg-primary/30" />
+                </div>
+              ))}
+              <div className="flex items-center justify-between pt-0.5">
+                <span className="text-[8px] text-muted-foreground">Total</span>
+                <span className="text-[9px] font-bold text-primary">$112,920</span>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-2 right-3 flex items-center gap-1 rounded-md bg-card/90 px-1.5 py-0.5 text-[9px] font-medium text-primary shadow-sm">
+            .xlsx
           </div>
         </div>
       );
@@ -2238,7 +2269,12 @@ const Index = () => {
                 <Sparkles className="h-4 w-4 text-primary" />
                 AI专家建议行动：
               </p>
-              <div className="grid gap-4 md:grid-cols-3">
+              <div
+                className={cn(
+                  "grid gap-4",
+                  selectedTaskTab.steps.length >= 4 ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3",
+                )}
+              >
                 {selectedTaskTab.steps.map((step) => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";

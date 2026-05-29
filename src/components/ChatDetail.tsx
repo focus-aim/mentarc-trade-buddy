@@ -29,6 +29,15 @@ import KeywordTrendResult from "./KeywordTrendResult";
 import MarketResearchResult from "./MarketResearchResult";
 import TrendCollectionResult from "./TrendCollectionResult";
 import FollowupStrategyResult from "./FollowupStrategyResult";
+import {
+  QuoteConfirmStep,
+  QuoteTemplateStep,
+  QuoteResultCard,
+  isQuoteGenPrompt,
+  type QuoteInfo,
+  type QuoteTemplate,
+  DEFAULT_QUOTE_INFO,
+} from "./QuoteGenerationFlow";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -94,13 +103,15 @@ interface ChatDetailProps {
 interface Message {
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result";
+  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-confirm" | "quote-template" | "quote-mindflow" | "quote-result";
   mindflowSteps?: string[];
   detailTypes?: string[];
   images?: string[];
   quote?: ChatQuote;
   strategy?: InquiryStrategyChoice;
   keywordChoice?: KeywordGuidanceChoice;
+  quoteInfo?: QuoteInfo;
+  quoteTemplate?: QuoteTemplate;
 }
 
 const INQUIRY_EMAIL = `Subject: Inquiry for Double Wall Insulated Beer Mug
@@ -271,6 +282,28 @@ const TREND_MINDFLOW_STEPS = [
   "生成热点趋势采集报告",
 ];
 
+const QUOTE_RICH_STEPS: RichStep[] = [
+  {
+    label: "信息整合",
+    subSteps: [
+      { plugin: "知识库", query: "调取产品规格、价格区间与认证清单", description: "汇总产品默认报价信息。" },
+      { plugin: "买家画像", query: "读取 TechSol US 采购背景与目标价", description: "匹配最适合的报价策略。" },
+    ],
+  },
+  {
+    label: "条款 & 数据校验",
+    subSteps: [
+      { plugin: "校验引擎", query: "贸易术语 / 付款方式 / 交期一致性检查", description: "确认无遗漏字段。" },
+    ],
+  },
+  {
+    label: "模板渲染",
+    subSteps: [
+      { plugin: "模板引擎", query: "按所选模板排版生成报价单", description: "生成可下载的 Excel 报价单。" },
+    ],
+  },
+];
+
 const isTrendCollectionPrompt = (text?: string) => {
   if (!text) return false;
   return /热点趋势采集|采集.*海外社媒|海外社媒.*趋势|社媒.*商机|采集.*热点趋势/.test(text);
@@ -438,6 +471,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingBuyerBgMindFlow, setShowingBuyerBgMindFlow] = useState(initialIsBuyerBg);
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
+  const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
@@ -661,6 +695,52 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     ]);
   }, []);
 
+  const handleQuoteConfirmNext = useCallback((info: QuoteInfo) => {
+    setMessages((prev) => {
+      const next = prev.map((m) =>
+        m.type === "quote-confirm" && !m.quoteInfo ? { ...m, quoteInfo: info } : m,
+      );
+      return [
+        ...next,
+        { role: "assistant" as const, content: "", type: "quote-template" as const },
+      ];
+    });
+  }, []);
+
+  const handleQuoteTemplateConfirm = useCallback((template: QuoteTemplate) => {
+    setMessages((prev) => {
+      const next = prev.map((m) =>
+        m.type === "quote-template" && !m.quoteTemplate ? { ...m, quoteTemplate: template } : m,
+      );
+      return [
+        ...next,
+        { role: "user" as const, content: "开始生成报价单", type: "text" as const },
+        { role: "assistant" as const, content: "", type: "quote-mindflow" as const, quoteTemplate: template },
+      ];
+    });
+    setShowingQuoteMindFlow(true);
+  }, []);
+
+  const handleQuoteMindFlowComplete = useCallback(() => {
+    setShowingQuoteMindFlow(false);
+    setMessages((prev) => {
+      const lastConfirm = [...prev].reverse().find((m) => m.type === "quote-confirm" && m.quoteInfo);
+      const lastTemplate = [...prev].reverse().find((m) => m.type === "quote-template" && m.quoteTemplate);
+      const info = lastConfirm?.quoteInfo || DEFAULT_QUOTE_INFO;
+      const template = lastTemplate?.quoteTemplate || "business";
+      return [
+        ...prev,
+        {
+          role: "assistant" as const,
+          content: "",
+          type: "quote-result" as const,
+          quoteInfo: info,
+          quoteTemplate: template,
+        },
+      ];
+    });
+  }, []);
+
   const handleKeywordMindFlowComplete = useCallback(() => {
     setMessages((prev) => [
       ...prev,
@@ -820,7 +900,14 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
           setShowingMindFlow(true);
         }
       } else if (moduleTitle === "业务专家") {
-        if (isBuyerBackgroundPrompt(text)) {
+        if (isQuoteGenPrompt(text)) {
+          newMessages.push({
+            role: "assistant",
+            content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
+            type: "plain-text",
+          });
+          newMessages.push({ role: "assistant", content: "", type: "quote-confirm" });
+        } else if (isBuyerBackgroundPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
           setShowingBuyerBgMindFlow(true);
         } else if (isFollowupStrategyPrompt(text)) {
@@ -847,6 +934,13 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       }
     } else if (moduleTitle === "运营专家" && isKeywordPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "keyword-mindflow" });
+    } else if (moduleTitle === "业务专家" && isQuoteGenPrompt(text)) {
+      newMessages.push({
+        role: "assistant",
+        content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
+        type: "plain-text",
+      });
+      newMessages.push({ role: "assistant", content: "", type: "quote-confirm" });
     } else if (moduleTitle === "业务专家" && isBuyerBackgroundPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
       setShowingBuyerBgMindFlow(true);
@@ -996,6 +1090,25 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={MARKET_MINDFLOW_STEPS} onComplete={handleMarketMindFlowComplete} />
                   ) : msg.type === "trend-mindflow" ? (
                     <MindFlowMessage steps={TREND_MINDFLOW_STEPS} onComplete={handleTrendMindFlowComplete} />
+                  ) : msg.type === "quote-mindflow" ? (
+                    <MindFlowMessage richSteps={QUOTE_RICH_STEPS} onComplete={handleQuoteMindFlowComplete} />
+                  ) : msg.type === "quote-confirm" ? (
+                    <QuoteConfirmStep
+                      onNext={handleQuoteConfirmNext}
+                      done={!!msg.quoteInfo}
+                      doneInfo={msg.quoteInfo}
+                    />
+                  ) : msg.type === "quote-template" ? (
+                    <QuoteTemplateStep
+                      onConfirm={handleQuoteTemplateConfirm}
+                      done={!!msg.quoteTemplate}
+                      selected={msg.quoteTemplate || null}
+                    />
+                  ) : msg.type === "quote-result" ? (
+                    <QuoteResultCard
+                      template={msg.quoteTemplate || "business"}
+                      info={msg.quoteInfo || DEFAULT_QUOTE_INFO}
+                    />
                   ) : msg.type === "keyword-guidance" ? (
                     <KeywordGuidancePrompt onPick={handleKeywordGuidancePick} selected={msg.keywordChoice || null} />
                   ) : msg.type === "operation-greeting" ? (
