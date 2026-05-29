@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Image, Send, X, Link, MessageSquareQuote } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Paperclip, Send, X, Link, MessageSquareQuote } from "lucide-react";
 import type { ChatQuote } from "./InquiryResultMessage";
 
 export interface ChatAttachment {
@@ -125,7 +125,7 @@ const ChatInput = ({
             ))
           ) : (
             <button className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors active:scale-95">
-              <Image className="w-5 h-5" />
+              <Paperclip className="w-5 h-5" />
             </button>
           )}
         </div>
