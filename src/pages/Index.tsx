@@ -180,6 +180,11 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         desc: "制定跟进节奏与话术路径",
         prompt: "帮我为这个买家制定一套跟进策略，包括节奏、话术和下一步动作",
       },
+      {
+        title: "生成报价单",
+        desc: "AI 自动汇总信息，按模板出具报价单",
+        prompt: "生成报价单",
+      },
     ],
   },
   {
