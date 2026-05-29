@@ -1032,6 +1032,14 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="mx-auto w-full max-w-4xl px-6 pt-2 pb-4 space-y-4">
             {messages.map((msg, i) => {
+              // Skip inline render for active (not-done) quote-confirm/template
+              // — they are pinned above the input area.
+              if (
+                (msg.type === "quote-confirm" && !msg.quoteInfo) ||
+                (msg.type === "quote-template" && !msg.quoteTemplate)
+              ) {
+                return null;
+              }
               const isResult =
                 msg.type === "operation-result" ||
                 msg.type === "inquiry-result" ||
