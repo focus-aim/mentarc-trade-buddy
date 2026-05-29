@@ -1,23 +1,24 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 
-export type SecondFollowupChoice = "price" | "value" | "urgency";
+export type SecondFollowupChoice = "delivery" | "market" | "trend";
 
-const APPROACHES: { id: SecondFollowupChoice; label: string; desc: string }[] = [
+const APPROACHES: { id: SecondFollowupChoice; label: string; desc: string; recommend?: boolean }[] = [
   {
-    id: "price",
-    label: "强化价格竞争力",
-    desc: "针对其转向价格敏感的心态，提供阶梯让利 + 赠样政策。",
+    id: "delivery",
+    label: "强调交付与履约保障",
+    desc: "调用公司资质与大客户案例，重申我们的质保政策，化解其对低价劣质供应商的担忧。",
+    recommend: true,
   },
   {
-    id: "value",
-    label: "强化价值与差异化",
-    desc: "突出认证 / 交期 / 售后服务，弱化纯价格对抗。",
+    id: "market",
+    label: "传递市场波动情报",
+    desc: "调用近期运费或原材料上涨信息，制造交货周期与成本的紧迫感，推动决策。",
   },
   {
-    id: "urgency",
-    label: "制造紧迫感推进",
-    desc: "用库存档期与限时优惠窗口推动买家尽快下单。",
+    id: "trend",
+    label: "行业趋势话题破冰",
+    desc: "暂缓推销，结合近期该国市场的选品趋势提出开放式问题，引导买家重新开启对话。",
   },
 ];
 
@@ -33,18 +34,28 @@ const SecondFollowupPrompt = ({ onConfirm, selected }: Props) => {
   return (
     <div className="space-y-3.5 text-[15px] leading-relaxed">
       <p className="text-foreground/90">
-        <span className="font-medium text-foreground">Bergmann Home Supplies GmbH</span>{" "}
-        前期已向您发起过保温啤酒杯阶梯报价询盘，其核心关注点是{" "}
-        <span className="font-medium text-foreground">材质规格与认证文件</span>；在新一轮询价中，买家从{" "}
-        <span className="font-medium text-foreground">「认证 / 定制能力」</span> 转向关注{" "}
-        <span className="font-medium text-foreground">「价格阶梯与交期承诺」</span>
-        ，表明其当前心态已从{" "}
-        <span className="font-medium text-foreground">「评估供应商」</span> 推进到{" "}
-        <span className="font-medium text-primary">「比价决策窗口」</span>。
+        已调取该买家的历史互动档案。距离上次提供{" "}
+        <span className="font-medium text-foreground">[SKU-123]</span>{" "}
+        报价已过去 <span className="font-medium text-foreground">[14]</span> 天。
       </p>
 
+      <div className="space-y-1.5">
+        <p className="text-foreground/90">
+          <span className="font-medium text-foreground">历史关注：</span>
+          前期沟通中，其核心诉求是压缩采购成本。
+        </p>
+        <p className="text-foreground/90">
+          <span className="font-medium text-foreground">当前异动：</span>
+          近期问询重点转向交付稳定性和质保条款。
+        </p>
+        <p className="text-foreground/90">
+          <span className="font-medium text-foreground">状态分析：</span>
+          买家可能已收到同行的低价方案，但对低价供应商的履约能力存在顾虑。当前处于决策摇摆期。
+        </p>
+      </div>
+
       <p className="text-foreground/85">
-        我将为您拟定下一次跟进话术，您倾向的应对方式是：
+        为您匹配了以下跟进方向，请选择切入点，我将据此生成话术：
       </p>
 
       <div className="space-y-2">
@@ -63,6 +74,11 @@ const SecondFollowupPrompt = ({ onConfirm, selected }: Props) => {
             >
               <div className="flex items-center gap-2">
                 <span className="text-[13.5px] font-medium text-foreground">{a.label}</span>
+                {a.recommend && (
+                  <span className="text-[10.5px] px-1.5 py-0.5 rounded bg-primary text-white font-medium">
+                    建议选此项
+                  </span>
+                )}
                 {active && <Check className="w-3.5 h-3.5 text-primary" />}
               </div>
               <p className="mt-1 text-[12.5px] text-muted-foreground">{a.desc}</p>
