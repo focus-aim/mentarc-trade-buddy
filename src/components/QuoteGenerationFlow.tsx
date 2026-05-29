@@ -368,7 +368,9 @@ export const QuoteResultCard = ({
 
   const items = useMemo(() => {
     const unit = Number(info.unitPrice) || 0;
-    const qty = Number(info.qty) || 0;
+    const baseQty = Number(info.qty) || 0;
+    const moq = 100;
+    const qty = info.qtyBasis === "moq" ? moq : baseQty;
     const sample = { name: "Sample (空运)", qty: 1, unit: 420, total: 420 };
     const main = { name: info.productName, qty, unit, total: unit * qty };
     return [sample, main];
