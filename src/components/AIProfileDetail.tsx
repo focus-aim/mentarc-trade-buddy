@@ -907,10 +907,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                                     <Check className="mr-2 h-3.5 w-3.5 text-primary" />
                                     启用
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => openEdit("ai", it)}>
-                                    <Pencil className="mr-2 h-3.5 w-3.5" />
-                                    编辑
-                                  </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
                                     className="text-destructive focus:text-destructive"
@@ -945,9 +941,9 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               ? `${it.authors[0]} 等`
                               : it.authors[0]}
                           </span>
-                          <span className="inline-flex items-center gap-1 text-[10.5px] text-muted-foreground/70">
+                          <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
                             <TrendingUp className="h-3 w-3" />
-                            调用 {it.callCount} 次
+                            {it.callCount} 次调用
                           </span>
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
