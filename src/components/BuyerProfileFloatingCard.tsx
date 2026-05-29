@@ -173,31 +173,14 @@ export const BuyerProfileSheetContent = ({
         </div>
       </section>
 
-      {/* Follow-up stage */}
-      <section className="px-5 py-4 space-y-3 border-b border-border">
-        <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5">
-          <Workflow className="w-3.5 h-3.5 text-primary" />
-          跟进阶段
-        </h3>
-        <div className="rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2.5">
-          <p className="text-[11px] text-muted-foreground mb-1">当前阶段</p>
-          <p className="text-[13.5px] font-semibold text-primary">{stage}</p>
-          {updated && (
-            <p className="text-[11.5px] text-muted-foreground mt-1.5 leading-relaxed">
-              已识别买家从「价格敏感」转向「交付与履约保障」诉求，进入决策摇摆期。
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Follow-up timeline */}
+      {/* Analysis records */}
       <section className="px-5 py-4">
         <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5 mb-3">
           <Clock className="w-3.5 h-3.5 text-primary" />
-          跟进记录
+          分析记录
         </h3>
         <div className="space-y-2">
-          {followUps.map((it, i) => (
+          {analyses.map((it, i) => (
             <div
               key={i}
               className={`rounded-lg border px-3 py-2.5 ${
