@@ -614,8 +614,18 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
 
 
   const sideArchive = useMemo(() => {
-    return null as never;
-  }, []);
+    if (moduleTitle === "业务专家") {
+      return { title: "买家档案", subtitle: "Bergmann Home Supplies GmbH", icon: UserRound, recordsTitle: "历史询盘记录", records: BUYER_INQUIRY_RECORDS };
+    }
+    if (moduleTitle === "运营专家") {
+      return { title: "产品素材", subtitle: "智能电助力自行车素材档案", icon: ImageIcon, recordsTitle: "已归档产品素材", records: PRODUCT_ASSET_RECORDS };
+    }
+    if (moduleTitle === "市场专家") {
+      return { title: "市场分析", subtitle: "欧洲电助力自行车市场档案", icon: FileText, recordsTitle: "已归档市场分析", records: MARKET_REPORT_RECORDS };
+    }
+    return null;
+  }, [moduleTitle]);
+
   // Buyer profile floating card state (业务专家 only)
   const buyerCardState = useMemo(() => {
     if (moduleTitle !== "业务专家") return { visible: false, updated: false, stage: "" };
@@ -629,19 +639,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       stage: hasSecondFollowup ? "二次跟进 · 决策摇摆期" : "首轮报价已发出",
     };
   }, [messages, moduleTitle]);
-
-  const _unusedSideArchive = useMemo(() => {
-    if (moduleTitle === "业务专家") {
-      return { title: "买家档案", subtitle: "Bergmann Home Supplies GmbH", icon: UserRound, recordsTitle: "历史询盘记录", records: BUYER_INQUIRY_RECORDS };
-    }
-    if (moduleTitle === "运营专家") {
-      return { title: "产品素材", subtitle: "智能电助力自行车素材档案", icon: ImageIcon, recordsTitle: "已归档产品素材", records: PRODUCT_ASSET_RECORDS };
-    }
-    if (moduleTitle === "市场专家") {
-      return { title: "市场分析", subtitle: "欧洲电助力自行车市场档案", icon: FileText, recordsTitle: "已归档市场分析", records: MARKET_REPORT_RECORDS };
-    }
-    return null;
-  }, [moduleTitle]);
 
   const COMPETITOR_HIGHLIGHTS = [
     { title: "价格策略", desc: "阶梯报价清晰：1-9台 $899、10-49台 $829、50+台 $769，支持整柜议价" },
