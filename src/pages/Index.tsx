@@ -2251,6 +2251,7 @@ const Index = () => {
                 {selectedTaskTab.steps.map((step) => {
                   const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
                   const isPromptFill = step.title === "外贸问题解答";
+                  const isFollowup = step.title === "买家跟进节点";
                   const stepAny = step as { soon?: boolean };
                   return (
                     <article
@@ -2260,12 +2261,14 @@ const Index = () => {
                           ? handleOpenProfile
                           : isPromptFill
                             ? () => handleUseCasePrompt(step.prompt)
-                            : undefined
+                            : isFollowup
+                              ? () => setFollowupDialogOpen(true)
+                              : undefined
                       }
                       className={cn(
                         "group relative overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-4 shadow-sm shadow-primary/3",
                         stepAny.soon && "bg-muted/40 opacity-75",
-                        (isProfileLink || isPromptFill) &&
+                        (isProfileLink || isPromptFill || isFollowup) &&
                           "cursor-pointer transition-all hover:border-primary/50 hover:shadow-md hover:shadow-primary/10",
                       )}
                     >
@@ -2281,7 +2284,7 @@ const Index = () => {
                       <div className="mt-4">
                         <StepPreview title={step.title} />
                       </div>
-                      {!stepAny.soon && !isProfileLink && !isPromptFill && (
+                      {!stepAny.soon && !isProfileLink && !isPromptFill && !isFollowup && (
                         <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center justify-center gap-2 bg-card/90 px-4 py-4 opacity-0 backdrop-blur-sm transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
                           <button
                             onClick={() => {
