@@ -1014,6 +1014,12 @@ const Index = () => {
     setInputKey((k) => k + 1);
   }, []);
 
+  const handleDirectFollowup = useCallback((buyer: InquiryBuyer) => {
+    const prompt = `立即跟进买家「${buyer.company}」（${buyer.contact}）：${buyer.nextAction.label}。请基于该买家档案，帮我起草本次跟进的话术与下一步执行计划。`;
+    setChatInitialMessage(prompt);
+    setActiveModule("业务专家");
+  }, []);
+
   const handleOpenProfile = useCallback(() => {
     setActiveModule(null);
     setShowResults(false);
@@ -1275,6 +1281,13 @@ const Index = () => {
                             <span className="shrink-0 rounded-md bg-card/80 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
                               {buyer.nextAction.due}
                             </span>
+                            <button
+                              onClick={() => handleDirectFollowup(buyer)}
+                              className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
+                            >
+                              <Sparkles className="h-2.5 w-2.5" />
+                              立即跟进
+                            </button>
                           </div>
                         </div>
 
@@ -2381,9 +2394,7 @@ const Index = () => {
                     </span>
                     <button
                       onClick={() => {
-                        handleUseCasePrompt(
-                          `立即跟进买家「${buyer.company}」（${buyer.contact}）：${buyer.nextAction.label}。请基于该买家档案，帮我起草本次跟进的话术与下一步执行计划。`
-                        );
+                        handleDirectFollowup(buyer);
                         setFollowupDialogOpen(false);
                       }}
                       className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[12px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
