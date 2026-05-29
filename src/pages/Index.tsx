@@ -1149,7 +1149,7 @@ const Index = () => {
                         <div className="relative px-5 py-4 sm:px-6 sm:py-5">
                           <div className="flex items-start justify-between gap-3">
                             <button
-                              onClick={() => setActiveBuyerId(buyer.id)}
+                              onClick={() => setSheetBuyerId(buyer.id)}
                               className="group/title flex min-w-0 flex-1 items-center gap-2 text-left"
                             >
                               <p className="truncate text-[15px] font-semibold leading-snug text-foreground transition-colors group-hover/title:text-primary">
