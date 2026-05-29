@@ -1131,8 +1131,6 @@ const Index = () => {
                 </p>
               </section>
 
-
-              {activeResultTab !== "product" ? (
                 <section
                   className="mt-5 space-y-3 opacity-0 animate-fade-up"
                   style={{ animationDelay: "220ms" }}
