@@ -781,19 +781,13 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             <ModuleDetailSheet
               moduleKey={detailModule}
               company={company}
-              draft={draft}
-              setDraft={setDraft}
-              editing={editingModule}
-              retraining={retrainingModule}
-              retrainProgress={retrainProgress}
+              onFieldChange={(key, value) =>
+                setCompany((prev) => ({ ...prev, [key]: value }))
+              }
               onClose={() => {
                 setDetailModule(null);
                 cancelEditModule();
               }}
-              onStartEdit={() => detailModule && startEditModule(detailModule)}
-              onCancelEdit={cancelEditModule}
-              onSave={() => detailModule && saveModule(detailModule)}
-              onRetrain={() => detailModule && triggerRetrain(detailModule)}
             />
           </section>
         )}
