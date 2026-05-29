@@ -905,7 +905,11 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                                 <>
                                   <DropdownMenuItem onClick={() => adoptDiscovery(it.id)}>
                                     <Check className="mr-2 h-3.5 w-3.5 text-primary" />
-                                    启用（共享）
+                                    启用
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => openEdit("ai", it)}>
+                                    <Pencil className="mr-2 h-3.5 w-3.5" />
+                                    编辑
                                   </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
@@ -913,7 +917,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                                     onClick={() => discardDiscovery(it.id)}
                                   >
                                     <Trash2 className="mr-2 h-3.5 w-3.5" />
-                                    丢弃
+                                    删除
                                   </DropdownMenuItem>
                                 </>
                               )}
