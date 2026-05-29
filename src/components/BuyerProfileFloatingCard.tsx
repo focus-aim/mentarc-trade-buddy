@@ -84,7 +84,7 @@ const Field = ({
 // ============================================================
 // Drawer content — compact buyer detail
 // ============================================================
-const BuyerProfileSheetContent = ({
+export const BuyerProfileSheetContent = ({
   stage,
   updated,
   onClose,
