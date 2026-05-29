@@ -238,16 +238,8 @@ const StepPreview = ({ title }: { title: string }) => {
   switch (title) {
     case "分析询盘":
       return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/5 to-secondary/10 p-3")}>
-          <div className="rounded-md bg-card/80 p-2 shadow-sm">
-            <div className="flex items-center gap-1.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-primary/60" />
-              <div className="h-1.5 w-12 rounded-full bg-foreground/15" />
-            </div>
-            <div className="mt-1.5 h-1.5 w-3/4 rounded-full bg-foreground/10" />
-            <div className="mt-1 h-1.5 w-1/2 rounded-full bg-foreground/10" />
-          </div>
-          <div className="mt-2 flex gap-1.5">
+        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/5 to-secondary/10 p-2")}>
+          <div className="flex flex-wrap gap-1">
             <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[9px] font-medium text-primary">5kW</span>
             <span className="rounded-md bg-secondary/30 px-1.5 py-0.5 text-[9px] font-medium text-foreground/70">
               UL1741
@@ -256,47 +248,46 @@ const StepPreview = ({ title }: { title: string }) => {
               300pcs
             </span>
           </div>
+          <div className="mt-2 space-y-1">
+            <div className="h-1.5 w-full rounded-full bg-foreground/10" />
+            <div className="h-1.5 w-3/4 rounded-full bg-foreground/10" />
+            <div className="h-1.5 w-1/2 rounded-full bg-foreground/10" />
+          </div>
         </div>
       );
     case "背调买家":
       return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/10 to-primary/5 p-3")}>
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15">
-              <Users className="h-4 w-4 text-primary" />
-            </div>
-            <div className="flex-1 space-y-1">
-              <div className="h-1.5 w-2/3 rounded-full bg-foreground/15" />
-              <div className="h-1.5 w-1/2 rounded-full bg-foreground/10" />
-            </div>
-          </div>
-          <div className="mt-3 grid grid-cols-3 gap-1.5">
-            <div className="rounded-md bg-card/80 p-1.5 text-center shadow-sm">
+        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/10 to-primary/5 p-2")}>
+          <div className="grid grid-cols-3 gap-1">
+            <div className="rounded-md bg-card/80 p-1 text-center shadow-sm">
               <div className="text-[10px] font-bold text-primary">A+</div>
               <div className="text-[8px] text-muted-foreground">实力</div>
             </div>
-            <div className="rounded-md bg-card/80 p-1.5 text-center shadow-sm">
+            <div className="rounded-md bg-card/80 p-1 text-center shadow-sm">
               <div className="text-[10px] font-bold text-foreground/80">EU</div>
               <div className="text-[8px] text-muted-foreground">区域</div>
             </div>
-            <div className="rounded-md bg-card/80 p-1.5 text-center shadow-sm">
+            <div className="rounded-md bg-card/80 p-1 text-center shadow-sm">
               <div className="text-[10px] font-bold text-emerald-500">低</div>
               <div className="text-[8px] text-muted-foreground">风险</div>
             </div>
+          </div>
+          <div className="mt-2 space-y-1">
+            <div className="h-1.5 w-2/3 rounded-full bg-foreground/15" />
+            <div className="h-1.5 w-1/2 rounded-full bg-foreground/10" />
           </div>
         </div>
       );
     case "​策略咨询":
       return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/5 to-secondary/10 p-3")}>
-          <div className="space-y-2">
+        <div className={cn(baseWrap, "bg-gradient-to-br from-primary/5 to-secondary/10 p-2")}>
+          <div className="space-y-1.5">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/15 text-[9px] font-bold text-primary">
+              <div key={i} className="flex items-center gap-1.5">
+                <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary/15 text-[8px] font-bold text-primary">
                   {i}
                 </div>
                 <div className="h-1.5 flex-1 rounded-full bg-foreground/10" style={{ width: `${100 - i * 15}%` }} />
-                <Clock className="h-2.5 w-2.5 text-muted-foreground" />
               </div>
             ))}
           </div>
@@ -304,27 +295,18 @@ const StepPreview = ({ title }: { title: string }) => {
       );
     case "生成报价单":
       return (
-        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/15 to-primary/5 p-3")}>
-          <div className="rounded-md bg-card/90 p-2 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="h-1.5 w-12 rounded-full bg-primary/50" />
-              <div className="h-1 w-6 rounded-full bg-foreground/15" />
-            </div>
-            <div className="mt-1.5 space-y-1">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="flex items-center gap-1">
-                  <div className="h-1 flex-1 rounded-full bg-foreground/10" />
-                  <div className="h-1 w-6 rounded-full bg-primary/30" />
-                </div>
-              ))}
-              <div className="flex items-center justify-between pt-0.5">
-                <span className="text-[8px] text-muted-foreground">Total</span>
-                <span className="text-[9px] font-bold text-primary">$112,920</span>
+        <div className={cn(baseWrap, "bg-gradient-to-br from-secondary/15 to-primary/5 p-2")}>
+          <div className="space-y-1">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="flex items-center gap-1">
+                <div className="h-1 flex-1 rounded-full bg-foreground/10" />
+                <div className="h-1 w-5 rounded-full bg-primary/30" />
               </div>
-            </div>
+            ))}
           </div>
-          <div className="absolute bottom-2 right-3 flex items-center gap-1 rounded-md bg-card/90 px-1.5 py-0.5 text-[9px] font-medium text-primary shadow-sm">
-            .xlsx
+          <div className="mt-1.5 flex items-center justify-between">
+            <span className="text-[8px] text-muted-foreground">Total</span>
+            <span className="text-[9px] font-bold text-primary">$112,920</span>
           </div>
         </div>
       );
@@ -2182,7 +2164,9 @@ const Index = () => {
               <div
                 className={cn(
                   "grid gap-4",
-                  selectedTaskTab.steps.length >= 4 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-3",
+                  selectedTaskTab.label === "跟单成交"
+                    ? "md:grid-cols-2 lg:grid-cols-4"
+                    : "md:grid-cols-3",
                 )}
               >
                 {selectedTaskTab.steps.map((step) => {
