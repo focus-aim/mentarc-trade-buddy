@@ -33,6 +33,24 @@ import {
   ChevronRight,
 } from "lucide-react";
 import {
+  MoreHorizontal,
+  Power,
+  PowerOff,
+  Trash2,
+  Pencil,
+  Brain,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
