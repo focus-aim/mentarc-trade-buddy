@@ -628,7 +628,7 @@ type InquiryBuyer = {
   region: string;
   stage: string;
   stageTone: "primary" | "amber" | "emerald" | "muted";
-  nextAction: { label: string; due: string };
+  nextAction: { label: string };
   analyses: { title: string; date: string }[];
 };
 
