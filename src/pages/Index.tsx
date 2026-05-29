@@ -1167,34 +1167,12 @@ const Index = () => {
             <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
               <section className="opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
                 <h1 className="text-2xl font-bold tracking-tight">
-                  <span className="text-aurora">任务成果</span>
+                  <span className="text-aurora">买家档案</span>
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground">
                   根据历史对话自动归档的业务资产，可随时溯源到原对话继续推进。
                 </p>
               </section>
-
-              <div className="mt-5 inline-flex items-center gap-1 rounded-xl border border-border/60 bg-card/70 p-1 backdrop-blur-sm opacity-0 animate-fade-up" style={{ animationDelay: "140ms" }}>
-                {[
-                  { key: "buyer" as const, label: "买家档案" },
-                  { key: "templates" as const, label: "报价单模板" },
-                ].map((t) => (
-                  <button
-                    key={t.key}
-                    onClick={() => setActiveResultsTab(t.key)}
-                    className={cn(
-                      "rounded-lg px-4 py-1.5 text-[13px] font-medium transition-colors",
-                      activeResultsTab === t.key
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-
-              {activeResultsTab === "buyer" ? (
                 <section
                   className="mt-5 space-y-3 opacity-0 animate-fade-up"
                   style={{ animationDelay: "220ms" }}
