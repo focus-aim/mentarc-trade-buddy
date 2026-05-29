@@ -626,7 +626,7 @@ export const QuoteResultCard = ({
 };
 
 export const QUOTE_GEN_PROMPT = "生成报价单";
-export const isQuoteGenPrompt = (text?: string) => !!text && /生成报价单|报价单生成/.test(text);
+export const isQuoteGenPrompt = (text?: string) => !!text && /生成.*报价单|报价单生成/.test(text);
 
 // Silence unused import warning in some build configs
 void Pencil;

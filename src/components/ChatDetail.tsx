@@ -291,14 +291,14 @@ const QUOTE_GEN_PREP_STEPS = [
   "准备报价生成向导",
 ];
 
-const QUOTE_GEN_STRATEGY_TEXT = "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。";
+const QUOTE_GEN_STRATEGY_TEXT = "**当前买家跟进要点与报价策略**\n\n- 买家 GreenLife 首批采购 300 台 5kW hybrid inverter，要求 UL1741 认证，目标价 FOB <$380/unit。\n- 订单量明确、认证门槛高，建议优先确认 UL1741 资质与首批 300 台交期。\n- 报价策略：在目标价附近给出阶梯报价，突出 UL1741 合规 + 混合机型方案 + 后续返单空间。";
 
 const QUOTE_RICH_STEPS: RichStep[] = [
   {
     label: "信息整合",
     subSteps: [
       { plugin: "知识库", query: "调取产品规格、价格区间与认证清单", description: "汇总产品默认报价信息。" },
-      { plugin: "买家画像", query: "读取 TechSol US 采购背景与目标价", description: "匹配最适合的报价策略。" },
+      { plugin: "买家画像", query: "读取 GreenLife 采购背景与目标价", description: "匹配最适合的报价策略。" },
     ],
   },
   {
