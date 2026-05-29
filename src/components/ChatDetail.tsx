@@ -1096,18 +1096,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={TREND_MINDFLOW_STEPS} onComplete={handleTrendMindFlowComplete} />
                   ) : msg.type === "quote-mindflow" ? (
                     <MindFlowMessage richSteps={QUOTE_RICH_STEPS} onComplete={handleQuoteMindFlowComplete} />
-                  ) : msg.type === "quote-confirm" ? (
-                    <QuoteConfirmStep
-                      onNext={handleQuoteConfirmNext}
-                      done={!!msg.quoteInfo}
-                      doneInfo={msg.quoteInfo}
-                    />
-                  ) : msg.type === "quote-template" ? (
-                    <QuoteTemplateStep
-                      onConfirm={handleQuoteTemplateConfirm}
-                      done={!!msg.quoteTemplate}
-                      selected={msg.quoteTemplate || null}
-                    />
                   ) : msg.type === "quote-result" ? (
                     <QuoteResultCard
                       template={msg.quoteTemplate || "business"}
