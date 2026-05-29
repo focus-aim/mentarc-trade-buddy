@@ -1404,7 +1404,8 @@ const CondensedModuleCard = ({
   onOpen: () => void;
 }) => {
   const Icon = mod.icon;
-  const insightCount = mod.insights.length;
+  const filledInsights = mod.insights.filter((i) => i.filled).length;
+  const totalInsights = mod.insights.length;
   // Map mastery → 1–4 dots + label
   const filledDots =
     mod.mastery >= 80 ? 4 : mod.mastery >= 60 ? 3 : mod.mastery >= 40 ? 2 : 1;
@@ -1472,10 +1473,21 @@ const CondensedModuleCard = ({
         {mod.insights.map((it, i) => (
           <div
             key={i}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border/50 bg-background/60 px-2.5 py-1.5 text-[12px] font-medium text-foreground/85"
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-colors",
+              it.filled
+                ? "border-primary/20 bg-primary/[0.04] text-foreground"
+                : "border-dashed border-border/60 bg-background/40 text-muted-foreground/70",
+            )}
           >
-            <span className="h-1 w-1 shrink-0 rounded-full bg-primary/70" />
-            <span className="truncate">{it}</span>
+            {it.filled ? (
+              <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
+              </span>
+            ) : (
+              <span className="h-3.5 w-3.5 shrink-0 rounded-full border border-dashed border-muted-foreground/40" />
+            )}
+            <span className="truncate">{it.label}</span>
           </div>
         ))}
       </div>
@@ -1483,7 +1495,8 @@ const CondensedModuleCard = ({
       {/* Footer */}
       <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
         <span className="text-[11.5px] text-muted-foreground">
-          已涵盖 <span className="font-semibold text-foreground tabular-nums">{insightCount}</span> 个维度
+          已沉淀 <span className="font-semibold text-foreground tabular-nums">{filledInsights}</span>
+          <span className="text-muted-foreground/70"> / {totalInsights}</span> 项
         </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
