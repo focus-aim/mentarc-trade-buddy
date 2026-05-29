@@ -781,19 +781,13 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
             <ModuleDetailSheet
               moduleKey={detailModule}
               company={company}
-              draft={draft}
-              setDraft={setDraft}
-              editing={editingModule}
-              retraining={retrainingModule}
-              retrainProgress={retrainProgress}
+              onFieldChange={(key, value) =>
+                setCompany((prev) => ({ ...prev, [key]: value }))
+              }
               onClose={() => {
                 setDetailModule(null);
                 cancelEditModule();
               }}
-              onStartEdit={() => detailModule && startEditModule(detailModule)}
-              onCancelEdit={cancelEditModule}
-              onSave={() => detailModule && saveModule(detailModule)}
-              onRetrain={() => detailModule && triggerRetrain(detailModule)}
             />
           </section>
         )}
@@ -1893,33 +1887,15 @@ const CondensedModuleCard = ({
 const ModuleDetailSheet = ({
   moduleKey,
   company,
-  draft,
-  setDraft,
-  editing,
-  retraining,
-  retrainProgress,
   onClose,
-  onStartEdit,
-  onCancelEdit,
-  onSave,
-  onRetrain,
+  onFieldChange,
 }: {
   moduleKey: KBModuleKey | null;
   company: CompanyForm;
-  draft: CompanyForm;
-  setDraft: (v: CompanyForm) => void;
-  editing: KBModuleKey | null;
-  retraining: KBModuleKey | null;
-  retrainProgress: number;
   onClose: () => void;
-  onStartEdit: () => void;
-  onCancelEdit: () => void;
-  onSave: () => void;
-  onRetrain: () => void;
+  onFieldChange: (key: keyof CompanyForm, value: string) => void;
 }) => {
   const mod = moduleKey ? KB_MODULES.find((m) => m.key === moduleKey) ?? null : null;
-  const isEditing = !!mod && editing === mod.key;
-  const isRetraining = !!mod && retraining === mod.key;
   const style = mod ? masteryStyle(mod.mastery) : null;
   const Icon = mod?.icon;
 
@@ -1959,22 +1935,6 @@ const ModuleDetailSheet = ({
               </div>
             </div>
 
-            {/* Retraining banner */}
-            {isRetraining && (
-              <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5">
-                <div className="flex items-center gap-2 text-[12px] font-medium text-primary">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  正在重新训练 · {retrainProgress}%
-                </div>
-                <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-primary/10">
-                  <div
-                    className="h-full bg-primary transition-all"
-                    style={{ width: `${retrainProgress}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
             {/* Extracted fields */}
             <div className="mt-5">
               <div className="mb-2 flex items-center gap-1.5">
@@ -1985,86 +1945,33 @@ const ModuleDetailSheet = ({
               </div>
               <div className="space-y-2.5">
                 {mod.fields.map((f) => {
-                  const value = isEditing ? draft[f.key] : company[f.key];
+                  const value = company[f.key];
                   return (
                     <div
                       key={f.key}
                       className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
                     >
                       <div className="text-[11px] font-medium text-muted-foreground">{f.label}</div>
-                      {isEditing ? (
-                        f.textarea ? (
-                          <textarea
-                            value={draft[f.key]}
-                            onChange={(e) =>
-                              setDraft({ ...draft, [f.key]: e.target.value })
-                            }
-                            rows={2}
-                            className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                            placeholder="点击键入"
-                          />
-                        ) : (
-                          <input
-                            value={draft[f.key]}
-                            onChange={(e) =>
-                              setDraft({ ...draft, [f.key]: e.target.value })
-                            }
-                            className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                            placeholder="点击键入"
-                          />
-                        )
+                      {f.textarea ? (
+                        <textarea
+                          value={value}
+                          onChange={(e) => onFieldChange(f.key, e.target.value)}
+                          rows={2}
+                          className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                          placeholder="点击键入"
+                        />
                       ) : (
-                        <p className="mt-1 text-[13px] leading-relaxed text-foreground/85 break-words">
-                          {value || (
-                            <span className="text-muted-foreground/60">未填写</span>
-                          )}
-                        </p>
+                        <input
+                          value={value}
+                          onChange={(e) => onFieldChange(f.key, e.target.value)}
+                          className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                          placeholder="点击键入"
+                        />
                       )}
                     </div>
                   );
                 })}
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="mt-6 flex items-center gap-2 border-t border-border/40 pt-4">
-              {isEditing ? (
-                <>
-                  <button
-                    onClick={onSave}
-                    disabled={isRetraining}
-                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
-                  >
-                    <Check className="h-3.5 w-3.5" />
-                    保存并重新训练
-                  </button>
-                  <button
-                    onClick={onCancelEdit}
-                    className="inline-flex items-center justify-center rounded-full border border-border bg-background/70 px-4 py-2 text-[12.5px] font-medium text-foreground hover:bg-accent transition-colors"
-                  >
-                    取消
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={onStartEdit}
-                    disabled={isRetraining}
-                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-[12px] font-semibold text-foreground hover:bg-accent transition-colors disabled:opacity-50"
-                  >
-                    <PenLine className="h-3.5 w-3.5" />
-                    编辑信息
-                  </button>
-                  <button
-                    onClick={onRetrain}
-                    disabled={isRetraining}
-                    className="ml-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/15 transition-colors disabled:opacity-50"
-                  >
-                    <Sparkles className="h-3.5 w-3.5" />
-                    重新训练
-                  </button>
-                </>
-              )}
             </div>
           </>
         )}
