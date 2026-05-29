@@ -1124,7 +1124,7 @@ const Index = () => {
             <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
               <section className="opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
                 <h1 className="text-2xl font-bold tracking-tight">
-                  <span className="text-aurora">任务成果</span>
+                  <span className="text-aurora">买家档案</span>
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground">
                   根据历史对话自动归档的业务资产，可随时溯源到原对话继续推进。
