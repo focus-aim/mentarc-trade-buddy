@@ -545,13 +545,62 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   const [preferences, setPreferences] = useState<PreferenceItem[]>(initialPreferences);
   const [detailModule, setDetailModule] = useState<KBModuleKey | null>(null);
   const [activeMaterial, setActiveMaterial] = useState<MaterialFile | null>(null);
+  const [sharedSkills, setSharedSkills] = useState<TeamSkillItem[]>(initialSharedSkills);
+  const [aiDiscoveries, setAiDiscoveries] = useState<AIDiscoveredItem[]>(initialAIDiscoveries);
+  const [expTab, setExpTab] = useState<"shared" | "ai">("shared");
   const [teamSkillPage, setTeamSkillPage] = useState(1);
   const [activeTeamSkill, setActiveTeamSkill] = useState<TeamSkillItem | null>(null);
-  const teamSkillTotalPages = Math.max(1, Math.ceil(teamSkillItems.length / TEAM_SKILLS_PER_PAGE));
-  const teamSkillPageItems = teamSkillItems.slice(
+  const [editingSkill, setEditingSkill] = useState<
+    | { kind: "shared" | "ai"; item: TeamSkillItem | AIDiscoveredItem }
+    | null
+  >(null);
+  const [editDraft, setEditDraft] = useState<{ headline: string; subtitle: string; tags: string }>({
+    headline: "",
+    subtitle: "",
+    tags: "",
+  });
+
+  const currentList: TeamSkillItem[] = expTab === "shared" ? sharedSkills : aiDiscoveries;
+  const teamSkillTotalPages = Math.max(1, Math.ceil(currentList.length / TEAM_SKILLS_PER_PAGE));
+  const teamSkillPageItems = currentList.slice(
     (teamSkillPage - 1) * TEAM_SKILLS_PER_PAGE,
     teamSkillPage * TEAM_SKILLS_PER_PAGE,
   );
+
+  const openEdit = (kind: "shared" | "ai", item: TeamSkillItem) => {
+    setEditingSkill({ kind, item });
+    setEditDraft({ headline: item.headline, subtitle: item.subtitle, tags: item.tags.join("、") });
+  };
+  const saveEdit = () => {
+    if (!editingSkill) return;
+    const next = {
+      headline: editDraft.headline.trim() || editingSkill.item.headline,
+      subtitle: editDraft.subtitle.trim() || editingSkill.item.subtitle,
+      tags: editDraft.tags.split(/[、,，\s]+/).filter(Boolean),
+    };
+    if (editingSkill.kind === "shared") {
+      setSharedSkills((prev) => prev.map((s) => (s.id === editingSkill.item.id ? { ...s, ...next } : s)));
+    } else {
+      setAiDiscoveries((prev) => prev.map((s) => (s.id === editingSkill.item.id ? { ...s, ...next } : s)));
+    }
+    setEditingSkill(null);
+  };
+  const toggleSharedStatus = (id: string) =>
+    setSharedSkills((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status: s.status === "active" ? "disabled" : "active" } : s)),
+    );
+  const adoptDiscovery = (id: string) => {
+    setAiDiscoveries((prev) => {
+      const found = prev.find((s) => s.id === id);
+      if (found) {
+        const { confidence: _c, discoveredAt: _d, ...base } = found;
+        setSharedSkills((cur) => [{ ...base, status: "active" }, ...cur]);
+      }
+      return prev.filter((s) => s.id !== id);
+    });
+  };
+  const discardDiscovery = (id: string) =>
+    setAiDiscoveries((prev) => prev.filter((s) => s.id !== id));
 
   const newPreferenceCount = preferences.filter((p) => p.isNew).length;
 
