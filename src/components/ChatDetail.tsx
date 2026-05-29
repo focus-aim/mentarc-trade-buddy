@@ -105,7 +105,7 @@ interface ChatDetailProps {
 interface Message {
   role: "user" | "assistant";
   content: string;
-  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-summary" | "quote-mindflow" | "quote-result" | "second-followup-prompt";
+  type?: "text" | "plain-text" | "mindflow" | "operation-result" | "inquiry-result" | "image-mindflow" | "image-result" | "upload-prompt" | "detail-type-select" | "detail-mindflow" | "detail-result" | "operation-greeting" | "demo-mindflow" | "demo-result" | "inquiry-strategy-prompt" | "inquiry-followup-result" | "buyer-background-mindflow" | "buyer-background-result" | "emails-mindflow" | "followup-strategy-mindflow" | "followup-strategy-result" | "keyword-mindflow" | "keyword-result" | "keyword-guidance" | "market-mindflow" | "market-result" | "trend-mindflow" | "trend-result" | "quote-summary" | "quote-gen-prep-mindflow" | "quote-mindflow" | "quote-result" | "second-followup-prompt";
   mindflowSteps?: string[];
   detailTypes?: string[];
   images?: string[];
@@ -285,6 +285,14 @@ const TREND_MINDFLOW_STEPS = [
   "生成热点趋势采集报告",
 ];
 
+const QUOTE_GEN_PREP_STEPS = [
+  "解析买家跟进上下文",
+  "匹配产品与报价策略",
+  "准备报价生成向导",
+];
+
+const QUOTE_GEN_STRATEGY_TEXT = "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。";
+
 const QUOTE_RICH_STEPS: RichStep[] = [
   {
     label: "信息整合",
@@ -460,11 +468,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [messages, setMessages] = useState<Message[]>(() => initialUserMessage?.trim() ? (
     initialIsQuoteGen ? [
       { role: "user", content: initialMessage, type: "text" },
-      {
-        role: "assistant",
-        content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
-        type: "plain-text",
-      },
+      { role: "assistant", content: "", type: "quote-gen-prep-mindflow" },
     ] : [
       { role: "user", content: initialMessage, type: "text" },
       { role: "assistant", content: "", type: initialAssistantType },
@@ -490,7 +494,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
   const [showingFollowupStrategyMindFlow, setShowingFollowupStrategyMindFlow] = useState(initialIsFollowup);
   const [showingQuoteMindFlow, setShowingQuoteMindFlow] = useState(false);
-  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(initialIsQuoteGen);
+  const [quoteWizardActive, setQuoteWizardActive] = useState<boolean>(false);
   const [latestResult, setLatestResult] = useState<ReactNode>(null);
   const [latestResultLabel, setLatestResultLabel] = useState<string>("");
   const [activeResultIdx, setActiveResultIdx] = useState<number | null>(null);
@@ -752,6 +756,22 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     setShowingQuoteMindFlow(true);
   }, []);
 
+  const handleQuoteGenPrepComplete = useCallback(() => {
+    setMessages((prev) => {
+      const next = [...prev];
+      const idx = next.findIndex((m) => m.type === "quote-gen-prep-mindflow");
+      if (idx >= 0) {
+        next[idx] = {
+          role: "assistant",
+          content: QUOTE_GEN_STRATEGY_TEXT,
+          type: "plain-text",
+        };
+      }
+      return next;
+    });
+    setQuoteWizardActive(true);
+  }, []);
+
   const handleQuoteMindFlowComplete = useCallback(() => {
     setShowingQuoteMindFlow(false);
     setMessages((prev) => {
@@ -931,12 +951,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         }
       } else if (moduleTitle === "业务专家") {
         if (isQuoteGenPrompt(text)) {
-          newMessages.push({
-            role: "assistant",
-            content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
-            type: "plain-text",
-          });
-          setQuoteWizardActive(true);
+          newMessages.push({ role: "assistant", content: "", type: "quote-gen-prep-mindflow" });
         } else if (isBuyerBackgroundPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
           setShowingBuyerBgMindFlow(true);
@@ -967,12 +982,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     } else if (moduleTitle === "运营专家" && isKeywordPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "keyword-mindflow" });
     } else if (moduleTitle === "业务专家" && isQuoteGenPrompt(text)) {
-      newMessages.push({
-        role: "assistant",
-        content: "**当前买家跟进要点与报价策略**\n\n- 买家 TechSol US 已明确 5kW UL1741 逆变器需求，目标价 FOB <$380/unit。\n- 7 月上线，对样品速度与交期敏感，建议主动给出双交期方案。\n- 报价策略：在目标价基础上让出有限空间，突出认证齐全 + 一年质保 + 美西常备库存。",
-        type: "plain-text",
-      });
-      setQuoteWizardActive(true);
+      newMessages.push({ role: "assistant", content: "", type: "quote-gen-prep-mindflow" });
     } else if (moduleTitle === "业务专家" && isBuyerBackgroundPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "buyer-background-mindflow" });
       setShowingBuyerBgMindFlow(true);
@@ -1144,6 +1154,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={TREND_MINDFLOW_STEPS} onComplete={handleTrendMindFlowComplete} />
                   ) : msg.type === "quote-mindflow" ? (
                     <MindFlowMessage richSteps={QUOTE_RICH_STEPS} onComplete={handleQuoteMindFlowComplete} />
+                  ) : msg.type === "quote-gen-prep-mindflow" ? (
+                    <MindFlowMessage steps={QUOTE_GEN_PREP_STEPS} onComplete={handleQuoteGenPrepComplete} />
                   ) : msg.type === "quote-result" ? (
                     <QuoteResultCard
                       template={msg.quoteTemplate || "business"}
