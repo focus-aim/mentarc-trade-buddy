@@ -617,6 +617,24 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   };
   const discardDiscovery = (id: string) =>
     setAiDiscoveries((prev) => prev.filter((s) => s.id !== id));
+  const handleAddSkill = () => {
+    const headline = addDraft.headline.trim();
+    const subtitle = addDraft.subtitle.trim();
+    if (!headline || !subtitle) return;
+    const newSkill: TeamSkillItem = {
+      id: `s-${Date.now()}`,
+      headline,
+      subtitle,
+      tags: addDraft.tags.split(/[、,，\s]+/).filter(Boolean),
+      authors: addDraft.authors.trim() ? [addDraft.authors.trim()] : ["我"],
+      status: "active",
+      callCount: 0,
+    };
+    setSharedSkills((prev) => [newSkill, ...prev]);
+    setAddSkillOpen(false);
+    setAddDraft({ headline: "", subtitle: "", tags: "", authors: "" });
+    setTeamSkillPage(1);
+  };
 
   const newPreferenceCount = preferences.filter((p) => p.isNew).length;
 
