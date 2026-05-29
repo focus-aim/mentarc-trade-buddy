@@ -658,7 +658,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
   const tabs: { key: TabKey; label: string; badge?: number }[] = [
     { key: "company", label: "企业知识" },
-    { key: "preference", label: "团队经验", badge: newPreferenceCount },
+    { key: "preference", label: "团队经验", badge: aiDiscoveries.length },
     { key: "skills", label: "AI 技能" },
   ];
 
