@@ -706,45 +706,28 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     ]);
   }, []);
 
-  const handleQuoteConfirmNext = useCallback((info: QuoteInfo) => {
-    setMessages((prev) => {
-      const next = prev.map((m) =>
-        m.type === "quote-confirm" && !m.quoteInfo ? { ...m, quoteInfo: info } : m,
-      );
-      return [
-        ...next,
-        { role: "assistant" as const, content: "", type: "quote-template" as const },
-      ];
-    });
-  }, []);
-
-  const handleQuoteTemplateConfirm = useCallback((template: QuoteTemplate) => {
-    setMessages((prev) => {
-      const next = prev.map((m) =>
-        m.type === "quote-template" && !m.quoteTemplate ? { ...m, quoteTemplate: template } : m,
-      );
-      return [
-        ...next,
-        { role: "user" as const, content: "开始生成报价单", type: "text" as const },
-        { role: "assistant" as const, content: "", type: "quote-mindflow" as const, quoteTemplate: template },
-      ];
-    });
+  const handleQuoteWizardComplete = useCallback((info: QuoteInfo, template: QuoteTemplate) => {
+    setQuoteWizardActive(false);
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: "", type: "quote-summary", quoteInfo: info, quoteTemplate: template },
+      { role: "assistant", content: "", type: "quote-mindflow", quoteInfo: info, quoteTemplate: template },
+    ]);
     setShowingQuoteMindFlow(true);
   }, []);
 
   const handleQuoteMindFlowComplete = useCallback(() => {
     setShowingQuoteMindFlow(false);
     setMessages((prev) => {
-      const lastConfirm = [...prev].reverse().find((m) => m.type === "quote-confirm" && m.quoteInfo);
-      const lastTemplate = [...prev].reverse().find((m) => m.type === "quote-template" && m.quoteTemplate);
-      const info = lastConfirm?.quoteInfo || DEFAULT_QUOTE_INFO;
-      const template = lastTemplate?.quoteTemplate || "business";
+      const lastMindflow = [...prev].reverse().find((m) => m.type === "quote-mindflow");
+      const info = lastMindflow?.quoteInfo || DEFAULT_QUOTE_INFO;
+      const template = lastMindflow?.quoteTemplate || "business";
       return [
         ...prev,
         {
-          role: "assistant" as const,
+          role: "assistant",
           content: "",
-          type: "quote-result" as const,
+          type: "quote-result",
           quoteInfo: info,
           quoteTemplate: template,
         },
