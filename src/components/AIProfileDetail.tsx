@@ -407,53 +407,90 @@ const expertExperienceGroups: {
 
 // 团队经验技巧：标题 + 副标题 + 标签 + 来自业务员
 interface TeamSkillItem {
+  id: string;
   headline: string;
   subtitle: string;
   tags: string[];
-  author: string;
+  authors: string[];
+  status: "active" | "disabled";
 }
-const teamSkillItems: TeamSkillItem[] = [
+const initialSharedSkills: TeamSkillItem[] = [
   {
+    id: "s-1",
     headline: "刚询价且需求不清时先拆应用场景再引预算区间",
     subtitle: "客户刚询价但需求不明确时，不直接报完整价格，先用应用场景拆需求并引出预算区间再推进报价。",
-    tags: ["询价", "报价跟进", "需求不清", "比价", "压价"],
-    author: "Rita",
+    tags: ["询价", "报价跟进", "需求不清", "比价"],
+    authors: ["Rita", "Jason"],
+    status: "active",
   },
   {
+    id: "s-2",
     headline: "首封回复先抛 3 个澄清问题，再给方案概览",
     subtitle: "首封回复不堆产品参数，先用 3 个高价值澄清问题锁定客户真实场景，再附上方案概览引导深聊。",
-    tags: ["首封回复", "澄清问题", "意图判断", "节奏控制"],
-    author: "Jason",
+    tags: ["首封回复", "澄清问题", "意图判断"],
+    authors: ["Jason"],
+    status: "active",
   },
   {
+    id: "s-3",
     headline: "报价用「标准 / 定制 / 品牌」三档组合替代单价",
     subtitle: "面对不确定预算的客户，用三档组合报价替代单一报价，引导客户主动选档，降低议价压力。",
-    tags: ["报价策略", "三档组合", "议价", "客单价"],
-    author: "Jason",
+    tags: ["报价策略", "三档组合", "议价"],
+    authors: ["Jason", "Cody"],
+    status: "active",
   },
   {
+    id: "s-4",
     headline: "详情页用使用场景替代技术参数堆砌",
     subtitle: "在详情页前两屏用真实使用场景图与短句替代参数列表，提升非专业买家的转化率。",
-    tags: ["详情页", "使用场景", "转化率", "首屏"],
-    author: "Cody",
+    tags: ["详情页", "使用场景", "转化率"],
+    authors: ["Cody"],
+    status: "active",
   },
   {
-    headline: "差异化卖点放首屏，认证背书收尾建立信任",
-    subtitle: "首屏直击差异化卖点，结尾集中放置认证、检测报告与合作品牌，形成「卖点 → 信任」闭环。",
-    tags: ["卖点", "首屏", "认证背书", "信任建立"],
-    author: "Cody",
-  },
-  {
+    id: "s-5",
     headline: "未回复客户 D+3 改用「样品图 + 同类案例」",
     subtitle: "对 3 天未回复的客户切换沟通角度，用样品实拍 + 同类客户成交案例，回复率可提升 2 倍。",
-    tags: ["跟进策略", "未回复", "样品", "案例触达"],
-    author: "Rita",
+    tags: ["跟进策略", "未回复", "样品"],
+    authors: ["Rita"],
+    status: "active",
+  },
+];
+
+interface AIDiscoveredItem extends TeamSkillItem {
+  confidence: number;
+  discoveredAt: string;
+}
+const initialAIDiscoveries: AIDiscoveredItem[] = [
+  {
+    id: "ai-1",
+    headline: "客户提到 \"lead time\" 时优先给排产档期而非笼统天数",
+    subtitle: "从 23 段会话中发现：当买家明确提及交期，业务员给出具体排产档期（如 W42/W45）成单率较平均水平高 38%。",
+    tags: ["交期", "排产", "成单率"],
+    authors: ["Rita", "Jason"],
+    status: "active",
+    confidence: 0.86,
+    discoveredAt: "今天 11:20",
   },
   {
-    headline: "高意向客户走「样品 → 合同 → 试单」三步锁单",
-    subtitle: "识别高意向信号后用三步流程压缩决策周期，2 周内可推进试单，避免反复议价。",
-    tags: ["高意向", "锁单", "试单", "周期压缩"],
-    author: "Jason",
+    id: "ai-2",
+    headline: "提供 3 张同行业落地图比单纯发产品图回复率高 2.1×",
+    subtitle: "AI 在跟进话术中识别出「同行业案例图集」这一隐性打法，建议沉淀为团队标准动作。",
+    tags: ["跟进话术", "案例图", "复用"],
+    authors: ["Cody"],
+    status: "active",
+    confidence: 0.79,
+    discoveredAt: "昨天 18:05",
+  },
+  {
+    id: "ai-3",
+    headline: "中东客户首次询盘附送斋月营销日历可显著提升回复",
+    subtitle: "近 30 天 4 位业务员对中东客户附带营销节奏建议后，平均回复速度从 36h 缩短到 9h。",
+    tags: ["中东", "节庆营销", "首次询盘"],
+    authors: ["Rita", "Cody", "Jason"],
+    status: "active",
+    confidence: 0.72,
+    discoveredAt: "2 天前",
   },
 ];
 const TEAM_SKILLS_PER_PAGE = 5;
