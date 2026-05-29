@@ -2221,6 +2221,17 @@ const Index = () => {
         </main>
       )}
       <TeamManagementDialog open={teamDialogOpen} onOpenChange={setTeamDialogOpen} />
+      <Sheet open={!!sheetBuyerId} onOpenChange={(o) => !o && setSheetBuyerId(null)}>
+        <SheetContent side="right" className="w-full sm:max-w-[480px] p-0 overflow-y-auto scrollbar-thin">
+          {sheetBuyerId && (
+            <BuyerProfileSheetContent
+              stage={INQUIRY_BUYERS.find((b) => b.id === sheetBuyerId)?.stage ?? ""}
+              updated={false}
+              onClose={() => setSheetBuyerId(null)}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
       <Dialog open={followupDialogOpen} onOpenChange={setFollowupDialogOpen}>
         <DialogContent className="flex max-h-[86vh] max-w-2xl flex-col gap-0 overflow-hidden rounded-2xl p-0">
           <DialogHeader className="shrink-0 border-b border-border/70 bg-card/95 px-6 py-4 text-left backdrop-blur-md">
