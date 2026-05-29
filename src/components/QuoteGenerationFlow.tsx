@@ -686,3 +686,263 @@ export const isQuoteGenPrompt = (text?: string) => !!text && /生成报价单|�
 
 // Silence unused import warning in some build configs
 void Pencil;
+
+// ---------- Combined Wizard (Step 1 + Step 2 in one card) ----------
+
+export const QuoteWizard = ({
+  onComplete,
+  initialInfo,
+  initialTemplate,
+}: {
+  onComplete: (info: QuoteInfo, template: QuoteTemplate) => void;
+  initialInfo?: QuoteInfo;
+  initialTemplate?: QuoteTemplate;
+}) => {
+  const [step, setStep] = useState<1 | 2>(1);
+  const [collapsed, setCollapsed] = useState(false);
+  const [info, setInfo] = useState<QuoteInfo>(initialInfo || DEFAULT_QUOTE_INFO);
+  const [picked, setPicked] = useState<QuoteTemplate>(initialTemplate || "business");
+  const [kbOpen, setKbOpen] = useState(false);
+  const incotermOptions = ["FOB", "EXW", "DDP"];
+
+  return (
+    <div className="rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-sm shadow-sm">
+      {/* Header with step indicator */}
+      <div className={`flex items-center justify-between px-4 py-3 ${collapsed ? "" : "border-b border-border/60"}`}>
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5">
+            <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold transition-colors ${step === 1 ? "bg-primary text-primary-foreground" : "bg-primary/12 text-primary"}`}>
+              {step > 1 ? <Check className="h-3.5 w-3.5" /> : "1"}
+            </span>
+            <span className={`text-[12.5px] font-medium ${step === 1 ? "text-foreground" : "text-muted-foreground"}`}>确认关键信息</span>
+          </div>
+          <span className="h-px w-5 bg-border" />
+          <div className="flex items-center gap-1.5">
+            <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold transition-colors ${step === 2 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>2</span>
+            <span className={`text-[12.5px] font-medium ${step === 2 ? "text-foreground" : "text-muted-foreground"}`}>选择模板</span>
+          </div>
+        </div>
+        <button
+          onClick={() => setCollapsed((c) => !c)}
+          className="inline-flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          aria-label={collapsed ? "展开" : "折叠"}
+        >
+          {collapsed ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronUp className="h-3.5 w-3.5" />}
+        </button>
+      </div>
+
+      {!collapsed && step === 1 && (
+        <div className="px-4 py-3 space-y-3">
+          <p className="text-[12.5px] text-muted-foreground leading-relaxed">
+            以下信息已从知识库调取并自动填入，请<span className="text-foreground font-medium">确认或补充</span>缺失项。
+          </p>
+          <div className="space-y-2.5">
+            {/* 买家名称 */}
+            <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+              <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+                <UserRound className="h-3.5 w-3.5 text-primary" />
+                买家名称
+              </div>
+              <input
+                type="text"
+                value={info.buyerCompany}
+                onChange={(e) => setInfo({ ...info, buyerCompany: e.target.value })}
+                className="flex-1 rounded-md border border-border/70 bg-background px-2 py-1.5 text-[12px] text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40"
+              />
+            </div>
+            {/* 采购产品 */}
+            <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+              <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+                <Package className="h-3.5 w-3.5 text-primary" />
+                采购产品
+              </div>
+              <input
+                type="text"
+                value={info.productName}
+                placeholder="产品名 + 基本要求"
+                onChange={(e) => setInfo({ ...info, productName: e.target.value })}
+                className="flex-1 rounded-md border border-border/70 bg-background px-2 py-1.5 text-[12px] text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/40 truncate"
+              />
+            </div>
+            {/* 报价参数 */}
+            <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 space-y-2">
+              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground">
+                <Truck className="h-3.5 w-3.5 text-primary" />
+                报价参数
+              </div>
+              <div className="grid gap-2 md:grid-cols-2">
+                <div className="flex items-center gap-2">
+                  <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">贸易术语</label>
+                  <div className="flex gap-1">
+                    {incotermOptions.map((opt) => {
+                      const active = info.incoterm === opt;
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => setInfo({ ...info, incoterm: opt })}
+                          className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
+                            active
+                              ? "border-primary/60 bg-primary/10 text-primary"
+                              : "border-border/70 bg-background text-foreground hover:bg-muted"
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">预估数量</label>
+                  <div className="flex gap-1">
+                    {([
+                      { v: "moq", label: "按 MOQ" },
+                      { v: "purchase", label: "按采购量" },
+                    ] as const).map((opt) => {
+                      const active = info.qtyBasis === opt.v;
+                      return (
+                        <button
+                          key={opt.v}
+                          onClick={() => setInfo({ ...info, qtyBasis: opt.v })}
+                          className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
+                            active
+                              ? "border-primary/60 bg-primary/10 text-primary"
+                              : "border-border/70 bg-background text-foreground hover:bg-muted"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* 我的公司 */}
+            <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+              <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
+                <Building2 className="h-3.5 w-3.5 text-primary" />
+                我的公司
+              </div>
+              <div className="flex-1 text-[12px] text-foreground/80 truncate">
+                我的公司和产品信息
+                <button
+                  type="button"
+                  onClick={() => setKbOpen(true)}
+                  className="ml-1.5 inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-medium text-primary hover:bg-primary/15 transition-colors"
+                >
+                  已从知识库调取
+                  <ChevronRight className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={() => setStep(2)}
+              className="inline-flex items-center gap-1 rounded-lg bg-primary px-3.5 py-1.5 text-[12.5px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              下一步
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {!collapsed && step === 2 && (
+        <div className="px-4 py-3 space-y-3">
+          <p className="text-[12.5px] text-muted-foreground leading-relaxed">
+            选择一个排版样式，AI 将按所选模板生成报价单。
+          </p>
+          <div className="grid gap-2.5 md:grid-cols-3">
+            {QUOTE_TEMPLATES.map((t) => {
+              const active = picked === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setPicked(t.id)}
+                  className={`text-left rounded-xl border p-2.5 transition-all ${
+                    active
+                      ? "border-primary/60 bg-primary/[0.06] ring-1 ring-primary/30"
+                      : "border-border/60 bg-background/50 hover:border-primary/30 hover:bg-primary/[0.03]"
+                  }`}
+                >
+                  <TemplateThumb id={t.id} />
+                  <div className="mt-2 flex items-center gap-1.5">
+                    <span className="text-[12.5px] font-semibold text-foreground">{t.name}</span>
+                    {active && <Check className="h-3 w-3 text-primary" />}
+                  </div>
+                  <p className="mt-0.5 text-[11px] text-muted-foreground leading-relaxed">{t.tagline}</p>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center justify-between pt-1">
+            <button
+              onClick={() => setStep(1)}
+              className="inline-flex items-center gap-1 rounded-lg border border-border/70 bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:bg-muted transition-colors"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              上一步
+            </button>
+            <button
+              onClick={() => onComplete(info, picked)}
+              className="inline-flex items-center gap-1 rounded-lg bg-primary px-3.5 py-1.5 text-[12.5px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              开始生成
+            </button>
+          </div>
+        </div>
+      )}
+
+      <CompanyStrengthSheet open={kbOpen} onOpenChange={setKbOpen} />
+    </div>
+  );
+};
+
+// ---------- User-side long info card (sent to chat on 开始生成) ----------
+
+export const QuoteSummaryCard = ({
+  info,
+  template,
+}: {
+  info: QuoteInfo;
+  template: QuoteTemplate;
+}) => {
+  const tpl = QUOTE_TEMPLATES.find((t) => t.id === template) || QUOTE_TEMPLATES[1];
+  const items: { icon: typeof UserRound; label: string; value: string }[] = [
+    { icon: UserRound, label: "买家", value: info.buyerCompany },
+    { icon: Package, label: "产品", value: info.productName },
+    {
+      icon: Truck,
+      label: "参数",
+      value: `${info.incoterm} · ${info.qtyBasis === "moq" ? "按 MOQ" : "按采购量"}`,
+    },
+    { icon: FileSpreadsheet, label: "模板", value: tpl.name },
+  ];
+  return (
+    <div className="w-full rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/[0.08] via-primary/[0.04] to-secondary/[0.08] backdrop-blur-sm shadow-sm overflow-hidden">
+      <div className="px-4 py-2.5 flex items-center gap-2 border-b border-primary/15 bg-white/40">
+        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary">
+          <Sparkles className="h-3.5 w-3.5" />
+        </div>
+        <span className="text-[12.5px] font-semibold text-foreground">开始生成报价单</span>
+      </div>
+      <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
+        {items.map((it) => {
+          const Icon = it.icon;
+          return (
+            <div key={it.label} className="min-w-0 flex items-start gap-1.5">
+              <Icon className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
+              <div className="min-w-0">
+                <div className="text-[10.5px] text-muted-foreground leading-tight">{it.label}</div>
+                <div className="text-[12.5px] font-medium text-foreground truncate" title={it.value}>{it.value}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
