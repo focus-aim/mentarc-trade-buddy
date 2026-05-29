@@ -970,10 +970,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               {it.authors.length > 1 ? `${it.authors[0]} 等` : it.authors[0]}
                             </span>
                           </span>
-                          <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
-                            <TrendingUp className="h-3 w-3" />
-                            {it.callCount} 次调用
-                          </span>
+                          {it.callCount > 0 && (
+                            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
+                              <TrendingUp className="h-3 w-3" />
+                              {it.callCount} 次调用
+                            </span>
+                          )}
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
