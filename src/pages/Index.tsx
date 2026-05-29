@@ -54,6 +54,8 @@ import AIProfileDetail from "@/components/AIProfileDetail";
 import TeamManagementDialog from "@/components/TeamManagementDialog";
 import InquiryResultMessage, { BuyerBackgroundReport } from "@/components/InquiryResultMessage";
 import BuyerProfileDetail from "@/components/BuyerProfileDetail";
+import { BuyerProfileSheetContent } from "@/components/BuyerProfileFloatingCard";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 import { cn } from "@/lib/utils";
 import operationAvatar from "@/assets/expert-operation.jpg";
@@ -852,6 +854,7 @@ const Index = () => {
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
+  const [sheetBuyerId, setSheetBuyerId] = useState<string | null>(null);
   
   const [bgReportBuyerId, setBgReportBuyerId] = useState<string | null>(null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(null);
