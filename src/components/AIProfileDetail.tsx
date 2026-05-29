@@ -476,7 +476,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     authors: ["Rita", "Jason"],
     status: "active",
     callCount: 0,
-    confidence: 0.86,
+    confidence: 0,
     discoveredAt: "今天 11:20",
   },
   {
@@ -487,7 +487,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     authors: ["Cody"],
     status: "active",
     callCount: 0,
-    confidence: 0.79,
+    confidence: 0,
     discoveredAt: "昨天 18:05",
   },
   {
@@ -498,7 +498,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     authors: ["Rita", "Cody", "Jason"],
     status: "active",
     callCount: 0,
-    confidence: 0.72,
+    confidence: 0,
     discoveredAt: "2 天前",
   },
 ];
