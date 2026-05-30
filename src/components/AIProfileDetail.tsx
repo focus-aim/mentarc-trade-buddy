@@ -936,20 +936,20 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
                         {/* Bottom meta */}
                         <div className="mt-auto flex items-center gap-3 pt-3">
-                          <span className="inline-flex items-center gap-1.5 text-[10.5px] text-muted-foreground/80">
+                          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-1">
                             <span className="flex -space-x-1.5">
                               {it.authors.slice(0, 3).map((name) => (
                                 <span
                                   key={name}
-                                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-background bg-gradient-to-br from-primary/15 to-accent/30 text-[9px] font-semibold text-primary"
+                                  className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-background bg-gradient-to-br from-primary/25 to-accent/40 text-[11px] font-bold text-primary shadow-sm"
                                   title={name}
                                 >
                                   {name.slice(0, 1)}
                                 </span>
                               ))}
                             </span>
-                            <span>
-                              {it.authors.length > 1 ? `${it.authors[0]} 等` : it.authors[0]}
+                            <span className="text-[12px] font-semibold text-foreground/90 pr-1">
+                              {it.authors.join("、")}
                             </span>
                           </span>
                           {it.callCount > 0 && (
