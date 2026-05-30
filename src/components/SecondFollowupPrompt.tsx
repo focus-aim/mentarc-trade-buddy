@@ -6,19 +6,19 @@ export type SecondFollowupChoice = "delivery" | "market" | "trend";
 const APPROACHES: { id: SecondFollowupChoice; label: string; desc: string; recommend?: boolean }[] = [
   {
     id: "delivery",
-    label: "强调交付与履约保障",
-    desc: "调用公司资质与大客户案例，重申我们的质保政策，化解其对低价劣质供应商的担忧。",
+    label: "稳住交付，打消顾虑",
+    desc: "亮出资质和大客户案例，让他放心选我们。",
     recommend: true,
   },
   {
     id: "market",
-    label: "传递市场波动情报",
-    desc: "调用近期运费或原材料上涨信息，制造交货周期与成本的紧迫感，推动决策。",
+    label: "抛个涨价信号",
+    desc: "用运费和原材料波动，催一催他的决策。",
   },
   {
     id: "trend",
-    label: "行业趋势话题破冰",
-    desc: "暂缓推销，结合近期该国市场的选品趋势提出开放式问题，引导买家重新开启对话。",
+    label: "聊聊行业，先破冰",
+    desc: "放下报价，聊点市场趋势，把话题重新打开。",
   },
 ];
 
