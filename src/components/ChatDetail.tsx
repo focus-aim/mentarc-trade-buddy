@@ -1066,6 +1066,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         visible={buyerCardState.visible}
         updated={buyerCardState.updated}
         stage={buyerCardState.stage}
+        scrollRef={chatScrollRef}
       />
 
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
