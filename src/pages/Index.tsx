@@ -911,6 +911,7 @@ const Index = () => {
   const [trainingForm, setTrainingForm] = useState({
     mainProducts: "",
     targetMarket: "",
+    companyName: "宁波启明智能科技有限公司",
     website: "",
     docName: "",
   });
