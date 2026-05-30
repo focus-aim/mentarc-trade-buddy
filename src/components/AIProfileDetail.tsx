@@ -405,7 +405,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["询价", "报价跟进", "需求不清", "比价"],
     authors: ["Rita", "Jason"],
     status: "active",
-    callCount: 0,
+    callCount: 128,
   },
   {
     id: "s-2",
@@ -414,7 +414,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["首封回复", "澄清问题", "意图判断"],
     authors: ["Jason"],
     status: "active",
-    callCount: 0,
+    callCount: 96,
   },
   {
     id: "s-3",
@@ -423,7 +423,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["报价策略", "三档组合", "议价"],
     authors: ["Jason", "Cody"],
     status: "active",
-    callCount: 0,
+    callCount: 74,
   },
   {
     id: "s-4",
@@ -432,7 +432,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["详情页", "使用场景", "转化率"],
     authors: ["Cody"],
     status: "active",
-    callCount: 0,
+    callCount: 53,
   },
   {
     id: "s-5",
@@ -441,7 +441,7 @@ const initialSharedSkills: TeamSkillItem[] = [
     tags: ["跟进策略", "未回复", "样品"],
     authors: ["Rita"],
     status: "active",
-    callCount: 0,
+    callCount: 41,
   },
 ];
 
@@ -457,7 +457,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     tags: ["交期", "排产", "成单率"],
     authors: ["Rita", "Jason"],
     status: "active",
-    callCount: 0,
+    callCount: 36,
     confidence: 0,
     discoveredAt: "今天 11:20",
   },
@@ -468,7 +468,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     tags: ["跟进话术", "案例图", "复用"],
     authors: ["Cody"],
     status: "active",
-    callCount: 0,
+    callCount: 22,
     confidence: 0,
     discoveredAt: "昨天 18:05",
   },
@@ -479,7 +479,7 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
     tags: ["中东", "节庆营销", "首次询盘"],
     authors: ["Rita", "Cody", "Jason"],
     status: "active",
-    callCount: 0,
+    callCount: 18,
     confidence: 0,
     discoveredAt: "2 天前",
   },
@@ -952,12 +952,10 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               {it.authors.join("、")}
                             </span>
                           </span>
-                          {it.callCount > 0 && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
-                              <TrendingUp className="h-3 w-3" />
-                              {it.callCount} 次调用
-                            </span>
-                          )}
+                          <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
+                            <TrendingUp className="h-3 w-3" />
+                            调用次数 {it.callCount}
+                          </span>
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
