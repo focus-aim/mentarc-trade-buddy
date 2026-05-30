@@ -1619,7 +1619,7 @@ const Index = () => {
                     <div className="relative mt-6 space-y-3">
                       {/* Company name — prefilled */}
                       <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-muted-foreground font-bold text-sm text-slate-800">
                           <Building2 className="h-3.5 w-3.5" />
                           公司名称
                         </div>
@@ -1628,13 +1628,13 @@ const Index = () => {
                           onChange={(e) => setTrainingForm({ ...trainingForm, companyName: e.target.value })}
                           disabled={trainingStage !== "form"}
                           placeholder="请填写公司全称"
-                          className="mt-1 w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
+                          className="mt-1 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-70 font-normal border-slate-950"
                         />
                       </div>
 
                       {/* Website — company URL & B2B showrooms */}
                       <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm font-bold text-slate-950">
                           <Globe className="h-3.5 w-3.5" />
                           企业官网
                         </div>
@@ -1643,7 +1643,7 @@ const Index = () => {
                           onChange={(e) => setTrainingForm({ ...trainingForm, website: e.target.value })}
                           disabled={trainingStage !== "form"}
                           placeholder="公司网址、阿里 / Made-in-China 等 B2B 平台展示厅链接"
-                          className="mt-1 w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
+                          className="mt-1 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-70 font-normal border-slate-950"
                         />
                       </div>
 
@@ -1654,7 +1654,7 @@ const Index = () => {
                           trainingStage !== "form" && "pointer-events-none opacity-70",
                         )}
                       >
-                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-muted-foreground text-sm font-bold bg-slate-50 text-slate-950">
                           <FileText className="h-3.5 w-3.5" />
                           业务文档
                         </div>
@@ -1669,7 +1669,7 @@ const Index = () => {
                             </div>
                           ) : (
                             <div className="space-y-1">
-                              <div className="text-sm font-bold text-foreground">
+                              <div className="text-foreground text-xs font-normal text-slate-500">
                                 点击上传文档，或拖动文件到此处
                               </div>
                               <div className="text-xs text-muted-foreground">
@@ -1680,7 +1680,7 @@ const Index = () => {
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span>支持 PDF / Word / Excel / PPT</span>
                             <span className="text-muted-foreground/50">·</span>
-                            <span>单文件 ≤ 20MB</span>
+                            <span>单文件 ≤ 100MB</span>
                           </div>
                         </div>
                         <input
