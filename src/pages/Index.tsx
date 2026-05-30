@@ -1642,7 +1642,14 @@ const Index = () => {
                             <FileText className="h-3.5 w-3.5" />
                             业务文档
                           </div>
-                          <div className="mt-1 truncate text-sm font-medium text-foreground placeholder:font-normal">
+                          <div
+                            className={cn(
+                              "mt-1 truncate text-sm",
+                              trainingForm.docName
+                                ? "font-medium text-foreground"
+                                : "text-muted-foreground",
+                            )}
+                          >
                             {trainingForm.docName || "企业介绍、产品图册、报价资料等，拖拽到此或点击上传"}
                           </div>
                         </div>
