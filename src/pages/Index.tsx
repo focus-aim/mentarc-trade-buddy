@@ -1617,6 +1617,21 @@ const Index = () => {
                     </div>
 
                     <div className="relative mt-6 space-y-3">
+                      {/* Company name — prefilled */}
+                      <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                          <Building2 className="h-3.5 w-3.5" />
+                          公司名称
+                        </div>
+                        <input
+                          value={trainingForm.companyName}
+                          onChange={(e) => setTrainingForm({ ...trainingForm, companyName: e.target.value })}
+                          disabled={trainingStage !== "form"}
+                          placeholder="请填写公司全称"
+                          className="mt-1 w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
+                        />
+                      </div>
+
                       {/* Website — company URL & B2B showrooms */}
                       <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
                         <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
@@ -1628,41 +1643,45 @@ const Index = () => {
                           onChange={(e) => setTrainingForm({ ...trainingForm, website: e.target.value })}
                           disabled={trainingStage !== "form"}
                           placeholder="公司网址、阿里 / Made-in-China 等 B2B 平台展示厅链接"
-                          className="mt-1 w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
+                          className="mt-1 w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
                         />
                       </div>
 
-                      {/* File upload — taller tile with explicit button */}
+                      {/* File upload — centered dropzone */}
                       <label
                         className={cn(
-                          "group relative flex min-h-[200px] cursor-pointer flex-col gap-3 rounded-2xl border border-dashed border-border/60 bg-background/40 px-5 py-5 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5",
+                          "group relative flex min-h-[220px] cursor-pointer flex-col rounded-2xl border border-dashed border-border/60 bg-background/40 px-5 py-5 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5",
                           trainingStage !== "form" && "pointer-events-none opacity-70",
                         )}
                       >
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                            <FileText className="h-3.5 w-3.5" />
-                            业务文档
-                          </div>
-                          <div
-                            className={cn(
-                              "mt-1 truncate text-sm",
-                              trainingForm.docName
-                                ? "font-medium text-foreground"
-                                : "text-muted-foreground",
-                            )}
-                          >
-                            {trainingForm.docName || "企业介绍、产品图册、报价资料等，拖拽到此或点击上传"}
-                          </div>
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                          <FileText className="h-3.5 w-3.5" />
+                          业务文档
                         </div>
-                        <div className="mt-auto flex items-center justify-between gap-3">
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                            <FileUp className="h-3.5 w-3.5" />
-                            上传文档
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            支持 PDF / Word / Excel / PPT
-                          </span>
+
+                        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-4 text-center">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform duration-200 group-hover:scale-105">
+                            <UploadCloud className="h-6 w-6" />
+                          </div>
+                          {trainingForm.docName ? (
+                            <div className="max-w-[260px] truncate text-sm font-bold text-foreground">
+                              {trainingForm.docName}
+                            </div>
+                          ) : (
+                            <div className="space-y-1">
+                              <div className="text-sm font-bold text-foreground">
+                                点击上传文档，或拖动文件到此处
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                企业介绍、产品图册、报价资料等
+                              </div>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>支持 PDF / Word / Excel / PPT</span>
+                            <span className="text-muted-foreground/50">·</span>
+                            <span>单文件 ≤ 20MB</span>
+                          </div>
                         </div>
                         <input
                           type="file"
