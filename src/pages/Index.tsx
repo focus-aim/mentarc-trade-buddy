@@ -1633,7 +1633,7 @@ const Index = () => {
                       </div>
 
                       {/* Website — company URL & B2B showrooms */}
-                      <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
+                      <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-4 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
                         <div className="flex items-center gap-1.5 text-muted-foreground text-sm font-bold text-slate-950">
                           <Globe className="h-3.5 w-3.5" />
                           企业官网
@@ -1643,7 +1643,7 @@ const Index = () => {
                           onChange={(e) => setTrainingForm({ ...trainingForm, website: e.target.value })}
                           disabled={trainingStage !== "form"}
                           placeholder="公司网址、阿里 / Made-in-China 等 B2B 平台展示厅链接"
-                          className="mt-1 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-70 font-normal border-slate-950"
+                          className="mt-2 w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none disabled:opacity-70 font-normal border-slate-950"
                         />
                       </div>
 
@@ -1658,6 +1658,9 @@ const Index = () => {
                           <FileText className="h-3.5 w-3.5" />
                           业务文档
                         </div>
+                        <div className="mt-2 text-sm text-muted-foreground">
+                          企业介绍、产品图册、报价资料等
+                        </div>
 
                         <div className="flex flex-1 flex-col items-center justify-center gap-3 py-4 text-center">
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary transition-transform duration-200 group-hover:scale-105">
@@ -1668,13 +1671,8 @@ const Index = () => {
                               {trainingForm.docName}
                             </div>
                           ) : (
-                            <div className="space-y-1">
-                              <div className="text-foreground text-xs font-normal text-slate-500">
-                                点击上传文档，或拖动文件到此处
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                企业介绍、产品图册、报价资料等
-                              </div>
+                            <div className="text-foreground text-xs font-normal text-slate-500">
+                              点击上传文档，或拖动文件到此处
                             </div>
                           )}
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
