@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserRound, Building2, Package, Workflow, CheckCircle2, ChevronRight, X, Mail, Phone, MapPin, Star, Clock } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
@@ -6,10 +6,32 @@ interface BuyerProfileFloatingCardProps {
   visible: boolean;
   updated: boolean;
   stage: string;
+  scrollRef?: React.RefObject<HTMLElement>;
 }
 
-const BuyerProfileFloatingCard = ({ visible, updated, stage }: BuyerProfileFloatingCardProps) => {
+const BuyerProfileFloatingCard = ({ visible, updated, stage, scrollRef }: BuyerProfileFloatingCardProps) => {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const lastYRef = useRef(0);
+
+  useEffect(() => {
+    const el = scrollRef?.current;
+    if (!el) return;
+    const onScroll = () => {
+      const y = el.scrollTop;
+      const last = lastYRef.current;
+      if (y <= 24) {
+        setCollapsed(false);
+      } else if (y - last > 6) {
+        setCollapsed(true);
+      } else if (last - y > 24) {
+        setCollapsed(false);
+      }
+      lastYRef.current = y;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [scrollRef]);
 
   if (!visible) return null;
 
@@ -19,9 +41,24 @@ const BuyerProfileFloatingCard = ({ visible, updated, stage }: BuyerProfileFloat
   return (
     <>
       <div
-        className="pointer-events-auto fixed right-6 top-24 z-30 w-[260px] animate-fade-up"
+        className={`pointer-events-auto fixed right-6 top-24 z-30 animate-fade-up transition-all duration-300 ease-out ${
+          collapsed ? "w-auto" : "w-[260px]"
+        }`}
         style={{ animationDuration: "260ms" }}
       >
+        {collapsed ? (
+          <button
+            type="button"
+            onClick={() => setCollapsed(false)}
+            className="flex items-center gap-1.5 rounded-full border border-primary/25 bg-card/90 backdrop-blur-md px-3 py-1.5 shadow-[0_8px_24px_-12px_hsl(var(--primary)/0.3)] hover:border-primary/40 hover:shadow-[0_10px_28px_-10px_hsl(var(--primary)/0.35)] transition-all"
+          >
+            <span className="inline-flex w-4 h-4 rounded-full bg-emerald-500/15 text-emerald-600 items-center justify-center">
+              <CheckCircle2 className="w-2.5 h-2.5" />
+            </span>
+            <span className="text-[12px] font-semibold text-foreground">买家档案</span>
+            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground rotate-180" />
+          </button>
+        ) : (
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -44,6 +81,7 @@ const BuyerProfileFloatingCard = ({ visible, updated, stage }: BuyerProfileFloat
             <Field icon={Workflow} label="跟进阶段" value={stage} highlight={updated} />
           </div>
         </button>
+        )}
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
