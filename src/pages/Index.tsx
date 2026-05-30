@@ -1617,7 +1617,8 @@ const Index = () => {
                     <div className="relative mt-6 space-y-3">
                       {/* Website — company URL & B2B showrooms */}
                       <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                        <div className="text-xs font-medium text-muted-foreground">
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                          <Globe className="h-3.5 w-3.5" />
                           企业官网
                         </div>
                         <input
@@ -1625,22 +1626,30 @@ const Index = () => {
                           onChange={(e) => setTrainingForm({ ...trainingForm, website: e.target.value })}
                           disabled={trainingStage !== "form"}
                           placeholder="公司网址、阿里 / Made-in-China 等 B2B 平台展示厅链接"
-                          className="w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground/60 placeholder:font-normal focus:outline-none disabled:opacity-70"
+                          className="mt-1 w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground placeholder:font-normal focus:outline-none disabled:opacity-70"
                         />
                       </div>
 
                       {/* File upload — taller tile with explicit button */}
                       <label
                         className={cn(
-                          "group relative flex min-h-[140px] cursor-pointer flex-col gap-3 rounded-2xl border border-dashed border-border/60 bg-background/40 px-5 py-5 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5",
+                          "group relative flex min-h-[200px] cursor-pointer flex-col gap-3 rounded-2xl border border-dashed border-border/60 bg-background/40 px-5 py-5 transition-all duration-200 hover:border-primary/40 hover:bg-primary/5",
                           trainingStage !== "form" && "pointer-events-none opacity-70",
                         )}
                       >
                         <div className="min-w-0">
-                          <div className="text-xs font-medium text-muted-foreground">
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                            <FileText className="h-3.5 w-3.5" />
                             业务文档
                           </div>
-                          <div className="truncate text-sm text-foreground/80">
+                          <div
+                            className={cn(
+                              "mt-1 truncate text-sm",
+                              trainingForm.docName
+                                ? "font-medium text-foreground"
+                                : "text-muted-foreground",
+                            )}
+                          >
                             {trainingForm.docName || "企业介绍、产品图册、报价资料等，拖拽到此或点击上传"}
                           </div>
                         </div>
@@ -1649,7 +1658,7 @@ const Index = () => {
                             <FileUp className="h-3.5 w-3.5" />
                             上传文档
                           </span>
-                          <span className="text-xs text-muted-foreground/80">
+                          <span className="text-xs text-muted-foreground">
                             支持 PDF / Word / Excel / PPT
                           </span>
                         </div>
