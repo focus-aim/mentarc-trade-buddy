@@ -1615,59 +1615,8 @@ const Index = () => {
                     </div>
 
                     <div className="relative mt-6 space-y-3">
-                      {/* Main products — conversational row */}
+                      {/* Website — company URL & B2B showrooms */}
                       <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
-                        <div className="text-xs font-medium text-muted-foreground">
-                          主营产品
-                        </div>
-                        <input
-                          value={trainingForm.mainProducts}
-                          onChange={(e) => setTrainingForm({ ...trainingForm, mainProducts: e.target.value })}
-                          disabled={trainingStage !== "form"}
-                          placeholder="说说你卖什么，比如 不锈钢保温杯"
-                          className="w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground/60 placeholder:font-normal focus:outline-none disabled:opacity-70"
-                        />
-                      </div>
-
-                      {/* Business focus — chips only, no text input */}
-                      <div className="group rounded-2xl border border-border/50 bg-background/70 px-4 py-3 transition-all duration-200">
-                        <div className="text-xs font-medium text-muted-foreground">
-                          业务关注点
-                        </div>
-                        <div className="mt-2.5 flex flex-wrap gap-1.5">
-                          {["内贸转外贸", "新市场开拓", "多渠道营销", "买家成交转化", "客户黏性运营"].map((focus) => {
-                            const selected = trainingForm.targetMarket
-                              .split(/[、,,\s]+/)
-                              .filter(Boolean);
-                            const active = selected.includes(focus);
-                            return (
-                              <button
-                                key={focus}
-                                type="button"
-                                disabled={trainingStage !== "form"}
-                                onClick={() => {
-                                  const next = active
-                                    ? selected.filter((r) => r !== focus)
-                                    : [...selected, focus];
-                                  setTrainingForm({ ...trainingForm, targetMarket: next.join("、") });
-                                }}
-                                className={cn(
-                                  "rounded-full border px-2.5 py-1 text-xs font-medium transition-all disabled:opacity-70",
-                                  active
-                                    ? "border-primary/40 bg-primary/10 text-primary"
-                                    : "border-border bg-background/60 text-muted-foreground hover:border-primary/30 hover:text-foreground",
-                                )}
-                              >
-                                {active && <span className="mr-0.5">✓</span>}
-                                {focus}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Website — optional, light style */}
-                      <div className="group rounded-2xl border border-border/40 bg-background/50 px-4 py-3 transition-all duration-200 focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10">
                         <div className="text-xs font-medium text-muted-foreground">
                           企业官网
                         </div>
@@ -1675,8 +1624,8 @@ const Index = () => {
                           value={trainingForm.website}
                           onChange={(e) => setTrainingForm({ ...trainingForm, website: e.target.value })}
                           disabled={trainingStage !== "form"}
-                          placeholder="贴上网址，AI 自动抓取分析"
-                          className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none disabled:opacity-70"
+                          placeholder="公司网址、阿里 / Made-in-China 等 B2B 平台展示厅链接"
+                          className="w-full bg-transparent text-sm font-medium text-foreground placeholder:text-muted-foreground/60 placeholder:font-normal focus:outline-none disabled:opacity-70"
                         />
                       </div>
 
@@ -1689,10 +1638,10 @@ const Index = () => {
                       >
                         <div className="min-w-0">
                           <div className="text-xs font-medium text-muted-foreground">
-                            产品资料
+                            业务文档
                           </div>
                           <div className="truncate text-sm text-foreground/80">
-                            {trainingForm.docName || "拖拽文件到此，或点击下方按钮上传"}
+                            {trainingForm.docName || "企业介绍、产品图册、报价资料等，拖拽到此或点击上传"}
                           </div>
                         </div>
                         <div className="mt-auto flex items-center justify-between gap-3">
