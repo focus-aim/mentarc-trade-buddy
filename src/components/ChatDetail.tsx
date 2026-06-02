@@ -31,6 +31,7 @@ import KeywordTrendResult from "./KeywordTrendResult";
 import MarketResearchResult from "./MarketResearchResult";
 import TrendCollectionResult from "./TrendCollectionResult";
 import FollowupStrategyResult from "./FollowupStrategyResult";
+import InquirySummaryResult from "./InquirySummaryResult";
 import {
   QuoteWizard,
   QuoteSummaryCard,
