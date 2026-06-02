@@ -594,6 +594,9 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     if (m.type === "trend-result") {
       return { node: <TrendCollectionResult onSendPrompt={(text) => handleSend(text)} />, label: "热点趋势采集报告" };
     }
+    if (m.type === "inquiry-summary-result") {
+      return { node: <InquirySummaryResult onSendPrompt={(text) => handleSend(text)} />, label: "本周询盘汇总" };
+    }
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expertAvatar]);
@@ -637,6 +640,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
       if (m.type === "keyword-result") return { label: "关键词趋势分析报告", kind: "趋势" };
       if (m.type === "market-result") return { label: "外贸市场调研报告", kind: "调研" };
       if (m.type === "trend-result") return { label: "热点趋势采集报告", kind: "趋势" };
+      if (m.type === "inquiry-summary-result") return { label: "本周询盘汇总", kind: "汇总" };
       return null;
     };
     // Use stable, monotonically-increasing relative timestamps (most recent = "刚刚")
