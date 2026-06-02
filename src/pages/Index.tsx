@@ -2066,8 +2066,9 @@ const Index = () => {
                     onClick={() => {
                       const isBuyerBg = /深度?背景调查|买家背调|生成买家背调报告|深度背调|公司画像.*采购实力|背景调查.*风险/.test(prefillValue);
                       const isFollowup = /跟进策略|生成两版询盘回复邮件|节奏.*话术|话术.*下一步|跟进.*节奏|制定.*跟进/.test(prefillValue);
+                      const isInquirySummary = /汇总.*询盘|询盘.*清单|本周.*询盘|各渠道.*询盘/.test(prefillValue);
                       setChatInitialMessage(prefillValue);
-                      setActiveModule(isBuyerBg || isFollowup ? "业务专家" : selectedModuleTitle);
+                      setActiveModule(isBuyerBg || isFollowup || isInquirySummary ? "业务专家" : selectedModuleTitle);
                     }}
                     className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90 transition-colors"
                     aria-label="发送"
