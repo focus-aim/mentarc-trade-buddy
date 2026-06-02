@@ -1004,6 +1004,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         } else if (isFollowupStrategyPrompt(text)) {
           newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
           setShowingFollowupStrategyMindFlow(true);
+        } else if (isInquirySummaryPrompt(text)) {
+          newMessages.push({ role: "assistant", content: "", type: "inquiry-summary-mindflow" });
         } else {
           newMessages.push({
             role: "assistant",
@@ -1035,6 +1037,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     } else if (moduleTitle === "业务专家" && isFollowupStrategyPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "followup-strategy-mindflow" });
       setShowingFollowupStrategyMindFlow(true);
+    } else if (moduleTitle === "业务专家" && isInquirySummaryPrompt(text)) {
+      newMessages.push({ role: "assistant", content: "", type: "inquiry-summary-mindflow" });
     } else if (moduleTitle === "市场专家" && isMarketResearchPrompt(text)) {
       newMessages.push({ role: "assistant", content: "", type: "market-mindflow" });
     } else if (moduleTitle === "市场专家" && isTrendCollectionPrompt(text)) {
