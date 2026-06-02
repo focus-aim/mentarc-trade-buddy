@@ -1135,7 +1135,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                 msg.type === "demo-result" ||
                 msg.type === "keyword-result" ||
                 msg.type === "market-result" ||
-                msg.type === "trend-result";
+                msg.type === "trend-result" ||
+                msg.type === "inquiry-summary-result";
               const isMindflow = msg.type && /mindflow$/.test(msg.type);
               const nextMsg = messages[i + 1];
               const isTurnEnd =
