@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Paperclip, Send, X, Link, MessageSquareQuote } from "lucide-react";
+import { Paperclip, Send, X, Link, MessageSquareQuote, Shield, ShieldCheck, ChevronDown } from "lucide-react";
 import type { ChatQuote } from "./InquiryResultMessage";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export interface ChatAttachment {
   label: string;
@@ -29,6 +35,7 @@ const ChatInput = ({
   onClearQuote,
 }: ChatInputProps) => {
   const [value, setValue] = useState(defaultValue);
+  const [permission, setPermission] = useState<"default" | "full">("default");
 
   useEffect(() => {
     if (defaultValue) setValue(defaultValue);
@@ -128,6 +135,35 @@ const ChatInput = ({
               <Paperclip className="w-5 h-5" />
             </button>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full border border-border/70 bg-background/60 text-xs text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-colors">
+                {permission === "default" ? (
+                  <Shield className="w-3.5 h-3.5 text-muted-foreground" />
+                ) : (
+                  <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                )}
+                <span>{permission === "default" ? "默认权限" : "完全访问权限"}</span>
+                <ChevronDown className="w-3 h-3 opacity-60" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuItem onClick={() => setPermission("default")} className="gap-2">
+                <Shield className="w-4 h-4 text-muted-foreground" />
+                <div className="flex flex-col">
+                  <span className="text-sm">默认权限</span>
+                  <span className="text-[11px] text-muted-foreground">仅访问当前会话所需信息</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPermission("full")} className="gap-2">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+                <div className="flex flex-col">
+                  <span className="text-sm">完全访问权限</span>
+                  <span className="text-[11px] text-muted-foreground">允许调用全部业务数据与工具</span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <button
           onClick={handleSend}
