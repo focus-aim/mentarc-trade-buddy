@@ -850,6 +850,13 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
     ]);
   }, []);
 
+  const handleInquirySummaryMindFlowComplete = useCallback(() => {
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: "", type: "inquiry-summary-result" },
+    ]);
+  }, []);
+
   const handleKeywordGuidancePick = useCallback((choice: KeywordGuidanceChoice, prompt: string) => {
     setMessages((prev) => {
       const next = prev.map((m) =>
