@@ -1206,6 +1206,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
                     <MindFlowMessage steps={MARKET_MINDFLOW_STEPS} onComplete={handleMarketMindFlowComplete} />
                   ) : msg.type === "trend-mindflow" ? (
                     <MindFlowMessage steps={TREND_MINDFLOW_STEPS} onComplete={handleTrendMindFlowComplete} />
+                  ) : msg.type === "inquiry-summary-mindflow" ? (
+                    <MindFlowMessage richSteps={INQUIRY_SUMMARY_RICH_STEPS} onComplete={handleInquirySummaryMindFlowComplete} />
                   ) : msg.type === "quote-mindflow" ? (
                     <MindFlowMessage richSteps={QUOTE_RICH_STEPS} onComplete={handleQuoteMindFlowComplete} />
                   ) : msg.type === "quote-gen-prep-mindflow" ? (
