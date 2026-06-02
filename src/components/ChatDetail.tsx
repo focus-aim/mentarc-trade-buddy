@@ -518,7 +518,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const [productImages, setProductImages] = useState<string[]>([]);
   const [prefillValue, setPrefillValue] = useState(config.defaultValue || "");
   const [prefillKey, setPrefillKey] = useState(0);
-  const [showingMindFlow, setShowingMindFlow] = useState(!!initialUserMessage?.trim() && moduleTitle !== "培训专家" && !initialIsBuyerBg && !initialIsFollowup && !initialIsQuoteGen);
+  const [showingMindFlow, setShowingMindFlow] = useState(!!initialUserMessage?.trim() && moduleTitle !== "培训专家" && !initialIsBuyerBg && !initialIsFollowup && !initialIsQuoteGen && !initialIsInquirySummary);
   const [showingImageMindFlow, setShowingImageMindFlow] = useState(false);
   const [showingDetailMindFlow, setShowingDetailMindFlow] = useState(false);
   const [pendingDetailTypes, setPendingDetailTypes] = useState<string[]>([]);
