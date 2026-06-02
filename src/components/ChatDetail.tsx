@@ -336,6 +336,39 @@ const isSecondFollowupPrompt = (text?: string) => {
   return /二次跟进|二轮跟进|再次跟进/.test(text);
 };
 
+const isInquirySummaryPrompt = (text?: string) => {
+  if (!text) return false;
+  return /汇总.*询盘|询盘.*清单|本周.*询盘|各渠道.*询盘/.test(text);
+};
+
+const INQUIRY_SUMMARY_RICH_STEPS: RichStep[] = [
+  {
+    label: "聚合本周询盘数据",
+    subSteps: [
+      { plugin: "阿里国际站", query: "拉取本周新增询盘 12 条", description: "汇总平台询盘" },
+      { plugin: "独立站表单", query: "同步官网表单提交记录", description: "整合 Web 端线索" },
+      { plugin: "邮件 / LinkedIn / 展会", query: "归集邮件直发与社媒线索", description: "去重并合并" },
+    ],
+  },
+  {
+    label: "买家识别与意向分级",
+    subSteps: [
+      { plugin: "买家画像", query: "匹配公司库 + 区域 + 历史采购", description: "识别买家身份" },
+      { plugin: "意向评分", query: "结合需求明确度与紧急度评级", description: "高 / 中 / 低 分级" },
+    ],
+  },
+  {
+    label: "归档至买家档案",
+    subSteps: [
+      { plugin: "档案系统", query: "自动建档并关联历史记录", description: "已写入买家档案模块" },
+    ],
+  },
+  {
+    label: "生成本周询盘汇总",
+  },
+];
+
+
 const FOLLOWUP_STRATEGY_RICH_STEPS: RichStep[] = [
   {
     label: "买家阶段判定",
