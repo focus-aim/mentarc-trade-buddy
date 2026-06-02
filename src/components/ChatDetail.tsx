@@ -486,6 +486,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
   const initialIsBuyerBg = moduleTitle === "业务专家" && isBuyerBackgroundPrompt(initialUserMessage);
   const initialIsFollowup = moduleTitle === "业务专家" && isFollowupStrategyPrompt(initialUserMessage);
   const initialIsQuoteGen = moduleTitle === "业务专家" && isQuoteGenPrompt(initialUserMessage);
+  const initialIsInquirySummary = moduleTitle === "业务专家" && isInquirySummaryPrompt(initialUserMessage);
   const initialAssistantType: Message["type"] = initialIsMarket
     ? "market-mindflow"
     : initialIsTrend
@@ -494,11 +495,13 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         ? "buyer-background-mindflow"
         : initialIsFollowup
           ? "followup-strategy-mindflow"
-          : moduleTitle === "培训专家"
-            ? "text"
-            : initialIsKeyword
-              ? "keyword-mindflow"
-              : "mindflow";
+          : initialIsInquirySummary
+            ? "inquiry-summary-mindflow"
+            : moduleTitle === "培训专家"
+              ? "text"
+              : initialIsKeyword
+                ? "keyword-mindflow"
+                : "mindflow";
   const [messages, setMessages] = useState<Message[]>(() => initialUserMessage?.trim() ? (
     initialIsQuoteGen ? [
       { role: "user", content: initialMessage, type: "text" },
