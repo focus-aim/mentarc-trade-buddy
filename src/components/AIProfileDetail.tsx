@@ -2158,3 +2158,103 @@ const SectionLabel = ({
     {extra}
   </div>
 );
+
+// ============= 报价策略详情 =============
+const QUOTE_BASICS: { label: string; value: string }[] = [
+  { label: "报价有效期", value: "自报价日起 15 天有效；汇率波动 >2% 时重新核价" },
+  { label: "付款方式", value: "T/T 30% 定金 + 70% 见提单副本；老客户支持 OA 30 天 / L/C at sight" },
+  { label: "交货期", value: "标准款 25 天 / 定制款 35–45 天；旺季顺延 5–7 天" },
+  { label: "售后保证", value: "12 个月质保；品质问题免费补货；提供英文使用说明与售后话术" },
+];
+
+const SCENE_STRATEGIES: { scene: string; strategy: string }[] = [
+  {
+    scene: "新客户首次询盘",
+    strategy: "报阶梯价（1k / 3k / 1×40HQ），主推标准款，附加免费样品政策建立信任。",
+  },
+  {
+    scene: "老客户返单",
+    strategy: "保留原 FOB 价 30 天；推荐搭配新品 SKU，老客户享 2% 返单折扣。",
+  },
+  {
+    scene: "大客户 / 品牌商",
+    strategy: "切换 FCA / DDP 报价；提供独家配色、专属包装、年度框架协议。",
+  },
+  {
+    scene: "比价压价场景",
+    strategy: "不直接降价，先拆分价值（认证 / 工艺 / 售后），再用 MOQ 上浮换取折让。",
+  },
+];
+
+const PricingStrategyDetail = ({
+  sampleRule,
+  onSampleRuleChange,
+}: {
+  sampleRule: string;
+  onSampleRuleChange: (v: string) => void;
+}) => {
+  return (
+    <div className="mt-5 space-y-5">
+      {/* 样品规则 */}
+      <section>
+        <SectionLabel icon={FlaskConical} title="样品规则" />
+        <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+          <textarea
+            value={sampleRule}
+            onChange={(e) => onSampleRuleChange(e.target.value)}
+            rows={2}
+            className="w-full resize-none bg-transparent text-[13px] leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+            placeholder="样品收费、运费与冲抵规则"
+          />
+        </div>
+      </section>
+
+      {/* 报价基本信息 */}
+      <section>
+        <SectionLabel icon={Calculator} title="报价基本信息" />
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {QUOTE_BASICS.map((it) => (
+            <div
+              key={it.label}
+              className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
+            >
+              <div className="text-[11px] font-medium text-muted-foreground">{it.label}</div>
+              <p className="mt-1 text-[12.5px] leading-snug text-foreground/85">{it.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 场景策略 */}
+      <section>
+        <SectionLabel
+          icon={Target}
+          title="场景策略"
+          extra={
+            <span className="text-[11px] font-medium text-muted-foreground">
+              {SCENE_STRATEGIES.length} 类场景
+            </span>
+          }
+        />
+        <div className="space-y-2">
+          {SCENE_STRATEGIES.map((it) => (
+            <div
+              key={it.scene}
+              className="rounded-xl border border-border/40 bg-background/50 p-3 transition-colors hover:border-primary/30"
+            >
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/8 px-2 py-0.5 text-[11.5px] font-semibold text-primary">
+                  <Target className="h-3 w-3" />
+                  {it.scene}
+                </span>
+              </div>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-foreground/85">
+                {it.strategy}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+};
