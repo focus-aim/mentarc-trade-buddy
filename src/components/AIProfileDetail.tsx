@@ -1936,6 +1936,11 @@ const ModuleDetailSheet = ({
                 summary={company.mainProducts}
                 onSummaryChange={(v) => onFieldChange("mainProducts", v)}
               />
+            ) : mod.key === "pricing" ? (
+              <PricingStrategyDetail
+                sampleRule={company.sampleRule}
+                onSampleRuleChange={(v) => onFieldChange("sampleRule", v)}
+              />
             ) : (
             <div className="mt-5">
               <div className="mb-2 flex items-center gap-1.5">
