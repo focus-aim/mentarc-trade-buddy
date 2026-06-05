@@ -1930,7 +1930,13 @@ const ModuleDetailSheet = ({
               </div>
             </div>
 
-            {/* Extracted fields */}
+            {/* Product service uses a richer layout */}
+            {mod.key === "product" ? (
+              <ProductServiceDetail
+                summary={company.mainProducts}
+                onSummaryChange={(v) => onFieldChange("mainProducts", v)}
+              />
+            ) : (
             <div className="mt-5">
               <div className="mb-2 flex items-center gap-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -1968,9 +1974,182 @@ const ModuleDetailSheet = ({
                 })}
               </div>
             </div>
+            )}
           </>
         )}
       </SheetContent>
     </Sheet>
   );
 };
+
+// ============= 产品服务详情 =============
+const CORE_PRODUCTS: {
+  name: string;
+  image: string;
+  price: string;
+  moq: string;
+  spec: string;
+}[] = [
+  {
+    name: "双层不锈钢真空保温杯 500ml",
+    image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=200&h=200&fit=crop",
+    price: "FOB $4.80–$5.60",
+    moq: "1,000 pcs",
+    spec: "316 食品级内胆 / 12h 保温 / 防漏静音盖",
+  },
+  {
+    name: "户外运动保温水壶 750ml",
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&h=200&fit=crop",
+    price: "FOB $6.20–$7.40",
+    moq: "1,000 pcs",
+    spec: "粉末喷涂 / 提手设计 / 适配户外冰水",
+  },
+  {
+    name: "商务礼品保温杯 380ml",
+    image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=200&h=200&fit=crop",
+    price: "FOB $5.40–$6.30",
+    moq: "2,000 pcs",
+    spec: "支持 Logo 激光 / 礼盒包装 / 多色可选",
+  },
+  {
+    name: "儿童吸管保温杯 300ml",
+    image: "https://images.unsplash.com/photo-1570831739435-6601aa3fa4fb?w=200&h=200&fit=crop",
+    price: "FOB $3.90–$4.60",
+    moq: "3,000 pcs",
+    spec: "BPA Free / 双重防漏 / 软硅胶吸管",
+  },
+  {
+    name: "车载咖啡随行杯 450ml",
+    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=200&h=200&fit=crop",
+    price: "FOB $5.10–$5.90",
+    moq: "1,000 pcs",
+    spec: "适配车载杯托 / 单手开合 / 6h 保温",
+  },
+];
+
+const PRODUCT_CERTS = ["FDA", "LFGB", "CE", "BSCI", "SEDEX", "ISO 9001"];
+
+const AFTER_SALES =
+  "12 个月质保，针对漏水、保温失效等品质问题免费补货；提供英文使用说明与电商售后话术包；大客户配备专属对接人，48 小时内响应海外售后咨询。";
+
+const ProductServiceDetail = ({
+  summary,
+  onSummaryChange,
+}: {
+  summary: string;
+  onSummaryChange: (v: string) => void;
+}) => {
+  const products = CORE_PRODUCTS.slice(0, 5);
+  return (
+    <div className="mt-5 space-y-5">
+      {/* 主营产品概括 */}
+      <section>
+        <SectionLabel icon={Tags} title="主营产品概括" />
+        <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+          <textarea
+            value={summary}
+            onChange={(e) => onSummaryChange(e.target.value)}
+            rows={2}
+            className="w-full resize-none bg-transparent text-[13px] leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+            placeholder="一句话描述主营产品线"
+          />
+        </div>
+      </section>
+
+      {/* 核心产品 */}
+      <section>
+        <SectionLabel
+          icon={Package}
+          title="核心产品"
+          extra={
+            <span className="text-[11px] font-medium text-muted-foreground">
+              {products.length} / 5
+            </span>
+          }
+        />
+        <div className="space-y-2">
+          {products.map((p) => (
+            <div
+              key={p.name}
+              className="flex gap-3 rounded-xl border border-border/40 bg-background/50 p-2.5 transition-colors hover:border-primary/30"
+            >
+              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <h5 className="truncate text-[13px] font-semibold text-foreground">
+                    {p.name}
+                  </h5>
+                  <span className="shrink-0 text-[12px] font-semibold text-primary">
+                    {p.price}
+                  </span>
+                </div>
+                <div className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+                  <span className="rounded bg-muted px-1.5 py-0.5 font-medium text-foreground/80">
+                    MOQ {p.moq}
+                  </span>
+                </div>
+                <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-foreground/75">
+                  {p.spec}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 服务保障 */}
+      <section>
+        <SectionLabel icon={ShieldCheck} title="服务保障" />
+        <div className="space-y-2.5">
+          <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+            <div className="text-[11px] font-medium text-muted-foreground">产品认证</div>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {PRODUCT_CERTS.map((c) => (
+                <span
+                  key={c}
+                  className="inline-flex items-center gap-1 rounded-full border border-primary/15 bg-primary/8 px-2 py-0.5 text-[11.5px] font-semibold text-primary"
+                >
+                  <ShieldCheck className="h-3 w-3" />
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+            <div className="text-[11px] font-medium text-muted-foreground">售后服务</div>
+            <p className="mt-1 text-[13px] leading-relaxed text-foreground/85">
+              {AFTER_SALES}
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const SectionLabel = ({
+  icon: Icon,
+  title,
+  extra,
+}: {
+  icon: typeof Tags;
+  title: string;
+  extra?: React.ReactNode;
+}) => (
+  <div className="mb-2 flex items-center justify-between gap-2">
+    <div className="flex items-center gap-1.5">
+      <Icon className="h-3.5 w-3.5 text-primary" />
+      <h4 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h4>
+    </div>
+    {extra}
+  </div>
+);
