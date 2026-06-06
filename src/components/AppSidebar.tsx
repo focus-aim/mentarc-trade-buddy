@@ -180,22 +180,7 @@ const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, o
           ))}
         </div>
       </div>
-      <div className="mt-auto mx-3 mb-4 grid grid-cols-2 gap-2">
-        <button
-          onClick={() => setPersonalizationOpen(true)}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-border/60 bg-card/60 px-3 py-2.5 text-[13px] font-medium text-sidebar-foreground hover:border-primary/30 hover:bg-muted hover:text-foreground transition-colors"
-        >
-          <UserCog className="w-4 h-4" />
-          个性化
-        </button>
-        <button
-          onClick={() => window.open("https://mentarc.com/download", "_blank")}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-border/60 bg-card/60 px-3 py-2.5 text-[13px] font-medium text-sidebar-foreground hover:border-primary/30 hover:bg-muted hover:text-foreground transition-colors"
-        >
-          <Monitor className="w-4 h-4" />
-          桌面客户端
-        </button>
-      </div>
+      <div className="mt-auto" />
       <PersonalizationDialog open={personalizationOpen} onOpenChange={setPersonalizationOpen} />
     </aside>
   );
