@@ -534,9 +534,10 @@ const FOCUS_OPTIONS = ["内贸转外贸", "新市场开拓", "多渠道营销", 
 interface AIProfileDetailProps {
   onTrySimilar?: (prompt: string) => void;
   onOpenTraining?: () => void;
+  isRetraining?: boolean;
 }
 
-const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps = {}) => {
+const AIProfileDetail = ({ onTrySimilar, onOpenTraining, isRetraining = false }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
@@ -756,6 +757,7 @@ const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps 
               fileCount={materials.length}
               linkCount={publicLinks.length}
               onOpen={onOpenTraining ?? (() => setLibraryOpen(true))}
+              retraining={isRetraining}
             />
 
             <div className="mt-4 grid gap-4 md:grid-cols-3">
@@ -1433,15 +1435,18 @@ const TrainingLibraryBar = ({
   fileCount,
   linkCount,
   onOpen,
+  retraining = false,
 }: {
   fileCount: number;
   linkCount: number;
   onOpen: () => void;
+  retraining?: boolean;
 }) => (
   <button
     type="button"
-    onClick={onOpen}
-    className="group relative mt-4 flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-r from-card/90 via-card/95 to-primary/[0.04] px-4 py-3 text-left backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_14px_36px_-20px_rgba(0,97,255,0.25)]"
+    onClick={retraining ? undefined : onOpen}
+    disabled={retraining}
+    className="group relative mt-4 flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-r from-card/90 via-card/95 to-primary/[0.04] px-4 py-3 text-left backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_14px_36px_-20px_rgba(0,97,255,0.25)] disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:border-border/60 disabled:hover:shadow-none"
   >
     <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-primary/[0.06] blur-3xl" />
     <div className="relative flex items-center gap-3 min-w-0">
@@ -1470,8 +1475,17 @@ const TrainingLibraryBar = ({
       </div>
     </div>
     <span className="relative inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-[12px] font-semibold text-primary transition-all group-hover:bg-primary/15 group-hover:gap-1.5">
-      查看详情
-      <ChevronRight className="h-3.5 w-3.5" />
+      {retraining ? (
+        <>
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          正在重新训练
+        </>
+      ) : (
+        <>
+          重新训练
+          <ChevronRight className="h-3.5 w-3.5" />
+        </>
+      )}
     </span>
   </button>
 );

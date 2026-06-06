@@ -909,6 +909,8 @@ const Index = () => {
   const [partnerConfigured, setPartnerConfigured] = useState(initialPartnerConfigured);
   // Initialization training flow: idle | form | training | result
   const [trainingStage, setTrainingStage] = useState<"idle" | "form" | "training" | "result">("idle");
+  const [retrainMode, setRetrainMode] = useState(false);
+  const [isRetraining, setIsRetraining] = useState(false);
   const [trainingForm, setTrainingForm] = useState({
     mainProducts: "",
     targetMarket: "",
@@ -1063,7 +1065,9 @@ const Index = () => {
             setShowProfile(false);
             setShowPartnerConfig(true);
             setTrainingStage("form");
+            setRetrainMode(true);
           }}
+          isRetraining={isRetraining}
         />
       ) : showBoard ? (
         <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
@@ -1592,14 +1596,21 @@ const Index = () => {
             {(trainingStage === "form" || trainingStage === "training" || trainingStage === "result") && (
               <div className="relative opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
                 <button
-                  onClick={() => setTrainingStage("idle")}
+                  onClick={() => {
+                    setTrainingStage("idle");
+                    if (retrainMode) {
+                      setRetrainMode(false);
+                      setShowPartnerConfig(false);
+                      setShowProfile(true);
+                    }
+                  }}
                   className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   返回
                 </button>
 
-                <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+                <div className={cn("grid gap-5", retrainMode ? "lg:max-w-2xl mx-auto" : "lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]")}>
                   {/* LEFT: Conversational materials capture */}
                   <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/85 via-card/75 to-primary/5 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
                     <div
@@ -1699,7 +1710,26 @@ const Index = () => {
                     </div>
 
                     <div className="relative mt-6 space-y-2">
-                      {trainingStage === "form" ? (
+                      {retrainMode && trainingStage === "form" ? (
+                        <button
+                          onClick={() => {
+                            setIsRetraining(true);
+                            setRetrainMode(false);
+                            setTrainingStage("idle");
+                            setShowPartnerConfig(false);
+                            setShowProfile(true);
+                          }}
+                          className="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary to-[hsl(217,100%,58%)] px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.01] active:scale-[0.99]"
+                        >
+                          <span
+                            aria-hidden
+                            className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+                          />
+                          <Sparkles className="h-[18px] w-[18px]" />
+                          重新训练
+                          <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
+                        </button>
+                      ) : trainingStage === "form" ? (
                         <>
                           <button
                             onClick={() => setTrainingStage("training")}
@@ -1746,7 +1776,7 @@ const Index = () => {
                     </div>
                   </div>
 
-                  {/* RIGHT: Mind-flow process / structured result */}
+                  {!retrainMode && (
                   <div className="relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/85 via-card/75 to-secondary/5 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
                     <div
                       aria-hidden
@@ -1987,6 +2017,7 @@ const Index = () => {
                       </button>
                     )}
                   </div>
+                  )}
                 </div>
               </div>
             )}
