@@ -1625,7 +1625,7 @@ const Index = () => {
                     <div className="relative">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
                         <Sparkles className="h-3.5 w-3.5" />
-                        初始化培训
+                        {retrainMode ? "重新训练" : "初始化培训"}
                       </span>
                       <h1 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-foreground">
                         让 AI 团队读懂你的业务
@@ -1711,6 +1711,7 @@ const Index = () => {
 
                     <div className="relative mt-6 space-y-2">
                       {retrainMode && trainingStage === "form" ? (
+                        <>
                         <button
                           onClick={() => {
                             setIsRetraining(true);
@@ -1729,6 +1730,18 @@ const Index = () => {
                           重新训练
                           <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
                         </button>
+                        <button
+                          onClick={() => {
+                            setTrainingStage("idle");
+                            setRetrainMode(false);
+                            setShowPartnerConfig(false);
+                            setShowProfile(true);
+                          }}
+                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-full px-6 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          取消
+                        </button>
+                        </>
                       ) : trainingStage === "form" ? (
                         <>
                           <button
