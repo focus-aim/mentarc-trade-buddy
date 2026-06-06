@@ -611,6 +611,8 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
   };
   const discardDiscovery = (id: string) =>
     setAiDiscoveries((prev) => prev.filter((s) => s.id !== id));
+  const deleteSharedSkill = (id: string) =>
+    setSharedSkills((prev) => prev.filter((s) => s.id !== id));
   const handleAddSkill = () => {
     const headline = addDraft.headline.trim();
     const subtitle = addDraft.subtitle.trim();
