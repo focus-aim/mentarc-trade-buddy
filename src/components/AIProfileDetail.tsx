@@ -1967,7 +1967,7 @@ const ModuleDetailSheet = ({
                                     value={value}
                                     onChange={(e) => onFieldChange(f.key, e.target.value)}
                                     rows={2}
-                                    className="flex-1 resize-none bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    className="flex-1 resize-none overflow-hidden bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
                                     placeholder="点击键入"
                                   />
                                 ) : (
