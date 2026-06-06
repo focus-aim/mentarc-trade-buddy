@@ -1886,7 +1886,7 @@ const ModuleDetailSheet = ({
                 </span>
                 {mod.title}
               </SheetTitle>
-              <SheetDescription className="text-[12.5px]">{mod.desc}</SheetDescription>
+              <SheetDescription className="text-left text-[12.5px]">{mod.desc}</SheetDescription>
             </SheetHeader>
 
             {/* Product service uses a richer layout */}
