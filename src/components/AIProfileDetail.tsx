@@ -39,6 +39,7 @@ import {
   Trash2,
   Pencil,
   Brain,
+  ImageIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -1899,12 +1900,6 @@ const ModuleDetailSheet = ({
               />
             ) : (
             <div className="mt-5">
-              <div className="mb-2 flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <h4 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  AI 抽取的信息字段
-                </h4>
-              </div>
               {(() => {
                 const groups: { name: string; items: typeof mod.fields }[] = [];
                 mod.fields.forEach((f) => {
@@ -1929,8 +1924,35 @@ const ModuleDetailSheet = ({
                           </div>
                         )}
                         <div className="space-y-2.5">
-                          {g.items.map((f) => {
+                          {g.items
+                            .filter((f) => f.key !== "companyLogo")
+                            .map((f) => {
                             const value = company[f.key];
+                            if (f.key === "companyName") {
+                              return (
+                                <div key={f.key} className="flex items-stretch gap-2.5">
+                                  <div className="flex-1 rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+                                    <div className="text-[11px] font-medium text-muted-foreground">
+                                      {f.label}
+                                    </div>
+                                    <input
+                                      value={value}
+                                      onChange={(e) => onFieldChange(f.key, e.target.value)}
+                                      className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                      placeholder="点击键入"
+                                    />
+                                  </div>
+                                  <button
+                                    type="button"
+                                    className="group flex h-auto w-[68px] shrink-0 flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border bg-background/50 text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/[0.04] hover:text-primary"
+                                    title="上传公司 LOGO"
+                                  >
+                                    <ImageIcon className="h-4 w-4" />
+                                    <span className="text-[10px] font-medium">LOGO</span>
+                                  </button>
+                                </div>
+                              );
+                            }
                             return (
                               <div
                                 key={f.key}
