@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { UserRound, Building2, Package, Workflow, CheckCircle2, ChevronRight, X, Mail, Phone, MapPin, Star, Clock } from "lucide-react";
+import { UserRound, Building2, Package, Workflow, CheckCircle2, ChevronRight, X, Mail, Globe, MapPin, ShoppingCart, Clock } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 interface BuyerProfileFloatingCardProps {
@@ -190,9 +190,9 @@ export const BuyerProfileSheetContent = ({
         </h3>
         <div className="grid grid-cols-2 gap-2.5">
           <Info icon={MapPin} label="所在地" value="德国 · 慕尼黑" />
-          <Info icon={Star} label="买家等级" value="A 级" />
           <Info icon={Mail} label="邮箱" value="m.schneider@bergmann.de" />
-          <Info icon={Phone} label="时区" value="CET (UTC+1)" />
+          <Info icon={Globe} label="官网" value="bergmann-home.de" />
+          <Info icon={ShoppingCart} label="采购模式" value="批发 + 自有品牌" />
         </div>
       </section>
 
