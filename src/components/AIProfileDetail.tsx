@@ -72,10 +72,15 @@ import trainingAvatar from "@/assets/expert-training.jpg";
 interface CompanyForm {
   // 公司实力
   companyName: string;
-  website: string;
-  companyProfile: string;
-  capacityScale: string;
-  trustEndorsement: string;
+  companyLogo: string;
+  coreAdvantage: string;
+  foundedYear: string;
+  companyScale: string;
+  mainBusiness: string;
+  mainMarkets: string;
+  productionCapacity: string;
+  tradeCapability: string;
+  certifications: string;
   // 产品服务
   mainProducts: string;
   productSelling: string;
@@ -216,7 +221,7 @@ const KB_MODULES: {
   icon: typeof Package;
   mastery: number;
   insights: { label: string; filled: boolean }[];
-  fields: { label: string; key: keyof CompanyForm; textarea?: boolean }[];
+  fields: { label: string; key: keyof CompanyForm; textarea?: boolean; group?: string }[];
 }[] = [
   {
     key: "strength",
@@ -225,17 +230,20 @@ const KB_MODULES: {
     icon: Building2,
     mastery: 92,
     insights: [
-      { label: "基础信息", filled: true },
-      { label: "资质与实力", filled: true },
-      { label: "客户案例", filled: true },
-      { label: "售后与服务", filled: true },
+      { label: "基本信息", filled: true },
+      { label: "公司背景", filled: true },
     ],
     fields: [
-      { label: "公司名称", key: "companyName" },
-      { label: "公司官网", key: "website" },
-      { label: "公司简介", key: "companyProfile", textarea: true },
-      { label: "产能与团队", key: "capacityScale", textarea: true },
-      { label: "资质背书", key: "trustEndorsement", textarea: true },
+      { label: "公司名称", key: "companyName", group: "基本信息" },
+      { label: "公司LOGO", key: "companyLogo", group: "基本信息" },
+      { label: "核心优势", key: "coreAdvantage", group: "基本信息", textarea: true },
+      { label: "成立年份", key: "foundedYear", group: "公司背景" },
+      { label: "公司规模", key: "companyScale", group: "公司背景" },
+      { label: "主营业务", key: "mainBusiness", group: "公司背景", textarea: true },
+      { label: "主要市场", key: "mainMarkets", group: "公司背景" },
+      { label: "生产能力", key: "productionCapacity", group: "公司背景", textarea: true },
+      { label: "贸易能力", key: "tradeCapability", group: "公司背景", textarea: true },
+      { label: "认证与资质", key: "certifications", group: "公司背景", textarea: true },
     ],
   },
   {
@@ -294,10 +302,19 @@ const experts = [
 
 const initialCompanyForm: CompanyForm = {
   companyName: "宁波恒杯进出口有限公司",
-  website: "https://www.example-trade.com",
-  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
-  capacityScale: "自有工厂 12,000㎡，注塑+焊接+喷涂全链；月产能 50 万 pcs，员工 280 人",
-  trustEndorsement: "BSCI / SEDEX 工厂审核；FDA、LFGB、CE 认证；服务 Stanley、Contigo 等品牌",
+  companyLogo: "henbei-logo.png（已上传）",
+  coreAdvantage:
+    "18 年深耕保温器皿出口；自有工厂 + 研发团队；月产能 50 万 pcs；服务 Stanley、Contigo 等全球品牌",
+  foundedYear: "2008 年",
+  companyScale: "员工 280 人 · 自有工厂 12,000㎡",
+  mainBusiness: "双层不锈钢真空保温杯研发、生产与出口（运动 / 商务 / 儿童 三大系列，12 款 SKU）",
+  mainMarkets: "欧洲 35% · 北美 28% · 澳洲 12% · 其他 25%",
+  productionCapacity:
+    "月产能 50 万 pcs；注塑 + 焊接 + 喷涂全链自有产线；旺季可弹性扩产至 70 万 pcs",
+  tradeCapability:
+    "18 年外贸经验，累计服务 60+ 国家客户；支持 FOB / CIF / DDP；英语 + 西语 + 德语团队",
+  certifications:
+    "BSCI / SEDEX 工厂审核 · FDA / LFGB / CE 认证 · ISO 9001 质量管理体系",
   mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
   productSelling: "12h 长效保温、316 食品级内胆、防漏静音盖、可定制 Logo",
   moqLeadtime: "标准款 MOQ 1,000 pcs，交期 25 天；定制款 MOQ 3,000 pcs，交期 35–45 天",
@@ -1888,35 +1905,65 @@ const ModuleDetailSheet = ({
                   AI 抽取的信息字段
                 </h4>
               </div>
-              <div className="space-y-2.5">
-                {mod.fields.map((f) => {
-                  const value = company[f.key];
-                  return (
-                    <div
-                      key={f.key}
-                      className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
-                    >
-                      <div className="text-[11px] font-medium text-muted-foreground">{f.label}</div>
-                      {f.textarea ? (
-                        <textarea
-                          value={value}
-                          onChange={(e) => onFieldChange(f.key, e.target.value)}
-                          rows={2}
-                          className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                          placeholder="点击键入"
-                        />
-                      ) : (
-                        <input
-                          value={value}
-                          onChange={(e) => onFieldChange(f.key, e.target.value)}
-                          className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                          placeholder="点击键入"
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              {(() => {
+                const groups: { name: string; items: typeof mod.fields }[] = [];
+                mod.fields.forEach((f) => {
+                  const name = f.group ?? "";
+                  let g = groups.find((x) => x.name === name);
+                  if (!g) {
+                    g = { name, items: [] };
+                    groups.push(g);
+                  }
+                  g.items.push(f);
+                });
+                return (
+                  <div className="space-y-4">
+                    {groups.map((g) => (
+                      <div key={g.name || "default"} className="space-y-2">
+                        {g.name && (
+                          <div className="flex items-center gap-2">
+                            <span className="h-1 w-1 rounded-full bg-primary/60" />
+                            <h5 className="text-[12px] font-semibold text-foreground">
+                              {g.name}
+                            </h5>
+                          </div>
+                        )}
+                        <div className="space-y-2.5">
+                          {g.items.map((f) => {
+                            const value = company[f.key];
+                            return (
+                              <div
+                                key={f.key}
+                                className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
+                              >
+                                <div className="text-[11px] font-medium text-muted-foreground">
+                                  {f.label}
+                                </div>
+                                {f.textarea ? (
+                                  <textarea
+                                    value={value}
+                                    onChange={(e) => onFieldChange(f.key, e.target.value)}
+                                    rows={2}
+                                    className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    placeholder="点击键入"
+                                  />
+                                ) : (
+                                  <input
+                                    value={value}
+                                    onChange={(e) => onFieldChange(f.key, e.target.value)}
+                                    className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    placeholder="点击键入"
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
             )}
           </>
