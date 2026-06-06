@@ -534,9 +534,10 @@ const FOCUS_OPTIONS = ["内贸转外贸", "新市场开拓", "多渠道营销", 
 interface AIProfileDetailProps {
   onTrySimilar?: (prompt: string) => void;
   onOpenTraining?: () => void;
+  isRetraining?: boolean;
 }
 
-const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps = {}) => {
+const AIProfileDetail = ({ onTrySimilar, onOpenTraining, isRetraining = false }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
@@ -756,6 +757,7 @@ const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps 
               fileCount={materials.length}
               linkCount={publicLinks.length}
               onOpen={onOpenTraining ?? (() => setLibraryOpen(true))}
+              retraining={isRetraining}
             />
 
             <div className="mt-4 grid gap-4 md:grid-cols-3">
