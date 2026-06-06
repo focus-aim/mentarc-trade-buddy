@@ -486,6 +486,18 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
 ];
 const TEAM_SKILLS_PER_PAGE = 6;
 
+// AI 经验发现 —— 来源业务员用脱敏手机号展示（用户133***7053）
+const aiAuthorPhoneMap: Record<string, string> = {
+  Rita: "13380127053",
+  Jason: "13955678042",
+  Cody: "13601239988",
+};
+function maskAuthorPhone(name: string): string {
+  const phone = aiAuthorPhoneMap[name];
+  if (!phone || phone.length < 7) return `用户${name}`;
+  return `用户${phone.slice(0, 3)}***${phone.slice(-4)}`;
+}
+
 const expertSkillBlocks: ExpertSkillBlock[] = [
   {
     expert: experts[0],
@@ -936,6 +948,11 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
                         {/* Bottom meta */}
                         <div className="mt-auto flex items-center gap-3 pt-3">
+                          {ai ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-[12px] font-medium text-foreground/80">
+                              来源业务员：{maskAuthorPhone(it.authors[0])}
+                            </span>
+                          ) : (
                           <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-1">
                             <span className="flex -space-x-1.5">
                               {it.authors.slice(0, 3).map((name) => (
@@ -952,6 +969,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               {it.authors.join("、")}
                             </span>
                           </span>
+                          )}
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
@@ -963,7 +981,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                             </span>
                           )}
                           {ai && (
-                            <span className="ml-auto text-[10px] text-muted-foreground/50">{ai.discoveredAt}</span>
+                            <span className="ml-auto text-[11px] text-muted-foreground">更新于 {ai.discoveredAt}</span>
                           )}
                         </div>
                       </div>
