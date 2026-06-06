@@ -1065,7 +1065,9 @@ const Index = () => {
             setShowProfile(false);
             setShowPartnerConfig(true);
             setTrainingStage("form");
+            setRetrainMode(true);
           }}
+          isRetraining={isRetraining}
         />
       ) : showBoard ? (
         <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
