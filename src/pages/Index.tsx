@@ -925,8 +925,8 @@ const Index = () => {
     mainProducts: "",
     targetMarket: "",
     companyName: "宁波启明智能科技有限公司",
-    website: "",
-    docName: "",
+    website: "https://www.qiming-smart.com",
+    docName: "启明智能_企业介绍与产品手册2025.pdf",
   });
   const [trainingProgress, setTrainingProgress] = useState(0);
   const selectedTaskTab = TASK_TABS.find((tab) => tab.label === activeTaskTab) ?? TASK_TABS[0];
