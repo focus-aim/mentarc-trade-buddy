@@ -909,6 +909,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                                 编辑
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
+                              {false && null}
                               <DropdownMenuItem
                                 className="text-destructive focus:text-destructive"
                                 onClick={() => (isShared ? deleteSharedSkill(it.id) : discardDiscovery(it.id))}
