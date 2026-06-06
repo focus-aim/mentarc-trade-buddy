@@ -2214,64 +2214,45 @@ const PricingStrategyDetail = ({
   const [basics, setBasics] = useState<Record<string, string>>(
     () => Object.fromEntries(QUOTE_BASICS.map((it) => [it.label, it.value])),
   );
-  const [scenes, setScenes] = useState<Record<string, string>>(
-    () => Object.fromEntries(SCENE_STRATEGIES.map((it) => [it.scene, it.strategy])),
-  );
   return (
-    <div className="mt-5">
-      <div className="mb-2 flex items-center gap-1.5">
-        <Sparkles className="h-3.5 w-3.5 text-primary" />
-        <h4 className="text-[12px] font-semibold uppercase tracking-wide text-muted-foreground">
-          AI 抽取的信息字段
-        </h4>
-      </div>
-      <div className="space-y-2.5">
-        {/* 样品规则 */}
-        <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
-          <div className="text-[11px] font-medium text-muted-foreground">样品规则</div>
+    <div className="mt-4 space-y-3">
+      {/* 样品规则 */}
+      <GroupCard title="样品规则">
+        <div className="flex items-start gap-2 py-1.5">
+          <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+            样品规则
+          </div>
           <textarea
             value={sampleRule}
             onChange={(e) => onSampleRuleChange(e.target.value)}
             rows={2}
-            className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+            className="flex-1 resize-none overflow-hidden bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
             placeholder="点击键入"
           />
         </div>
+      </GroupCard>
 
-        {/* 报价基本信息 — 4 sub-fields */}
-        {QUOTE_BASICS.map((it) => (
-          <div
-            key={it.label}
-            className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
-          >
-            <div className="text-[11px] font-medium text-muted-foreground">{it.label}</div>
-            <textarea
-              value={basics[it.label] ?? ""}
-              onChange={(e) => setBasics((prev) => ({ ...prev, [it.label]: e.target.value }))}
-              rows={2}
-              className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-              placeholder="点击键入"
-            />
-          </div>
-        ))}
-
-        {/* 场景策略 */}
-        {SCENE_STRATEGIES.map((it) => (
-          <div
-            key={it.scene}
-            className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
-          >
-            <div className="text-[11px] font-medium text-muted-foreground">场景策略 · {it.scene}</div>
-            <textarea
-              value={scenes[it.scene] ?? ""}
-              onChange={(e) => setScenes((prev) => ({ ...prev, [it.scene]: e.target.value }))}
-              rows={2}
-              className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-              placeholder="点击键入"
-            />
-          </div>
-        ))}
-      </div>
+      {/* 报价信息 */}
+      <GroupCard title="报价信息">
+        <div className="divide-y divide-border/40">
+          {QUOTE_BASICS.map((it) => (
+            <div key={it.label} className="flex items-start gap-2 py-1.5">
+              <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+                {it.label}
+              </div>
+              <textarea
+                value={basics[it.label] ?? ""}
+                onChange={(e) =>
+                  setBasics((prev) => ({ ...prev, [it.label]: e.target.value }))
+                }
+                rows={2}
+                className="flex-1 resize-none overflow-hidden bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                placeholder="点击键入"
+              />
+            </div>
+          ))}
+        </div>
+      </GroupCard>
     </div>
   );
 };
