@@ -1175,6 +1175,14 @@ const Index = () => {
                                 {buyer.stage}
                               </span>
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => setActiveBuyerId(buyer.id)}
+                              aria-label="查看详情"
+                              className="shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </button>
                           </div>
 
                           <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px] text-muted-foreground">
