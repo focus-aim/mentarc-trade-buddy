@@ -39,6 +39,7 @@ import {
   Trash2,
   Pencil,
   Brain,
+  ImageIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
