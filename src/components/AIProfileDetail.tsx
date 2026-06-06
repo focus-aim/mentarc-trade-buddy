@@ -233,6 +233,8 @@ const KB_MODULES: {
     insights: [
       { label: "基本信息", filled: true },
       { label: "公司背景", filled: true },
+      { label: "生产和贸易能力", filled: true },
+      { label: "认证与资质", filled: true },
     ],
     fields: [
       { label: "公司名称", key: "companyName", group: "基本信息" },
@@ -242,9 +244,9 @@ const KB_MODULES: {
       { label: "公司规模", key: "companyScale", group: "公司背景" },
       { label: "主营业务", key: "mainBusiness", group: "公司背景", textarea: true },
       { label: "主要市场", key: "mainMarkets", group: "公司背景" },
-      { label: "生产能力", key: "productionCapacity", group: "公司背景", textarea: true },
-      { label: "贸易能力", key: "tradeCapability", group: "公司背景", textarea: true },
-      { label: "认证与资质", key: "certifications", group: "公司背景", textarea: true },
+      { label: "生产能力", key: "productionCapacity", group: "生产和贸易能力", textarea: true },
+      { label: "贸易能力", key: "tradeCapability", group: "生产和贸易能力", textarea: true },
+      { label: "认证与资质", key: "certifications", group: "认证与资质", textarea: true },
     ],
   },
   {
@@ -1899,7 +1901,7 @@ const ModuleDetailSheet = ({
                 onSampleRuleChange={(v) => onFieldChange("sampleRule", v)}
               />
             ) : (
-            <div className="mt-5">
+            <div className="mt-4">
               {(() => {
                 const groups: { name: string; items: typeof mod.fields }[] = [];
                 mod.fields.forEach((f) => {
@@ -1912,53 +1914,52 @@ const ModuleDetailSheet = ({
                   g.items.push(f);
                 });
                 return (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {groups.map((g) => (
-                      <div key={g.name || "default"} className="space-y-2">
+                      <div
+                        key={g.name || "default"}
+                        className="rounded-xl border border-border/40 bg-background/40 px-3 py-2.5"
+                      >
                         {g.name && (
-                          <div className="flex items-center gap-2">
-                            <span className="h-1 w-1 rounded-full bg-primary/60" />
-                            <h5 className="text-[12px] font-semibold text-foreground">
+                          <div className="mb-2 flex items-center gap-1.5">
+                            <span className="h-3 w-0.5 rounded-full bg-primary/70" />
+                            <h5 className="text-[11.5px] font-semibold text-foreground">
                               {g.name}
                             </h5>
                           </div>
                         )}
-                        <div className="space-y-2.5">
+                        <div className="divide-y divide-border/40">
                           {g.items
                             .filter((f) => f.key !== "companyLogo")
                             .map((f) => {
                             const value = company[f.key];
                             if (f.key === "companyName") {
                               return (
-                                <div key={f.key} className="flex items-stretch gap-2.5">
-                                  <div className="flex-1 rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
-                                    <div className="text-[11px] font-medium text-muted-foreground">
+                                <div key={f.key} className="flex items-center gap-2 py-1.5">
+                                  <div className="flex flex-1 items-center gap-2">
+                                    <div className="w-[68px] shrink-0 text-[11.5px] text-muted-foreground">
                                       {f.label}
                                     </div>
                                     <input
                                       value={value}
                                       onChange={(e) => onFieldChange(f.key, e.target.value)}
-                                      className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                      className="flex-1 bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
                                       placeholder="点击键入"
                                     />
                                   </div>
                                   <button
                                     type="button"
-                                    className="group flex h-auto w-[68px] shrink-0 flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border bg-background/50 text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/[0.04] hover:text-primary"
+                                    className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-dashed border-border bg-background/50 text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/[0.04] hover:text-primary"
                                     title="上传公司 LOGO"
                                   >
-                                    <ImageIcon className="h-4 w-4" />
-                                    <span className="text-[10px] font-medium">LOGO</span>
+                                    <ImageIcon className="h-3.5 w-3.5" />
                                   </button>
                                 </div>
                               );
                             }
                             return (
-                              <div
-                                key={f.key}
-                                className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
-                              >
-                                <div className="text-[11px] font-medium text-muted-foreground">
+                              <div key={f.key} className="flex items-start gap-2 py-1.5">
+                                <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
                                   {f.label}
                                 </div>
                                 {f.textarea ? (
@@ -1966,14 +1967,14 @@ const ModuleDetailSheet = ({
                                     value={value}
                                     onChange={(e) => onFieldChange(f.key, e.target.value)}
                                     rows={2}
-                                    className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    className="flex-1 resize-none bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
                                     placeholder="点击键入"
                                   />
                                 ) : (
                                   <input
                                     value={value}
                                     onChange={(e) => onFieldChange(f.key, e.target.value)}
-                                    className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    className="flex-1 bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
                                     placeholder="点击键入"
                                   />
                                 )}
