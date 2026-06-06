@@ -948,6 +948,11 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
                         {/* Bottom meta */}
                         <div className="mt-auto flex items-center gap-3 pt-3">
+                          {ai ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-[12px] font-medium text-foreground/80">
+                              来源业务员：{maskAuthorPhone(it.authors[0])}
+                            </span>
+                          ) : (
                           <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-1">
                             <span className="flex -space-x-1.5">
                               {it.authors.slice(0, 3).map((name) => (
@@ -964,6 +969,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               {it.authors.join("、")}
                             </span>
                           </span>
+                          )}
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
@@ -975,7 +981,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                             </span>
                           )}
                           {ai && (
-                            <span className="ml-auto text-[10px] text-muted-foreground/50">{ai.discoveredAt}</span>
+                            <span className="ml-auto text-[11px] text-muted-foreground">更新于 {ai.discoveredAt}</span>
                           )}
                         </div>
                       </div>
