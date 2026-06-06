@@ -486,6 +486,18 @@ const initialAIDiscoveries: AIDiscoveredItem[] = [
 ];
 const TEAM_SKILLS_PER_PAGE = 6;
 
+// AI 经验发现 —— 来源业务员用脱敏手机号展示（用户133***7053）
+const aiAuthorPhoneMap: Record<string, string> = {
+  Rita: "13380127053",
+  Jason: "13955678042",
+  Cody: "13601239988",
+};
+function maskAuthorPhone(name: string): string {
+  const phone = aiAuthorPhoneMap[name];
+  if (!phone || phone.length < 7) return `用户${name}`;
+  return `用户${phone.slice(0, 3)}***${phone.slice(-4)}`;
+}
+
 const expertSkillBlocks: ExpertSkillBlock[] = [
   {
     expert: experts[0],
