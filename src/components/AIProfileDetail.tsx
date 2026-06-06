@@ -258,7 +258,8 @@ const KB_MODULES: {
     insights: [
       { label: "产品概括", filled: true },
       { label: "主要产品", filled: true },
-      { label: "服务保障", filled: true },
+      { label: "产品认证", filled: true },
+      { label: "售后服务", filled: true },
     ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
@@ -2108,26 +2109,18 @@ const ProductServiceDetail = ({
         </div>
       </GroupCard>
 
-      {/* 服务保障 */}
-      <GroupCard title="服务保障">
-        <div className="divide-y divide-border/40">
-          <div className="flex items-start gap-2 py-1.5">
-            <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
-              产品认证
-            </div>
-            <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
-              {PRODUCT_CERTS.join(" · ")}
-            </p>
-          </div>
-          <div className="flex items-start gap-2 py-1.5">
-            <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
-              售后服务
-            </div>
-            <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
-              {AFTER_SALES}
-            </p>
-          </div>
-        </div>
+      {/* 产品认证 */}
+      <GroupCard title="产品认证">
+        <p className="text-[12.5px] leading-snug text-foreground/85">
+          {PRODUCT_CERTS.join(" · ")}
+        </p>
+      </GroupCard>
+
+      {/* 售后服务 */}
+      <GroupCard title="售后服务">
+        <p className="text-[12.5px] leading-snug text-foreground/85">
+          {AFTER_SALES}
+        </p>
       </GroupCard>
     </div>
   );
