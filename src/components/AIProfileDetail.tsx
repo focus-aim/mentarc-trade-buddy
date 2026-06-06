@@ -143,22 +143,6 @@ const initialPublicLinks: PublicLink[] = [
     modules: ["strength"],
     summary: "公司发展历程、团队规模与全球客户分布。",
   },
-  {
-    id: "l2",
-    title: "天猫国际店铺主页",
-    url: "https://example.tmall.com",
-    addedAt: "3 天前",
-    modules: ["product", "market"],
-    summary: "线上 SKU 矩阵、定价与热销榜单。",
-  },
-  {
-    id: "l3",
-    title: "行业报告 · 2024 户外保温杯白皮书",
-    url: "https://example.com/report-2024",
-    addedAt: "2 周前",
-    modules: ["market"],
-    summary: "欧美主要市场容量、品牌格局与趋势数据。",
-  },
 ];
 
 const initialMaterials: MaterialFile[] = [
@@ -1456,7 +1440,6 @@ const TrainingLibraryBar = ({
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <h3 className="text-[14px] font-bold tracking-tight text-foreground">训练资料库</h3>
-          <span className="text-[11px] text-muted-foreground">统一投喂 · AI 自动归类到四大模块</span>
         </div>
         <div className="mt-1 flex items-center gap-3 text-[12px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
