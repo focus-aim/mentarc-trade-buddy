@@ -1603,7 +1603,7 @@ const Index = () => {
                   返回
                 </button>
 
-                <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+                <div className={cn("grid gap-5", retrainMode ? "lg:max-w-2xl mx-auto" : "lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]")}>
                   {/* LEFT: Conversational materials capture */}
                   <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/85 via-card/75 to-primary/5 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
                     <div
