@@ -904,11 +904,13 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                                   启用
                                 </DropdownMenuItem>
                               )}
-                              <DropdownMenuItem onClick={() => openEdit(isShared ? "shared" : "ai", it)}>
-                                <Pencil className="mr-2 h-3.5 w-3.5" />
-                                编辑
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
+                              {!isShared && (
+                                <DropdownMenuItem onClick={() => openEdit("ai", it)}>
+                                  <Pencil className="mr-2 h-3.5 w-3.5" />
+                                  编辑
+                                </DropdownMenuItem>
+                              )}
+                              {!isShared && <DropdownMenuSeparator />}
                               <DropdownMenuItem
                                 className="text-destructive focus:text-destructive"
                                 onClick={() => (isShared ? deleteSharedSkill(it.id) : discardDiscovery(it.id))}
