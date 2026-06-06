@@ -1201,8 +1201,12 @@ const Index = () => {
                               <span className="text-foreground/80">{buyer.products}</span>
                             </span>
                             <span className="inline-flex items-center gap-1.5">
-                              <UserRound className="h-3.5 w-3.5 text-muted-foreground/70" />
-                              {buyer.contact}
+                              <Building2 className="h-3.5 w-3.5 text-muted-foreground/70" />
+                              {buyer.companyType}
+                            </span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Mail className="h-3.5 w-3.5 text-muted-foreground/70" />
+                              {buyer.email}
                             </span>
                             <span className="inline-flex items-center gap-1.5">
                               <MapPin className="h-3.5 w-3.5 text-muted-foreground/70" />
