@@ -734,7 +734,7 @@ const AIProfileDetail = ({ onTrySimilar, onOpenTraining, isRetraining = false }:
             <ModuleHeader
               icon={BookOpen}
               title="企业知识库"
-              sub="围绕公司实力、产品服务、报价策略、市场情报四大模块沉淀，AI 持续识别掌握程度"
+              sub="沉淀企业知识，让AI真正理解你的业务，并在每次生成中持续应用"
             />
 
             <TrainingLibraryBar
