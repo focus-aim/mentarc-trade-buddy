@@ -2010,6 +2010,7 @@ const Index = () => {
                       </button>
                     )}
                   </div>
+                  )}
                 </div>
               </div>
             )}
