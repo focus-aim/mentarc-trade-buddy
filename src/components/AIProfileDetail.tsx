@@ -2055,39 +2055,39 @@ const ProductServiceDetail = ({
 }) => {
   const products = CORE_PRODUCTS.slice(0, 5);
   return (
-    <div className="mt-5 space-y-5">
+    <div className="mt-4 space-y-3">
       {/* 主营产品概括 */}
-      <section>
-        <SectionLabel icon={Tags} title="主营产品概括" />
-        <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
+      <GroupCard title="主营产品概括">
+        <div className="flex items-start gap-2 py-1.5">
+          <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+            产品线
+          </div>
           <textarea
             value={summary}
             onChange={(e) => onSummaryChange(e.target.value)}
             rows={2}
-            className="w-full resize-none bg-transparent text-[13px] leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+            className="flex-1 resize-none overflow-hidden bg-transparent text-[12.5px] leading-snug text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
             placeholder="一句话描述主营产品线"
           />
         </div>
-      </section>
+      </GroupCard>
 
       {/* 核心产品 */}
-      <section>
-        <SectionLabel
-          icon={Package}
-          title="核心产品"
-          extra={
-            <span className="text-[11px] font-medium text-muted-foreground">
-              {products.length} / 5
-            </span>
-          }
-        />
-        <div className="space-y-2">
+      <GroupCard
+        title="核心产品"
+        extra={
+          <span className="text-[10.5px] font-medium text-muted-foreground">
+            {products.length} / 5
+          </span>
+        }
+      >
+        <div className="divide-y divide-border/40">
           {products.map((p) => (
             <div
               key={p.name}
-              className="flex gap-3 rounded-xl border border-border/40 bg-background/50 p-2.5 transition-colors hover:border-primary/30"
+              className="flex gap-2.5 py-2 first:pt-1 last:pb-1"
             >
-              <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
+              <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
                 <img
                   src={p.image}
                   alt={p.name}
@@ -2097,38 +2097,37 @@ const ProductServiceDetail = ({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
-                  <h5 className="truncate text-[13px] font-semibold text-foreground">
+                  <h5 className="truncate text-[12.5px] font-semibold text-foreground">
                     {p.name}
                   </h5>
-                  <span className="shrink-0 text-[12px] font-semibold text-primary">
+                  <span className="shrink-0 text-[11.5px] font-semibold text-primary">
                     {p.price}
                   </span>
                 </div>
-                <div className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+                <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <span className="rounded bg-muted px-1.5 py-0.5 font-medium text-foreground/80">
                     MOQ {p.moq}
                   </span>
+                  <span className="truncate">{p.spec}</span>
                 </div>
-                <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-foreground/75">
-                  {p.spec}
-                </p>
               </div>
             </div>
           ))}
         </div>
-      </section>
+      </GroupCard>
 
       {/* 服务保障 */}
-      <section>
-        <SectionLabel icon={ShieldCheck} title="服务保障" />
-        <div className="space-y-2.5">
-          <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
-            <div className="text-[11px] font-medium text-muted-foreground">产品认证</div>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
+      <GroupCard title="服务保障">
+        <div className="divide-y divide-border/40">
+          <div className="flex items-start gap-2 py-1.5">
+            <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+              产品认证
+            </div>
+            <div className="flex flex-1 flex-wrap gap-1.5">
               {PRODUCT_CERTS.map((c) => (
                 <span
                   key={c}
-                  className="inline-flex items-center gap-1 rounded-full border border-primary/15 bg-primary/8 px-2 py-0.5 text-[11.5px] font-semibold text-primary"
+                  className="inline-flex items-center gap-1 rounded-full border border-primary/15 bg-primary/8 px-2 py-0.5 text-[11px] font-semibold text-primary"
                 >
                   <ShieldCheck className="h-3 w-3" />
                   {c}
@@ -2136,17 +2135,40 @@ const ProductServiceDetail = ({
               ))}
             </div>
           </div>
-          <div className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5">
-            <div className="text-[11px] font-medium text-muted-foreground">售后服务</div>
-            <p className="mt-1 text-[13px] leading-relaxed text-foreground/85">
+          <div className="flex items-start gap-2 py-1.5">
+            <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+              售后服务
+            </div>
+            <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
               {AFTER_SALES}
             </p>
           </div>
         </div>
-      </section>
+      </GroupCard>
     </div>
   );
 };
+
+const GroupCard = ({
+  title,
+  extra,
+  children,
+}: {
+  title: string;
+  extra?: ReactNode;
+  children: ReactNode;
+}) => (
+  <div className="rounded-xl border border-border/40 bg-background/40 px-3 py-2.5">
+    <div className="mb-2 flex items-center justify-between gap-2">
+      <div className="flex items-center gap-1.5">
+        <span className="h-3 w-0.5 rounded-full bg-primary/70" />
+        <h5 className="text-[11.5px] font-semibold text-foreground">{title}</h5>
+      </div>
+      {extra}
+    </div>
+    {children}
+  </div>
+);
 
 const SectionLabel = ({
   icon: Icon,
