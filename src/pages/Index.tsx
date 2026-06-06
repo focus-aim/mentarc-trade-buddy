@@ -909,6 +909,8 @@ const Index = () => {
   const [partnerConfigured, setPartnerConfigured] = useState(initialPartnerConfigured);
   // Initialization training flow: idle | form | training | result
   const [trainingStage, setTrainingStage] = useState<"idle" | "form" | "training" | "result">("idle");
+  const [retrainMode, setRetrainMode] = useState(false);
+  const [isRetraining, setIsRetraining] = useState(false);
   const [trainingForm, setTrainingForm] = useState({
     mainProducts: "",
     targetMarket: "",
