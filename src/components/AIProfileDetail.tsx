@@ -533,9 +533,10 @@ const FOCUS_OPTIONS = ["内贸转外贸", "新市场开拓", "多渠道营销", 
 
 interface AIProfileDetailProps {
   onTrySimilar?: (prompt: string) => void;
+  onOpenTraining?: () => void;
 }
 
-const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
+const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
