@@ -31,6 +31,7 @@ import {
   Download,
   ChevronLeft,
   ChevronRight,
+  AlertTriangle,
 } from "lucide-react";
 import {
   MoreHorizontal,
@@ -1472,6 +1473,15 @@ const TrainingLibraryBar = ({
             <span className="font-semibold text-foreground tabular-nums">{linkCount}</span>
             条公开链接
           </span>
+          <span className="h-3 w-px bg-border/70" />
+          <button
+            type="button"
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[12px] font-medium text-amber-600 ring-1 ring-amber-500/20 transition hover:bg-amber-500/15"
+          >
+            <AlertTriangle className="h-3 w-3" />
+            训练资料存在冲突，查看详情
+          </button>
         </div>
       </div>
     </div>
