@@ -488,9 +488,9 @@ const TEAM_SKILLS_PER_PAGE = 6;
 
 // AI 经验发现 —— 来源业务员用脱敏手机号展示（用户133***7053）
 const aiAuthorPhoneMap: Record<string, string> = {
-  Rita: "13380127053",
-  Jason: "13955678042",
-  Cody: "13601239988",
+  Rita: "13580129080",
+  Jason: "13585679080",
+  Cody: "13560129080",
 };
 function maskAuthorPhone(name: string): string {
   const phone = aiAuthorPhoneMap[name];
@@ -950,7 +950,7 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                         <div className="mt-auto flex items-center gap-3 pt-3">
                           {ai ? (
                             <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-[12px] font-medium text-foreground/80">
-                              来源业务员：{maskAuthorPhone(it.authors[0])}
+                              来源：{maskAuthorPhone(it.authors[0])}
                             </span>
                           ) : (
                           <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-1">
