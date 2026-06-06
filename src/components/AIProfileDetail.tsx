@@ -533,9 +533,10 @@ const FOCUS_OPTIONS = ["内贸转外贸", "新市场开拓", "多渠道营销", 
 
 interface AIProfileDetailProps {
   onTrySimilar?: (prompt: string) => void;
+  onOpenTraining?: () => void;
 }
 
-const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
+const AIProfileDetail = ({ onTrySimilar, onOpenTraining }: AIProfileDetailProps = {}) => {
   const [activeTab, setActiveTab] = useState<TabKey>("company");
   const [company, setCompany] = useState<CompanyForm>(initialCompanyForm);
   const [draft, setDraft] = useState<CompanyForm>(initialCompanyForm);
@@ -749,18 +750,12 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
               icon={BookOpen}
               title="企业知识库"
               sub="围绕公司实力、产品服务、报价策略、市场情报四大模块沉淀，AI 持续识别掌握程度"
-              actions={
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-                  <Sparkles className="h-3 w-3" />
-                  整体掌握度 {Math.round(KB_MODULES.reduce((s, m) => s + m.mastery, 0) / KB_MODULES.length)}%
-                </span>
-              }
             />
 
             <TrainingLibraryBar
               fileCount={materials.length}
               linkCount={publicLinks.length}
-              onOpen={() => setLibraryOpen(true)}
+              onOpen={onOpenTraining ?? (() => setLibraryOpen(true))}
             />
 
             <div className="mt-4 grid gap-4 md:grid-cols-3">

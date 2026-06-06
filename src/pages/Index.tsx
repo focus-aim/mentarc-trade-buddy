@@ -1059,6 +1059,11 @@ const Index = () => {
             setInputKey((k) => k + 1);
             setShowProfile(false);
           }}
+          onOpenTraining={() => {
+            setShowProfile(false);
+            setShowPartnerConfig(true);
+            setTrainingStage("form");
+          }}
         />
       ) : showBoard ? (
         <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
@@ -1705,14 +1710,20 @@ const Index = () => {
                               className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
                             />
                             <Sparkles className="h-[18px] w-[18px]" />
-                            开始训练
+                            重新训练
                             <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
                           </button>
                           <button
-                            onClick={() => setTrainingStage("training")}
+                            onClick={() => {
+                              setTrainingStage("idle");
+                              if (partnerConfigured) {
+                                setShowPartnerConfig(false);
+                                setShowProfile(true);
+                              }
+                            }}
                             className="inline-flex w-full items-center justify-center gap-1.5 rounded-full px-6 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                           >
-                            跳过，直接启动
+                            取消
                           </button>
                         </>
                       ) : trainingStage === "training" ? (
