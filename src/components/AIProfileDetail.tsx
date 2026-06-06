@@ -952,10 +952,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               {it.authors.join("、")}
                             </span>
                           </span>
-                          <span className="inline-flex items-center gap-1 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary">
-                            <TrendingUp className="h-3 w-3" />
-                            调用次数 {it.callCount}
-                          </span>
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
