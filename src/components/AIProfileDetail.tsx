@@ -1877,27 +1877,6 @@ const ModuleDetailSheet = ({
               <SheetDescription className="text-[12.5px]">{mod.desc}</SheetDescription>
             </SheetHeader>
 
-            {/* Mastery */}
-            <div className="mt-5 rounded-xl border border-border/50 bg-background/60 px-3.5 py-3">
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-[12px] font-medium text-muted-foreground">AI 训练掌握度</span>
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
-                    style.cls,
-                  )}
-                >
-                  {style.label} · {mod.mastery}%
-                </span>
-              </div>
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted/60">
-                <div
-                  className={cn("h-full transition-all", style.bar)}
-                  style={{ width: `${mod.mastery}%` }}
-                />
-              </div>
-            </div>
-
             {/* Product service uses a richer layout */}
             {mod.key === "product" ? (
               <ProductServiceDetail
