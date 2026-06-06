@@ -948,28 +948,9 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
 
                         {/* Bottom meta */}
                         <div className="mt-auto flex items-center gap-3 pt-3">
-                          {ai ? (
-                            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-[12px] font-medium text-foreground/80">
-                              来源：{maskAuthorPhone(it.authors[0])}
-                            </span>
-                          ) : (
-                          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/70 px-2 py-1">
-                            <span className="flex -space-x-1.5">
-                              {it.authors.slice(0, 3).map((name) => (
-                                <span
-                                  key={name}
-                                  className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-background bg-gradient-to-br from-primary/25 to-accent/40 text-[11px] font-bold text-primary shadow-sm"
-                                  title={name}
-                                >
-                                  {name.slice(0, 1)}
-                                </span>
-                              ))}
-                            </span>
-                            <span className="text-[12px] font-semibold text-foreground/90 pr-1">
-                              {it.authors.join("、")}
-                            </span>
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-2.5 py-1 text-[12px] font-medium text-foreground/80">
+                            来源：{maskAuthorPhone(it.authors[0])}
                           </span>
-                          )}
                           {disabled && (
                             <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                               已停用
@@ -979,9 +960,6 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                             <span className="inline-flex items-center gap-0.5 rounded-full bg-primary/8 px-2 py-0.5 text-[10px] font-bold text-primary">
                               置信 {(ai.confidence * 100).toFixed(0)}%
                             </span>
-                          )}
-                          {ai && (
-                            <span className="ml-auto text-[11px] text-muted-foreground">更新于 {ai.discoveredAt}</span>
                           )}
                         </div>
                       </div>
