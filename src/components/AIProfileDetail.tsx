@@ -2056,8 +2056,8 @@ const ProductServiceDetail = ({
   const products = CORE_PRODUCTS.slice(0, 5);
   return (
     <div className="mt-4 space-y-3">
-      {/* 主营产品概括 */}
-      <GroupCard title="主营产品概括">
+      {/* 产品概括 */}
+      <GroupCard title="产品概括">
         <div className="flex items-start gap-2 py-1.5">
           <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
             产品线
@@ -2072,9 +2072,9 @@ const ProductServiceDetail = ({
         </div>
       </GroupCard>
 
-      {/* 核心产品 */}
+      {/* 主要产品 */}
       <GroupCard
-        title="核心产品"
+        title="主要产品"
         extra={
           <span className="text-[10.5px] font-medium text-muted-foreground">
             {products.length} / 5
@@ -2096,19 +2096,14 @@ const ProductServiceDetail = ({
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <h5 className="truncate text-[12.5px] font-semibold text-foreground">
-                    {p.name}
-                  </h5>
-                  <span className="shrink-0 text-[11.5px] font-semibold text-primary">
-                    {p.price}
-                  </span>
-                </div>
-                <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                <h5 className="truncate text-[12.5px] font-semibold text-foreground">
+                  {p.name}
+                </h5>
+                <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <span className="rounded bg-muted px-1.5 py-0.5 font-medium text-foreground/80">
                     MOQ {p.moq}
                   </span>
-                  <span className="truncate">{p.spec}</span>
+                  <span className="font-semibold text-primary">{p.price}</span>
                 </div>
               </div>
             </div>
@@ -2123,17 +2118,9 @@ const ProductServiceDetail = ({
             <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
               产品认证
             </div>
-            <div className="flex flex-1 flex-wrap gap-1.5">
-              {PRODUCT_CERTS.map((c) => (
-                <span
-                  key={c}
-                  className="inline-flex items-center gap-1 rounded-full border border-primary/15 bg-primary/8 px-2 py-0.5 text-[11px] font-semibold text-primary"
-                >
-                  <ShieldCheck className="h-3 w-3" />
-                  {c}
-                </span>
-              ))}
-            </div>
+            <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
+              {PRODUCT_CERTS.join(" · ")}
+            </p>
           </div>
           <div className="flex items-start gap-2 py-1.5">
             <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
