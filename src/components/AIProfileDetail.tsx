@@ -1905,35 +1905,65 @@ const ModuleDetailSheet = ({
                   AI 抽取的信息字段
                 </h4>
               </div>
-              <div className="space-y-2.5">
-                {mod.fields.map((f) => {
-                  const value = company[f.key];
-                  return (
-                    <div
-                      key={f.key}
-                      className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
-                    >
-                      <div className="text-[11px] font-medium text-muted-foreground">{f.label}</div>
-                      {f.textarea ? (
-                        <textarea
-                          value={value}
-                          onChange={(e) => onFieldChange(f.key, e.target.value)}
-                          rows={2}
-                          className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                          placeholder="点击键入"
-                        />
-                      ) : (
-                        <input
-                          value={value}
-                          onChange={(e) => onFieldChange(f.key, e.target.value)}
-                          className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
-                          placeholder="点击键入"
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              {(() => {
+                const groups: { name: string; items: typeof mod.fields }[] = [];
+                mod.fields.forEach((f) => {
+                  const name = f.group ?? "";
+                  let g = groups.find((x) => x.name === name);
+                  if (!g) {
+                    g = { name, items: [] };
+                    groups.push(g);
+                  }
+                  g.items.push(f);
+                });
+                return (
+                  <div className="space-y-4">
+                    {groups.map((g) => (
+                      <div key={g.name || "default"} className="space-y-2">
+                        {g.name && (
+                          <div className="flex items-center gap-2">
+                            <span className="h-1 w-1 rounded-full bg-primary/60" />
+                            <h5 className="text-[12px] font-semibold text-foreground">
+                              {g.name}
+                            </h5>
+                          </div>
+                        )}
+                        <div className="space-y-2.5">
+                          {g.items.map((f) => {
+                            const value = company[f.key];
+                            return (
+                              <div
+                                key={f.key}
+                                className="rounded-xl border border-border/40 bg-background/50 px-3 py-2.5"
+                              >
+                                <div className="text-[11px] font-medium text-muted-foreground">
+                                  {f.label}
+                                </div>
+                                {f.textarea ? (
+                                  <textarea
+                                    value={value}
+                                    onChange={(e) => onFieldChange(f.key, e.target.value)}
+                                    rows={2}
+                                    className="mt-1 w-full resize-none bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    placeholder="点击键入"
+                                  />
+                                ) : (
+                                  <input
+                                    value={value}
+                                    onChange={(e) => onFieldChange(f.key, e.target.value)}
+                                    className="mt-1 w-full bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+                                    placeholder="点击键入"
+                                  />
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
             )}
           </>
