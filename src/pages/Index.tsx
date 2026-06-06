@@ -1059,6 +1059,11 @@ const Index = () => {
             setInputKey((k) => k + 1);
             setShowProfile(false);
           }}
+          onOpenTraining={() => {
+            setShowProfile(false);
+            setShowPartnerConfig(true);
+            setTrainingStage("form");
+          }}
         />
       ) : showBoard ? (
         <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
