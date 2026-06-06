@@ -898,40 +898,24 @@ const AIProfileDetail = ({ onTrySimilar }: AIProfileDetailProps = {}) => {
                               </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-36">
+                              {!isShared && (
+                                <DropdownMenuItem onClick={() => adoptDiscovery(it.id)}>
+                                  <Check className="mr-2 h-3.5 w-3.5 text-primary" />
+                                  启用
+                                </DropdownMenuItem>
+                              )}
                               <DropdownMenuItem onClick={() => openEdit(isShared ? "shared" : "ai", it)}>
                                 <Pencil className="mr-2 h-3.5 w-3.5" />
                                 编辑
                               </DropdownMenuItem>
-                              {isShared ? (
-                                <DropdownMenuItem onClick={() => toggleSharedStatus(it.id)}>
-                                  {disabled ? (
-                                    <>
-                                      <Power className="mr-2 h-3.5 w-3.5" />
-                                      启用
-                                    </>
-                                  ) : (
-                                    <>
-                                      <PowerOff className="mr-2 h-3.5 w-3.5" />
-                                      停用
-                                    </>
-                                  )}
-                                </DropdownMenuItem>
-                              ) : (
-                                <>
-                                  <DropdownMenuItem onClick={() => adoptDiscovery(it.id)}>
-                                    <Check className="mr-2 h-3.5 w-3.5 text-primary" />
-                                    启用
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    className="text-destructive focus:text-destructive"
-                                    onClick={() => discardDiscovery(it.id)}
-                                  >
-                                    <Trash2 className="mr-2 h-3.5 w-3.5" />
-                                    删除
-                                  </DropdownMenuItem>
-                                </>
-                              )}
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="text-destructive focus:text-destructive"
+                                onClick={() => (isShared ? deleteSharedSkill(it.id) : discardDiscovery(it.id))}
+                              >
+                                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                                删除
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
