@@ -302,10 +302,19 @@ const experts = [
 
 const initialCompanyForm: CompanyForm = {
   companyName: "宁波恒杯进出口有限公司",
-  website: "https://www.example-trade.com",
-  companyProfile: "成立于 2008 年，专注真空保温器皿研发与出口，累计服务全球 60+ 国家客户。",
-  capacityScale: "自有工厂 12,000㎡，注塑+焊接+喷涂全链；月产能 50 万 pcs，员工 280 人",
-  trustEndorsement: "BSCI / SEDEX 工厂审核；FDA、LFGB、CE 认证；服务 Stanley、Contigo 等品牌",
+  companyLogo: "henbei-logo.png（已上传）",
+  coreAdvantage:
+    "18 年深耕保温器皿出口；自有工厂 + 研发团队；月产能 50 万 pcs；服务 Stanley、Contigo 等全球品牌",
+  foundedYear: "2008 年",
+  companyScale: "员工 280 人 · 自有工厂 12,000㎡",
+  mainBusiness: "双层不锈钢真空保温杯研发、生产与出口（运动 / 商务 / 儿童 三大系列，12 款 SKU）",
+  mainMarkets: "欧洲 35% · 北美 28% · 澳洲 12% · 其他 25%",
+  productionCapacity:
+    "月产能 50 万 pcs；注塑 + 焊接 + 喷涂全链自有产线；旺季可弹性扩产至 70 万 pcs",
+  tradeCapability:
+    "18 年外贸经验，累计服务 60+ 国家客户；支持 FOB / CIF / DDP；英语 + 西语 + 德语团队",
+  certifications:
+    "BSCI / SEDEX 工厂审核 · FDA / LFGB / CE 认证 · ISO 9001 质量管理体系",
   mainProducts: "双层不锈钢真空保温杯（12 款 SKU，含运动、商务、儿童系列）",
   productSelling: "12h 长效保温、316 食品级内胆、防漏静音盖、可定制 Logo",
   moqLeadtime: "标准款 MOQ 1,000 pcs，交期 25 天；定制款 MOQ 3,000 pcs，交期 35–45 天",
