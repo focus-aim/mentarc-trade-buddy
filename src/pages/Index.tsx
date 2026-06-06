@@ -38,6 +38,8 @@ import {
   Download,
   Building2,
   UploadCloud,
+  AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
