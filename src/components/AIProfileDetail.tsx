@@ -1826,7 +1826,7 @@ const CondensedModuleCard = ({
       </header>
 
       {/* Insights — main content body */}
-      <div className="relative mt-4 grid grid-cols-2 gap-1.5">
+      <div className="relative mt-4 grid flex-1 grid-cols-2 content-start gap-1.5">
         {mod.insights.map((it, i) => (
           <div
             key={i}
