@@ -628,6 +628,8 @@ type InquiryBuyer = {
   company: string;
   products: string;
   contact: string;
+  companyType: string;
+  email: string;
   region: string;
   stage: string;
   stageTone: "primary" | "amber" | "emerald" | "muted";
