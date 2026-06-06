@@ -256,10 +256,9 @@ const KB_MODULES: {
     icon: Tags,
     mastery: 76,
     insights: [
-      { label: "主营品类", filled: true },
-      { label: "核心卖点", filled: true },
-      { label: "起订与交期", filled: true },
-      { label: "定制能力", filled: false },
+      { label: "产品概括", filled: true },
+      { label: "主要产品", filled: true },
+      { label: "服务保障", filled: false },
     ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
@@ -275,9 +274,7 @@ const KB_MODULES: {
     mastery: 48,
     insights: [
       { label: "样品规则", filled: true },
-      { label: "报价框架", filled: true },
-      { label: "付款条件", filled: false },
-      { label: "价格区间", filled: false },
+      { label: "报价信息", filled: false },
     ],
     fields: [
       { label: "样品规则", key: "sampleRule", textarea: true },
