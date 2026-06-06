@@ -133,20 +133,20 @@ export const BuyerProfileSheetContent = ({
 }) => {
   const analyses = [
     {
-      date: "今日",
-      channel: "二次跟进策略",
-      summary: "Bergmann 二次跟进 · 化解低价竞品顾虑",
+      name: "Bergmann 二次跟进 · 化解低价竞品顾虑",
+      date: "2026-06-06",
+      stage: "二次跟进",
       active: updated,
     },
     {
-      date: "14 天前",
-      channel: "报价单生成",
-      summary: "Bergmann 双层啤酒杯 · 首轮个性化报价",
+      name: "Bergmann 双层啤酒杯 · 首轮个性化报价",
+      date: "2026-05-23",
+      stage: "报价确认",
     },
     {
-      date: "15 天前",
-      channel: "询盘分析",
-      summary: "Bergmann 500ml 双层保温啤酒杯询盘解析",
+      name: "Bergmann 500ml 双层保温啤酒杯询盘解析",
+      date: "2026-05-22",
+      stage: "询盘解析",
     },
   ];
 
@@ -227,20 +227,15 @@ export const BuyerProfileSheetContent = ({
                   : "border-border bg-card/70"
               }`}
             >
-              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                <span className="font-medium text-foreground">{it.date}</span>
-                <span className="px-1.5 py-0.5 rounded bg-muted text-[10px]">
-                  {it.channel}
-                </span>
-                {it.active && (
-                  <span className="ml-auto px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-medium">
-                    进行中
-                  </span>
-                )}
-              </div>
-              <p className="mt-1 text-[12.5px] text-foreground/90 leading-snug">
-                {it.summary}
+              <p className="text-[12.5px] font-medium text-foreground leading-snug">
+                {it.name}
               </p>
+              <div className="mt-1.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+                <span>{it.date}</span>
+                <span className="ml-auto px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-medium">
+                  {it.stage}
+                </span>
+              </div>
             </div>
           ))}
         </div>
