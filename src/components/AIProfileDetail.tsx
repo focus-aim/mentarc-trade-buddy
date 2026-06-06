@@ -72,10 +72,15 @@ import trainingAvatar from "@/assets/expert-training.jpg";
 interface CompanyForm {
   // 公司实力
   companyName: string;
-  website: string;
-  companyProfile: string;
-  capacityScale: string;
-  trustEndorsement: string;
+  companyLogo: string;
+  coreAdvantage: string;
+  foundedYear: string;
+  companyScale: string;
+  mainBusiness: string;
+  mainMarkets: string;
+  productionCapacity: string;
+  tradeCapability: string;
+  certifications: string;
   // 产品服务
   mainProducts: string;
   productSelling: string;
