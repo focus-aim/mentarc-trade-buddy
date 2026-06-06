@@ -233,6 +233,8 @@ const KB_MODULES: {
     insights: [
       { label: "基本信息", filled: true },
       { label: "公司背景", filled: true },
+      { label: "生产和贸易能力", filled: true },
+      { label: "认证与资质", filled: true },
     ],
     fields: [
       { label: "公司名称", key: "companyName", group: "基本信息" },
@@ -242,9 +244,9 @@ const KB_MODULES: {
       { label: "公司规模", key: "companyScale", group: "公司背景" },
       { label: "主营业务", key: "mainBusiness", group: "公司背景", textarea: true },
       { label: "主要市场", key: "mainMarkets", group: "公司背景" },
-      { label: "生产能力", key: "productionCapacity", group: "公司背景", textarea: true },
-      { label: "贸易能力", key: "tradeCapability", group: "公司背景", textarea: true },
-      { label: "认证与资质", key: "certifications", group: "公司背景", textarea: true },
+      { label: "生产能力", key: "productionCapacity", group: "生产和贸易能力", textarea: true },
+      { label: "贸易能力", key: "tradeCapability", group: "生产和贸易能力", textarea: true },
+      { label: "认证与资质", key: "certifications", group: "认证与资质", textarea: true },
     ],
   },
   {
