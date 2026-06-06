@@ -1596,7 +1596,14 @@ const Index = () => {
             {(trainingStage === "form" || trainingStage === "training" || trainingStage === "result") && (
               <div className="relative opacity-0 animate-fade-up" style={{ animationDelay: "60ms" }}>
                 <button
-                  onClick={() => setTrainingStage("idle")}
+                  onClick={() => {
+                    setTrainingStage("idle");
+                    if (retrainMode) {
+                      setRetrainMode(false);
+                      setShowPartnerConfig(false);
+                      setShowProfile(true);
+                    }
+                  }}
                   className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
