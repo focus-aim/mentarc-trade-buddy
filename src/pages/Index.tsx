@@ -38,6 +38,8 @@ import {
   Download,
   Building2,
   UploadCloud,
+  AlertTriangle,
+  AlertCircle,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -925,8 +927,8 @@ const Index = () => {
     mainProducts: "",
     targetMarket: "",
     companyName: "宁波启明智能科技有限公司",
-    website: "",
-    docName: "",
+    website: "https://www.qiming-smart.com",
+    docName: "启明智能_企业介绍与产品手册2025.pdf",
   });
   const [trainingProgress, setTrainingProgress] = useState(0);
   const selectedTaskTab = TASK_TABS.find((tab) => tab.label === activeTaskTab) ?? TASK_TABS[0];
@@ -1716,6 +1718,29 @@ const Index = () => {
                         />
                       </label>
                     </div>
+
+                    {retrainMode && trainingStage === "form" && (
+                      <div className="relative mt-6 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.06] via-background/60 to-secondary/[0.06] p-4">
+                        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-primary">
+                          <Sparkles className="h-3.5 w-3.5" />
+                          AI 训练摘要
+                        </div>
+                        <ul className="mt-2.5 space-y-2 text-[13px] leading-relaxed text-foreground/85">
+                          <li className="flex items-start gap-2">
+                            <Check className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={3} />
+                            <span>训练完成。本次抓取网址 3 个、文档 1 份。</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <AlertTriangle className="mt-[2px] h-3.5 w-3.5 shrink-0 text-amber-500" />
+                            <span>检测到冲突：独立站与 MIC 公司名不一致，请确认。</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <AlertCircle className="mt-[2px] h-3.5 w-3.5 shrink-0 text-destructive" />
+                            <span>异常：1 个链接 404，未抓取内容。</span>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
 
                     <div className="relative mt-6 space-y-2">
                       {retrainMode && trainingStage === "form" ? (
