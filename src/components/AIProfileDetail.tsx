@@ -258,7 +258,8 @@ const KB_MODULES: {
     insights: [
       { label: "产品概括", filled: true },
       { label: "主要产品", filled: true },
-      { label: "服务保障", filled: true },
+      { label: "产品认证", filled: true },
+      { label: "售后服务", filled: true },
     ],
     fields: [
       { label: "主营产品", key: "mainProducts", textarea: true },
