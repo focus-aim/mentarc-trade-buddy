@@ -1769,7 +1769,7 @@ const Index = () => {
                     </div>
                   </div>
 
-                  {/* RIGHT: Mind-flow process / structured result */}
+                  {!retrainMode && (
                   <div className="relative flex flex-col overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/85 via-card/75 to-secondary/5 p-6 shadow-xl shadow-primary/5 backdrop-blur-md sm:p-8">
                     <div
                       aria-hidden
