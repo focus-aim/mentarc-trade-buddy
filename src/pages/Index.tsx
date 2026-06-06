@@ -1192,20 +1192,6 @@ const Index = () => {
                             </span>
                           </div>
 
-                          <div className="mt-3.5 flex items-start gap-2 rounded-lg border border-primary/15 bg-primary/[0.04] px-3 py-2">
-                            <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                            <div className="min-w-0 flex-1 text-[12.5px]">
-                              <span className="font-semibold text-primary">下次动作 · </span>
-                              <span className="text-foreground/85">{buyer.nextAction.label}</span>
-                            </div>
-                            <button
-                              onClick={() => handleDirectFollowup(buyer)}
-                              className="ml-1 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[11px] font-semibold text-primary-foreground shadow-sm shadow-primary/20 transition-colors hover:bg-primary/90"
-                            >
-                              <Sparkles className="h-2.5 w-2.5" />
-                              立即跟进
-                            </button>
-                          </div>
                         </div>
 
 
