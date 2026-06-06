@@ -1779,17 +1779,18 @@ const CondensedModuleCard = ({
     <button
       type="button"
       onClick={onOpen}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-white via-card/95 to-primary/[0.04] p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_18px_44px_-22px_rgba(0,97,255,0.28)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-white via-card/95 to-primary/[0.04] p-5 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_18px_44px_-22px_rgba(0,97,255,0.28)]"
       title={`AI 训练进度：${masteryLabel}`}
     >
-      {/* Ambient accent */}
+      {/* Top accent strip */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-primary/[0.08] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.12]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary/60 via-primary/30 to-secondary/40 opacity-70 transition-opacity duration-300 group-hover:opacity-100"
       />
+      {/* Ambient glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-20 -bottom-24 h-44 w-44 rounded-full bg-secondary/[0.06] blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-primary/[0.06] blur-3xl transition-opacity duration-500 group-hover:bg-primary/[0.1]"
       />
 
       {/* Header: icon + title/subtitle (left), mastery dots (right, subdued) */}
@@ -1808,37 +1809,42 @@ const CondensedModuleCard = ({
           </div>
         </div>
 
-        {/* Mastery dots — discrete side indicator */}
+        {/* Mastery indicator */}
         <div
-          className="flex shrink-0 items-center gap-1 pt-1.5"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary/15 bg-primary/[0.06] px-2 py-0.5"
           aria-label={`训练${masteryLabel}`}
         >
-          {Array.from({ length: 4 }).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "h-1.5 w-1.5 rounded-full transition-colors",
-                i < filledDots ? "bg-primary" : "bg-border",
-              )}
-            />
-          ))}
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "h-1 w-1 rounded-full transition-colors",
+                  i < filledDots ? "bg-primary" : "bg-primary/20",
+                )}
+              />
+            ))}
+          </div>
+          <span className="text-[10.5px] font-semibold text-primary/85">{masteryLabel}</span>
         </div>
       </header>
 
       {/* Insights — main content body */}
-      <div className="relative mt-4 grid grid-cols-2 gap-1.5">
+      <div className="relative mt-4 grid grid-cols-1 gap-1">
         {mod.insights.map((it, i) => (
           <div
             key={i}
             className={cn(
-              "inline-flex items-center gap-1.5 px-1 py-1 text-[12.5px] transition-colors",
-              it.filled ? "text-foreground/85" : "text-muted-foreground/60",
+              "inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-[12.5px] transition-colors",
+              it.filled ? "text-foreground/85" : "text-muted-foreground/55",
             )}
           >
             {it.filled ? (
-              <Check className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={3} />
+              <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
+                <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
+              </span>
             ) : (
-              <span className="h-3 w-3 shrink-0 rounded-full border border-dashed border-muted-foreground/35" />
+              <span className="h-4 w-4 shrink-0 rounded-full border border-dashed border-muted-foreground/35" />
             )}
             <span className="truncate">{it.label}</span>
           </div>
@@ -1846,7 +1852,10 @@ const CondensedModuleCard = ({
       </div>
 
       {/* Footer */}
-      <div className="relative mt-4 flex items-center justify-end border-t border-border/50 pt-3">
+      <div className="relative mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+        <span className="text-[11px] text-muted-foreground">
+          已沉淀 {filledInsights}/{totalInsights} 模块
+        </span>
         <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-all group-hover:gap-1.5">
           查看详情
           <ChevronRight className="h-3.5 w-3.5" />
