@@ -180,19 +180,19 @@ const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, o
           ))}
         </div>
       </div>
-      <div className="mt-auto px-5 pb-5 pt-3 space-y-1 border-t border-border/60">
+      <div className="mt-auto px-5 pb-5 pt-3 flex items-center gap-2 border-t border-border/60">
         <button
           onClick={() => setPersonalizationOpen(true)}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] text-sidebar-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[13px] text-sidebar-foreground hover:bg-muted hover:text-foreground transition-colors"
         >
           <UserCog className="w-[18px] h-[18px]" />
           <span>个性化</span>
         </button>
         <button
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] text-sidebar-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[13px] text-sidebar-foreground hover:bg-muted hover:text-foreground transition-colors"
         >
           <Monitor className="w-[18px] h-[18px]" />
-          <span>PC客户端下载</span>
+          <span>PC客户端</span>
         </button>
       </div>
       <PersonalizationDialog open={personalizationOpen} onOpenChange={setPersonalizationOpen} />
