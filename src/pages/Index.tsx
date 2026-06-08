@@ -1162,7 +1162,8 @@ const Index = () => {
                     return (
                       <div
                         key={buyer.id}
-                        className="hover-glow group relative overflow-hidden rounded-2xl border border-border/60 bg-card/85 backdrop-blur-sm shadow-card transition-all hover:border-primary/40 opacity-0 animate-fade-up"
+                        onClick={() => setSheetBuyerId(buyer.id)}
+                        className="hover-glow group relative cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card/85 backdrop-blur-sm shadow-card transition-all hover:border-primary/40 opacity-0 animate-fade-up"
                         style={{ animationDelay: `${260 + idx * 50}ms` }}
                       >
                         <span
@@ -1171,10 +1172,7 @@ const Index = () => {
                         />
                         <div className="relative px-5 py-4 sm:px-6 sm:py-5">
                           <div className="flex items-start justify-between gap-3">
-                            <button
-                              onClick={() => setSheetBuyerId(buyer.id)}
-                              className="group/title flex min-w-0 flex-1 items-center gap-2 text-left"
-                            >
+                            <div className="group/title flex min-w-0 flex-1 items-center gap-2 text-left">
                               <p className="truncate text-[15px] font-semibold leading-snug text-foreground transition-colors group-hover/title:text-primary">
                                 {buyer.company}
                               </p>
@@ -1186,15 +1184,13 @@ const Index = () => {
                               >
                                 {buyer.stage}
                               </span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setActiveBuyerId(buyer.id)}
-                              aria-label="查看详情"
-                              className="shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary"
+                            </div>
+                            <span
+                              aria-hidden
+                              className="shrink-0 inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-all group-hover:bg-primary/10 group-hover:text-primary"
                             >
                               <ChevronRight className="h-4 w-4" />
-                            </button>
+                            </span>
                           </div>
 
                           <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[12.5px] text-muted-foreground">
@@ -1226,7 +1222,10 @@ const Index = () => {
                               {buyer.analyses.map((a, i) => (
                                 <li key={i}>
                                   <button
-                                    onClick={() => setActiveBuyerId(buyer.id)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setSheetBuyerId(buyer.id);
+                                    }}
                                     className="group/item flex w-full items-center justify-between gap-3 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-card/80"
                                   >
                                     <span className="flex min-w-0 items-center gap-2">
