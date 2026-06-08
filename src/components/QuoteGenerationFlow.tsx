@@ -736,30 +736,6 @@ export const QuoteWizard = ({
                     })}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-[11.5px] text-muted-foreground w-[60px] shrink-0">预估数量</label>
-                  <div className="flex gap-1">
-                    {([
-                      { v: "moq", label: "按 MOQ" },
-                      { v: "purchase", label: "按采购量" },
-                    ] as const).map((opt) => {
-                      const active = info.qtyBasis === opt.v;
-                      return (
-                        <button
-                          key={opt.v}
-                          onClick={() => setInfo({ ...info, qtyBasis: opt.v })}
-                          className={`px-2.5 py-1 rounded-md text-[11.5px] font-medium border transition-colors ${
-                            active
-                              ? "border-primary/60 bg-primary/10 text-primary"
-                              : "border-border/70 bg-background text-foreground hover:bg-muted"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
               </div>
             </div>
             {/* 我的公司 */}
