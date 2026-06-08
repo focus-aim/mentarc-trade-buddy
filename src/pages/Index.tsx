@@ -1219,7 +1219,7 @@ const Index = () => {
 
                           <div className="mt-2.5 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
                             <UserRound className="h-3 w-3 text-primary/70" />
-                            <span>来源子账号</span>
+                            <span>来自</span>
                             <span className="text-foreground/80 font-medium">{buyer.owner}</span>
                           </div>
 
