@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Coins, Plus, Trash2, Pencil, UserPlus, Users, AlertCircle, Building2, Hash, CalendarDays, User } from "lucide-react";
+import { Coins, Plus, Trash2, Pencil, UserPlus, Users, AlertCircle, Building2, Hash, CalendarDays, User, Copy, MessageSquare, Clock } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface TeamManagementDialogProps {
   open: boolean;
@@ -38,8 +39,8 @@ const MAX_MEMBERS = 2;
 const MOCK_REGISTERED_PHONES = ["13812345678", "13998765432"];
 
 const MOCK_SUBACCOUNTS = [
-  { id: 1, name: "张三", phone: "13812345678", addedAt: "2026-03-15" },
-  { id: 2, name: "李四", phone: "13998765432", addedAt: "2026-03-20" },
+  { id: 1, name: "张三", phone: "13812345678", addedAt: "2026-03-15", pending: false },
+  { id: 2, name: "李四", phone: "13998765432", addedAt: "2026-03-20", pending: false },
 ];
 
 type TabKey = "info" | "members" | "usage";
@@ -53,30 +54,34 @@ const NAV_ITEMS: { key: TabKey; label: string; icon: typeof Users }[] = [
 const TeamManagementDialog = ({ open, onOpenChange }: TeamManagementDialogProps) => {
   const [activeTab, setActiveTab] = useState<TabKey>("info");
   const [subAccounts, setSubAccounts] = useState(MOCK_SUBACCOUNTS);
-  const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [addError, setAddError] = useState("");
+  const [showInvite, setShowInvite] = useState(false);
 
   const handleAddSubAccount = () => {
     setAddError("");
-    if (!newName.trim() || !newPhone.trim()) return;
+    setShowInvite(false);
+    if (!newPhone.trim()) return;
     if (subAccounts.length >= MAX_MEMBERS) {
       setAddError(`当前团队最多支持 ${MAX_MEMBERS} 个成员`);
-      return;
-    }
-    if (!MOCK_REGISTERED_PHONES.includes(newPhone.trim())) {
-      setAddError("当前手机号暂未注册贸探，请先邀请注册");
       return;
     }
     if (subAccounts.some((a) => a.phone === newPhone.trim())) {
       setAddError("该手机号已添加");
       return;
     }
+    if (!MOCK_REGISTERED_PHONES.includes(newPhone.trim())) {
+      setShowInvite(true);
+      setSubAccounts((prev) => [
+        ...prev,
+        { id: Date.now(), name: "—", phone: newPhone.trim(), addedAt: "待接受邀请", pending: true },
+      ]);
+      return;
+    }
     setSubAccounts((prev) => [
       ...prev,
-      { id: Date.now(), name: newName.trim(), phone: newPhone.trim(), addedAt: new Date().toISOString().slice(0, 10) },
+      { id: Date.now(), name: "新成员", phone: newPhone.trim(), addedAt: new Date().toISOString().slice(0, 10), pending: false },
     ]);
-    setNewName("");
     setNewPhone("");
   };
 
@@ -119,10 +124,9 @@ const TeamManagementDialog = ({ open, onOpenChange }: TeamManagementDialogProps)
                 onAdd={handleAddSubAccount}
                 onDelete={handleDeleteSubAccount}
                 addError={addError}
-                newName={newName}
-                setNewName={setNewName}
                 newPhone={newPhone}
                 setNewPhone={setNewPhone}
+                showInvite={showInvite}
               />
             )}
             {activeTab === "usage" && <UsagePanel />}
@@ -204,16 +208,24 @@ interface MembersPanelProps {
   onAdd: () => void;
   onDelete: (id: number) => void;
   addError: string;
-  newName: string;
-  setNewName: (v: string) => void;
   newPhone: string;
   setNewPhone: (v: string) => void;
+  showInvite: boolean;
 }
 
 const MembersPanel = ({
   subAccounts, maxMembers, onAdd, onDelete, addError,
-  newName, setNewName, newPhone, setNewPhone,
-}: MembersPanelProps) => (
+  newPhone, setNewPhone, showInvite,
+}: MembersPanelProps) => {
+  const inviteLink = "https://mentarc.ai/invite?code=TEAM-20250401-0038";
+  const handleCopy = () => {
+    navigator.clipboard?.writeText(inviteLink);
+    toast({ description: "邀请链接已复制" });
+  };
+  const handleSms = () => {
+    toast({ description: "短信提醒已发送" });
+  };
+  return (
   <div className="space-y-5">
     {/* Capacity indicator */}
     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/60 text-xs text-muted-foreground">
@@ -232,12 +244,6 @@ const MembersPanel = ({
       </h4>
       <div className="flex flex-col sm:flex-row gap-2">
         <Input
-          placeholder="姓名"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          className="sm:w-28 h-9 text-sm rounded-lg border-border/50 bg-background/80 focus:bg-background"
-        />
-        <Input
           placeholder="手机号"
           value={newPhone}
           onChange={(e) => setNewPhone(e.target.value)}
@@ -254,6 +260,24 @@ const MembersPanel = ({
           {addError}
         </div>
       )}
+      {showInvite && (
+        <div className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-2">
+          <div className="flex items-start gap-1.5 text-xs text-amber-700">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            <span>该手机号暂未注册贸探，请通过以下方式邀请对方注册。</span>
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={handleCopy} size="sm" variant="outline" className="gap-1.5 h-8 rounded-lg text-xs">
+              <Copy className="w-3 h-3" />
+              复制邀请链接
+            </Button>
+            <Button onClick={handleSms} size="sm" variant="outline" className="gap-1.5 h-8 rounded-lg text-xs">
+              <MessageSquare className="w-3 h-3" />
+              发送短信提醒
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
 
     {/* List */}
@@ -261,7 +285,6 @@ const MembersPanel = ({
       <Table>
         <TableHeader>
           <TableRow className="bg-muted/30 hover:bg-muted/30">
-            <TableHead className="text-xs font-medium h-9">姓名</TableHead>
             <TableHead className="text-xs font-medium h-9">手机号</TableHead>
             <TableHead className="text-xs font-medium h-9">添加时间</TableHead>
             <TableHead className="w-12 h-9"></TableHead>
@@ -270,9 +293,17 @@ const MembersPanel = ({
         <TableBody>
           {subAccounts.map((a) => (
             <TableRow key={a.id} className="hover:bg-muted/20">
-              <TableCell className="font-medium text-sm py-3">{a.name}</TableCell>
               <TableCell className="text-sm text-muted-foreground py-3">{a.phone}</TableCell>
-              <TableCell className="text-xs text-muted-foreground py-3">{a.addedAt}</TableCell>
+              <TableCell className="text-xs py-3">
+                {a.pending ? (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600">
+                    <Clock className="w-3 h-3" />
+                    待接受邀请
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">{a.addedAt}</span>
+                )}
+              </TableCell>
               <TableCell className="py-3">
                 <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/5 rounded-lg" onClick={() => onDelete(a.id)}>
                   <Trash2 className="w-3.5 h-3.5" />
@@ -282,14 +313,15 @@ const MembersPanel = ({
           ))}
           {subAccounts.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-muted-foreground py-10 text-sm">暂无子账号</TableCell>
+              <TableCell colSpan={3} className="text-center text-muted-foreground py-10 text-sm">暂无子账号</TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
     </div>
   </div>
-);
+  );
+};
 
 /* ── Usage Panel ── */
 const UsagePanel = () => {
