@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { UserRound, Building2, Package, Workflow, CheckCircle2, ChevronRight, X, Mail, Globe, MapPin, ShoppingCart, Clock } from "lucide-react";
+import { UserRound, Building2, Package, Workflow, CheckCircle2, ChevronRight, X, Mail, Globe, MapPin, ShoppingCart, Clock, Search } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { BuyerBackgroundReport } from "./InquiryResultMessage";
 
 interface BuyerProfileFloatingCardProps {
   visible: boolean;
@@ -131,6 +133,7 @@ export const BuyerProfileSheetContent = ({
   updated: boolean;
   onClose: () => void;
 }) => {
+  const [bgOpen, setBgOpen] = useState(false);
   const analyses = [
     {
       name: "Bergmann 二次跟进 · 化解低价竞品顾虑",
@@ -196,6 +199,29 @@ export const BuyerProfileSheetContent = ({
         </div>
       </section>
 
+      {/* Background report */}
+      <section className="px-5 py-4 border-b border-border">
+        <button
+          type="button"
+          onClick={() => setBgOpen(true)}
+          className="group w-full flex items-center gap-3 rounded-xl border border-border bg-card/70 hover:border-primary/40 hover:bg-primary/[0.03] transition-all px-3 py-2.5 text-left"
+        >
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+            <Search className="w-3.5 h-3.5" />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="flex items-center gap-1.5">
+              <span className="text-[12.5px] font-semibold text-foreground">买家背调报告</span>
+              <span className="rounded border border-primary/20 bg-primary/5 px-1.5 py-0 text-[10px] font-medium text-primary">1 份</span>
+            </span>
+            <span className="mt-0.5 block text-[11px] text-muted-foreground leading-snug">
+              资金实力、决策链与竞争对手画像分析
+            </span>
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+        </button>
+      </section>
+
       {/* Procurement intent */}
       <section className="px-5 py-4 space-y-2.5 border-b border-border">
         <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5">
@@ -240,6 +266,20 @@ export const BuyerProfileSheetContent = ({
           ))}
         </div>
       </section>
+
+      <Dialog open={bgOpen} onOpenChange={setBgOpen}>
+        <DialogContent className="max-w-3xl max-h-[86vh] overflow-y-auto p-0">
+          <DialogHeader className="px-6 pt-5 pb-3 border-b border-border">
+            <DialogTitle className="text-base font-semibold">买家背调报告</DialogTitle>
+            <DialogDescription className="text-[12px] text-muted-foreground">
+              基于公开信息与历史交易数据生成的深度背景分析。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="px-6 py-5">
+            <BuyerBackgroundReport />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
