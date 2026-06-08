@@ -346,6 +346,26 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
           </div>
         </section>
 
+        <button
+          onClick={() => setOpenKey("background")}
+          className="group mt-5 w-full text-left rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm p-5 opacity-0 animate-fade-up transition-all hover:border-primary/40 hover:shadow-md"
+          style={{ animationDelay: "75ms" }}
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+              <Search className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-bold text-foreground">买家背调报告</h2>
+                <span className="rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-medium text-primary">1 份报告</span>
+              </div>
+              <p className="mt-1 text-[11.5px] text-muted-foreground leading-snug">公司资质、决策链、合规风险等深度背景调查结果，点击查看完整分析报告。</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+          </div>
+        </button>
+
         <section className="mt-5 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm p-5 opacity-0 animate-fade-up" style={{ animationDelay: "90ms" }}>
           <div className="mb-3 flex items-center gap-2">
             <Clock className="w-3.5 h-3.5 text-primary" />
