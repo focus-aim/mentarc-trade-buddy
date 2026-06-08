@@ -49,6 +49,7 @@ type BuyerProfileData = {
   meta?: string;
   region: string;
   contact: string;
+  owner: string;
   inquiry: {
     expertTip: string;
     buyer: { company: string; contact: string; timezone: string; role: string; rating: string };
@@ -66,6 +67,7 @@ const BUYER_DATA: Record<string, BuyerProfileData> = {
     meta: "决策链 3 人 · 预算 €120K",
     region: "德国 · 慕尼黑",
     contact: "Michael Schneider · 采购总监",
+    owner: "子账号 · 张敏（欧洲组）",
     inquiry: {
       expertTip: "客户已明确预算与器械清单，先确认 EN957 认证 + 整店配送方案，避免被竞品以「整套打包价」抢单。",
       buyer: { company: "Bergmann Fitness Group", contact: "Michael Schneider", timezone: "欧洲中部（CET）", role: "连锁健身房采购总监", rating: "A 级" },
@@ -89,6 +91,7 @@ const BUYER_DATA: Record<string, BuyerProfileData> = {
     meta: "年采购量 8K 件 · 复购率高",
     region: "美国 · 加州",
     contact: "Sarah Lin · Head of Sourcing",
+    owner: "子账号 · Linda Wu（北美组）",
     inquiry: {
       expertTip: "DTC 品牌看重「独家定制 + 稳定交付」，不要一上来就拼价格，先用「联合开发 + 长期排产」绑住对方。",
       buyer: { company: "FlexHome Co.", contact: "Sarah Lin", timezone: "美西（PST）", role: "DTC 品牌采购负责人", rating: "A+ 级" },
@@ -112,6 +115,7 @@ const BUYER_DATA: Record<string, BuyerProfileData> = {
     meta: "门店 12 家 · 整店采购",
     region: "阿联酋 · 迪拜",
     contact: "Ahmed Al-Rashid · Operations Director",
+    owner: "子账号 · Hassan A.（中东组）",
     inquiry: {
       expertTip: "中东买家对「质保年限 + 本地化售后」极敏感，建议绑定迪拜本地代理或承诺 48 小时上门服务。",
       buyer: { company: "Gulf Fit Holdings", contact: "Ahmed Al-Rashid", timezone: "海湾标准（GST）", role: "连锁运营总监", rating: "A 级" },
@@ -337,6 +341,10 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
               <h1 className="mt-2 text-xl font-bold text-foreground">{data.name}</h1>
               <p className="mt-1 text-xs text-muted-foreground">
                 {data.region}　·　{data.contact}
+              </p>
+              <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary/85">
+                <UserRound className="w-3 h-3" />
+                来源子账号：<span className="font-medium text-foreground/85">{data.owner}</span>
               </p>
             </div>
             <div className="flex flex-col items-end gap-1.5">
