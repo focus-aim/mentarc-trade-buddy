@@ -358,9 +358,8 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm font-bold text-foreground">买家背调报告</h2>
-                <span className="rounded-md border border-primary/20 bg-primary/5 px-1.5 py-0.5 text-[10px] font-medium text-primary">1 份报告</span>
               </div>
-              <p className="mt-1 text-[11.5px] text-muted-foreground leading-snug">公司资质、决策链、合规风险等深度背景调查结果，点击查看完整分析报告。</p>
+              <p className="mt-1 text-[11.5px] text-muted-foreground leading-snug">公司概况、采购实力和风险提示</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
           </div>
