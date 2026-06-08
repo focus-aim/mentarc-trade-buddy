@@ -212,10 +212,9 @@ export const BuyerProfileSheetContent = ({
           <span className="min-w-0 flex-1">
             <span className="flex items-center gap-1.5">
               <span className="text-[12.5px] font-semibold text-foreground">买家背调报告</span>
-              <span className="rounded border border-primary/20 bg-primary/5 px-1.5 py-0 text-[10px] font-medium text-primary">1 份</span>
             </span>
             <span className="mt-0.5 block text-[11px] text-muted-foreground leading-snug">
-              资金实力、决策链与竞争对手画像分析
+              公司概况、采购实力和风险提示
             </span>
           </span>
           <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
