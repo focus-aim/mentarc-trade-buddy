@@ -196,7 +196,7 @@ export const BuyerProfileSheetContent = ({
           <Info icon={Mail} label="邮箱" value="m.schneider@bergmann.de" />
           <Info icon={Globe} label="官网" value="bergmann-home.de" />
           <Info icon={ShoppingCart} label="采购模式" value="批发 + 自有品牌" />
-          <Info icon={UserRound} label="来源子账号" value="子账号 · 张敏（欧洲组）" />
+          <Info icon={UserRound} label="来源子账号" value="用户 133****7053" />
         </div>
       </section>
 

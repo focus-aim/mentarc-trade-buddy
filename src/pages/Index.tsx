@@ -657,7 +657,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "德国采购意向跟进-0402", date: "04/02" },
       { title: "决策链梳理 & 预算确认-0418", date: "04/18" },
     ],
-    owner: "子账号 · 张敏（欧洲组）",
+    owner: "用户 133****7053",
   },
   {
     id: "b2",
@@ -675,7 +675,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "DTC 品牌私域获客拆解-0405", date: "04/05" },
       { title: "美西采购窗口期分析-0410", date: "04/10" },
     ],
-    owner: "子账号 · Linda Wu（北美组）",
+    owner: "用户 133****7053",
   },
   {
     id: "b3",
@@ -689,7 +689,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     stageTone: "amber",
     nextAction: { label: "深度买家背调，评估资金与决策链" },
     analyses: [{ title: "迪拜健身展线索整理-0331", date: "03/31" }],
-    owner: "子账号 · Hassan A.（中东组）",
+    owner: "用户 133****7053",
   },
   {
     id: "b4",
@@ -706,7 +706,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "保温啤酒杯阶梯报价询盘分析", date: "04/22" },
       { title: "买家 TechSol US 背调", date: "04/24" },
     ],
-    owner: "子账号 · 主账号 / 王磊",
+    owner: "用户 133****7053",
   },
 ];
 
@@ -1215,10 +1215,12 @@ const Index = () => {
                               <MapPin className="h-3.5 w-3.5 text-muted-foreground/70" />
                               {buyer.region}
                             </span>
-                            <span className="inline-flex items-center gap-1.5">
-                              <UserRound className="h-3.5 w-3.5 text-primary/70" />
-                              <span className="text-foreground/80">{buyer.owner}</span>
-                            </span>
+                          </div>
+
+                          <div className="mt-2.5 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+                            <UserRound className="h-3 w-3 text-primary/70" />
+                            <span>来源子账号</span>
+                            <span className="text-foreground/80 font-medium">{buyer.owner}</span>
                           </div>
 
                         </div>
