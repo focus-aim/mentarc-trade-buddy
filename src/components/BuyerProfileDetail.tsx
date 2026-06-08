@@ -344,7 +344,7 @@ const BuyerProfileDetail = ({ buyerId, onBack }: BuyerProfileDetailProps) => {
               </p>
               <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary/85">
                 <UserRound className="w-3 h-3" />
-                来源子账号：<span className="font-medium text-foreground/85">{data.owner}</span>
+                来自 <span className="font-medium text-foreground/85">{data.owner}</span>
               </p>
             </div>
             <div className="flex flex-col items-end gap-1.5">
