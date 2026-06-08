@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -218,11 +218,15 @@ const MembersPanel = ({
   newPhone, setNewPhone, showInvite,
 }: MembersPanelProps) => {
   const inviteLink = "https://mentarc.ai/invite?code=TEAM-20250401-0038";
+  const [smsSent, setSmsSent] = useState(false);
+  useEffect(() => { setSmsSent(false); }, [showInvite]);
   const handleCopy = () => {
     navigator.clipboard?.writeText(inviteLink);
     toast({ description: "邀请链接已复制" });
   };
   const handleSms = () => {
+    if (smsSent) return;
+    setSmsSent(true);
     toast({ description: "短信提醒已发送" });
   };
   return (
@@ -271,10 +275,17 @@ const MembersPanel = ({
               <Copy className="w-3 h-3" />
               复制邀请链接
             </Button>
-            <Button onClick={handleSms} size="sm" variant="outline" className="gap-1.5 h-8 rounded-lg text-xs">
-              <MessageSquare className="w-3 h-3" />
-              发送短信提醒
-            </Button>
+            {smsSent ? (
+              <span className="inline-flex items-center gap-1.5 h-8 px-2 text-xs text-muted-foreground cursor-not-allowed">
+                <MessageSquare className="w-3 h-3" />
+                已发送短信提醒
+              </span>
+            ) : (
+              <Button onClick={handleSms} size="sm" variant="outline" className="gap-1.5 h-8 rounded-lg text-xs">
+                <MessageSquare className="w-3 h-3" />
+                发送短信提醒
+              </Button>
+            )}
           </div>
         </div>
       )}
