@@ -383,7 +383,7 @@ export const QuoteTemplateStep = ({
       </div>
       {!collapsed && (
       <div className="px-4 py-3 space-y-3">
-        <div className="grid gap-2.5 md:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2.5">
           {QUOTE_TEMPLATES.map((t) => {
             const active = currentlySelected === t.id;
             return (
@@ -391,21 +391,21 @@ export const QuoteTemplateStep = ({
                 key={t.id}
                 onClick={() => !done && setPicked(t.id)}
                 disabled={done}
-                className={`text-left rounded-xl border p-2.5 transition-all flex items-center gap-3 ${
+                className={`text-left rounded-xl border p-2.5 transition-all flex flex-col gap-2 ${
                   active
                     ? "border-primary/60 bg-primary/[0.06] ring-1 ring-primary/30"
                     : "border-border/60 bg-background/50 hover:border-primary/30 hover:bg-primary/[0.03]"
                 } disabled:cursor-default`}
               >
-                <div className="w-[120px] shrink-0">
+                <div className="w-full">
                   <TemplateThumb id={t.id} />
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 w-full">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[13px] font-semibold text-foreground">{t.name}</span>
                     {active && <Check className="h-3.5 w-3.5 text-primary" />}
                   </div>
-                  <p className="mt-1 text-[11.5px] text-muted-foreground leading-relaxed">{t.tagline}</p>
+                  <p className="mt-0.5 text-[11.5px] text-muted-foreground leading-relaxed">{t.tagline}</p>
                 </div>
               </button>
             );
