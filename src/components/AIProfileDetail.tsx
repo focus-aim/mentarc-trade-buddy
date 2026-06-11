@@ -2127,11 +2127,6 @@ const ProductServiceDetail = ({
         </p>
       </GroupCard>
 
-      {/* 摘要提示 */}
-      <p className="px-1 text-[11.5px] leading-snug text-muted-foreground">
-        AI 已完成产品资料学习与理解，此处仅展示核心摘要
-      </p>
-
       {/* 主要产品 */}
       <GroupCard
         title="主要产品"
@@ -2170,6 +2165,11 @@ const ProductServiceDetail = ({
           ))}
         </div>
       </GroupCard>
+
+      {/* 摘要提示 */}
+      <p className="px-1 text-[11.5px] leading-snug text-muted-foreground">
+        AI 已完成产品资料学习与理解，此处仅展示核心摘要
+      </p>
     </div>
   );
 };
