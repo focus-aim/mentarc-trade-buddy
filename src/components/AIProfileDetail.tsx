@@ -2102,6 +2102,8 @@ const ProductServiceDetail = ({
   onSummaryChange: (v: string) => void;
 }) => {
   const products = CORE_PRODUCTS.slice(0, 10);
+  const [showAllProducts, setShowAllProducts] = useState(false);
+  const visibleProducts = showAllProducts ? products : products.slice(0, 5);
   return (
     <div className="mt-4 space-y-3">
       {/* 产品概括 */}
@@ -2140,7 +2142,7 @@ const ProductServiceDetail = ({
           AI 已完成产品资料学习与理解，此处仅展示核心摘要
         </p>
         <div className="divide-y divide-border/40">
-          {products.map((p) => (
+          {visibleProducts.map((p) => (
             <div
               key={p.name}
               className="flex gap-2.5 py-2 first:pt-1 last:pb-1"
@@ -2167,6 +2169,15 @@ const ProductServiceDetail = ({
             </div>
           ))}
         </div>
+        {products.length > 5 && (
+          <button
+            type="button"
+            onClick={() => setShowAllProducts((v) => !v)}
+            className="mt-2 w-full rounded-md py-1 text-[11.5px] font-medium text-primary hover:bg-primary/5"
+          >
+            {showAllProducts ? "收起" : `查看更多（${products.length - 5}）`}
+          </button>
+        )}
       </GroupCard>
     </div>
   );
