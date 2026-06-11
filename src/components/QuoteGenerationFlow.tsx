@@ -30,8 +30,8 @@ import {
 export type QuoteTemplate = "company" | "business";
 
 export const QUOTE_TEMPLATES: { id: QuoteTemplate; name: string; tagline: string }[] = [
-  { id: "company", name: "公司展示型", tagline: "偏产品图册，突出品牌、产品大图与卖点" },
-  { id: "business", name: "商务标准版", tagline: "偏报价单表格，规范字段，便于客户审核" },
+  { id: "company", name: "公司展示型", tagline: "偏产品图册，适合展现公司品牌、产品和服务" },
+  { id: "business", name: "商务标准版", tagline: "偏报价单表格，规范字段，便于报价审核" },
 ];
 
 export interface QuoteInfo {
