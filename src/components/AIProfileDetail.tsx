@@ -2136,6 +2136,9 @@ const ProductServiceDetail = ({
           </span>
         }
       >
+        <p className="mb-2 text-[11.5px] leading-snug text-muted-foreground">
+          AI 已完成产品资料学习与理解，此处仅展示核心摘要
+        </p>
         <div className="divide-y divide-border/40">
           {products.map((p) => (
             <div
@@ -2165,11 +2168,6 @@ const ProductServiceDetail = ({
           ))}
         </div>
       </GroupCard>
-
-      {/* 摘要提示 */}
-      <p className="px-1 text-[11.5px] leading-snug text-muted-foreground">
-        AI 已完成产品资料学习与理解，此处仅展示核心摘要
-      </p>
     </div>
   );
 };
