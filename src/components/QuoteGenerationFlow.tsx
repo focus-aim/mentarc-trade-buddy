@@ -970,37 +970,16 @@ export const QuoteSummaryCard = ({
   template: QuoteTemplate;
 }) => {
   const tpl = QUOTE_TEMPLATES.find((t) => t.id === template) || QUOTE_TEMPLATES[1];
-  const items: { icon: typeof UserRound; label: string; value: string }[] = [
-    { icon: UserRound, label: "买家", value: info.buyerCompany },
-    { icon: Package, label: "产品", value: info.productName },
-    {
-      icon: Truck,
-      label: "参数",
-      value: `${info.incoterm} · ${info.qtyBasis === "moq" ? "按 MOQ" : "按采购量"}`,
-    },
-    { icon: FileSpreadsheet, label: "模板", value: tpl.name },
-  ];
   return (
-    <div className="w-full rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/[0.08] via-primary/[0.04] to-secondary/[0.08] backdrop-blur-sm shadow-sm overflow-hidden">
-      <div className="px-4 py-2.5 flex items-center gap-2 border-b border-primary/15 bg-white/40">
-        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/15 text-primary">
+    <div className="w-full rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/[0.08] via-primary/[0.04] to-secondary/[0.08] backdrop-blur-sm shadow-sm">
+      <div className="px-4 py-2.5 flex items-center gap-2.5">
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
           <Sparkles className="h-3.5 w-3.5" />
         </div>
-        <span className="text-[12.5px] font-semibold text-foreground">开始生成报价单</span>
-      </div>
-      <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2">
-        {items.map((it) => {
-          const Icon = it.icon;
-          return (
-            <div key={it.label} className="min-w-0 flex items-start gap-1.5">
-              <Icon className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
-              <div className="min-w-0">
-                <div className="text-[10.5px] text-muted-foreground leading-tight">{it.label}</div>
-                <div className="text-[12.5px] font-medium text-foreground truncate" title={it.value}>{it.value}</div>
-              </div>
-            </div>
-          );
-        })}
+        <span className="text-[12.5px] font-semibold text-foreground shrink-0">开始生成报价单</span>
+        <span className="text-[12px] text-muted-foreground truncate">
+          {info.buyerCompany} · {tpl.name}
+        </span>
       </div>
     </div>
   );
