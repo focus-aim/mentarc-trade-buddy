@@ -975,7 +975,7 @@ export const QuoteSummaryCard = ({
         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
           <Sparkles className="h-3.5 w-3.5" />
         </div>
-        <span className="text-[12.5px] font-semibold text-foreground shrink-0">开始生成报价单</span>
+        <span className="text-[12.5px] font-semibold text-foreground shrink-0">报价单信息已提交</span>
         <span className="text-[12px] text-muted-foreground truncate">
           {info.buyerCompany} · {tpl.name}
         </span>
