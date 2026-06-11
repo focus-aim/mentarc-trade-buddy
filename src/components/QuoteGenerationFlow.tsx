@@ -15,7 +15,6 @@ import {
   Sparkles,
   Pencil,
 } from "lucide-react";
-import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
