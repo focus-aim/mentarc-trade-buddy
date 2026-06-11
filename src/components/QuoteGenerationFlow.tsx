@@ -971,14 +971,27 @@ export const QuoteSummaryCard = ({
   const tpl = QUOTE_TEMPLATES.find((t) => t.id === template) || QUOTE_TEMPLATES[1];
   return (
     <div className="w-full rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/[0.08] via-primary/[0.04] to-secondary/[0.08] backdrop-blur-sm shadow-sm">
-      <div className="px-4 py-2.5 flex items-center gap-2.5">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
-          <Sparkles className="h-3.5 w-3.5" />
+      <div className="px-4 py-3">
+        <div className="flex items-center gap-2">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
+            <Sparkles className="h-3.5 w-3.5" />
+          </div>
+          <span className="text-[12.5px] font-semibold text-foreground">报价单信息已提交</span>
         </div>
-        <span className="text-[12.5px] font-semibold text-foreground shrink-0">报价单信息已提交</span>
-        <span className="text-[12px] text-muted-foreground truncate">
-          {info.buyerCompany} · {tpl.name}
-        </span>
+        <dl className="mt-2 space-y-1 pl-8 text-[12px]">
+          <div className="flex gap-2">
+            <dt className="w-[72px] shrink-0 text-muted-foreground">买家公司</dt>
+            <dd className="flex-1 text-foreground">{info.buyerCompany}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="w-[72px] shrink-0 text-muted-foreground">采购产品</dt>
+            <dd className="flex-1 text-foreground">{info.productName}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="w-[72px] shrink-0 text-muted-foreground">报价单类型</dt>
+            <dd className="flex-1 text-foreground">{tpl.name}</dd>
+          </div>
+        </dl>
       </div>
     </div>
   );
