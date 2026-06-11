@@ -2134,7 +2134,7 @@ const ProductServiceDetail = ({
         title="主要产品"
         extra={
           <span className="text-[10.5px] font-medium text-muted-foreground">
-            {products.length} / 10
+            {"\n"}
           </span>
         }
       >
