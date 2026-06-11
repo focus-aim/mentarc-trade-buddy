@@ -2101,7 +2101,7 @@ const ProductServiceDetail = ({
   summary: string;
   onSummaryChange: (v: string) => void;
 }) => {
-  const products = CORE_PRODUCTS.slice(0, 5);
+  const products = CORE_PRODUCTS.slice(0, 10);
   return (
     <div className="mt-4 space-y-3">
       {/* 产品概括 */}
