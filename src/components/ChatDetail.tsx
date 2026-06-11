@@ -1142,7 +1142,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
               const isTurnEnd =
                 msg.role === "assistant" &&
                 !isMindflow &&
-                (!nextMsg || nextMsg.role === "user");
+                (!nextMsg || nextMsg.role === "user") &&
+                nextMsg?.type !== "quote-summary";
               const feedbackNode = isTurnEnd ? <MessageFeedback /> : null;
 
               if (isResult) {
