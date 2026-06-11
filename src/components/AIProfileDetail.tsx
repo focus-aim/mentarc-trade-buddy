@@ -2122,19 +2122,15 @@ const ProductServiceDetail = ({
 
       {/* 包装信息 */}
       <GroupCard title="包装信息">
-        <div className="space-y-1.5 py-0.5">
-          {PACKAGING_INFO.map((item) => (
-            <div key={item.label} className="flex items-start gap-2">
-              <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
-                {item.label}
-              </div>
-              <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
+        <p className="py-0.5 text-[12.5px] leading-relaxed text-foreground/85">
+          单件采用彩盒 / 牛皮纸礼盒，可定制 Logo 与品牌色；外箱为 5 层瓦楞，24 pcs / CTN，约 0.045 CBM；支持 FOB 宁波 / 深圳整柜或拼箱发运，亦可按亚马逊 FBA、PDQ 展示盒等合规要求定制。
+        </p>
       </GroupCard>
+
+      {/* 摘要提示 */}
+      <p className="px-1 text-[11.5px] leading-snug text-muted-foreground">
+        AI 已完成产品资料学习与理解，此处仅展示核心摘要
+      </p>
 
       {/* 主要产品 */}
       <GroupCard
@@ -2173,9 +2169,6 @@ const ProductServiceDetail = ({
             </div>
           ))}
         </div>
-        <p className="mt-2 border-t border-border/40 pt-2 text-[11px] leading-snug text-muted-foreground">
-          AI 已完成产品资料学习与理解，此处仅展示核心摘要
-        </p>
       </GroupCard>
     </div>
   );
