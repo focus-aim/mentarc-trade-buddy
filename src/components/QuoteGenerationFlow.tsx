@@ -437,6 +437,139 @@ export const QuoteTemplateStep = ({
 
 // ---------- Result card + full dialog ----------
 
+const QuotationPreview = ({
+  info,
+  items,
+  subtotal,
+  freight,
+  grand,
+  size = "full",
+}: {
+  info: QuoteInfo;
+  items: { name: string; qty: number; unit: number; total: number }[];
+  subtotal: number;
+  freight: number;
+  grand: number;
+  size?: "thumb" | "full";
+}) => {
+  const compact = size === "thumb";
+  const main = items[items.length - 1];
+  const buyerFirst = info.buyerCompany.split(/[ ,.]/)[0] || "Buyer";
+  const kpis = [
+    { label: "数量", value: `${main.qty.toLocaleString()} pcs` },
+    { label: "单价", value: `$${Number(info.unitPrice).toLocaleString()}` },
+    { label: "交期", value: info.leadTime.split(/[/\s]/)[0] || "—" },
+    { label: "合计", value: `$${grand.toLocaleString()}` },
+  ];
+
+  return (
+    <div
+      className={`bg-white border border-border/70 shadow-sm ${
+        compact ? "rounded-md p-3" : "rounded-xl p-7"
+      }`}
+      style={{ fontFamily: "ui-sans-serif, system-ui" }}
+    >
+      {/* Top header row */}
+      <div className="flex items-start justify-between">
+        <div
+          className={`tracking-[0.18em] font-semibold text-neutral-500 ${
+            compact ? "text-[7px]" : "text-[11px]"
+          }`}
+        >
+          QUOTATION
+        </div>
+        <div
+          className={`font-extrabold tracking-wide ${
+            compact ? "text-[9px]" : "text-[16px]"
+          }`}
+          style={{ color: "#D7261E" }}
+        >
+          MENTARC
+        </div>
+      </div>
+
+      {/* Title */}
+      <h1
+        className={`font-extrabold text-neutral-900 leading-tight ${
+          compact ? "text-[12px] mt-1.5" : "text-[26px] mt-3"
+        }`}
+      >
+        Quotation for {buyerFirst}
+      </h1>
+      <div
+        className={compact ? "mt-1 h-[1.5px] w-10" : "mt-2 h-[2px] w-20"}
+        style={{ backgroundColor: "#D7261E" }}
+      />
+
+      {/* Body two-column */}
+      <div className={`grid grid-cols-5 ${compact ? "gap-2 mt-2" : "gap-5 mt-5"}`}>
+        {/* Left: paragraphs */}
+        <div className={`col-span-3 text-neutral-700 ${compact ? "text-[7px] leading-snug space-y-1" : "text-[12px] leading-relaxed space-y-2.5"}`}>
+          <p>
+            <span className="font-semibold text-neutral-900">Mentarc Trading Co., Ltd.</span> 很荣幸为
+            <span className="font-semibold text-neutral-900"> {info.buyerCompany}</span> 提供
+            <span className="font-semibold text-neutral-900"> {info.productName}</span> 的正式报价。
+            本次报价基于双方前期沟通的产品规格与采购量，{info.spec}。
+          </p>
+          <p>
+            报价采用 {info.incoterm} 贸易术语，{info.payTerms}。
+            {info.qtyBasis === "moq" ? "数量按 MOQ 计算，" : "数量按采购量计算，"}
+            交期：{info.leadTime}。如需调整规格、追加 SKU 或议定其他付款方式，欢迎在有效期内回复确认。
+          </p>
+          {!compact && (
+            <p>
+              我司已通过 BSCI / SEDEX 工厂审核及 FDA、LFGB、CE 认证，月产能 50 万 pcs，能稳定支持北美与欧洲渠道的持续补货。
+              欢迎安排样品确认与现场验厂。
+            </p>
+          )}
+        </div>
+
+        {/* Right: info boxes */}
+        <div className={`col-span-2 ${compact ? "space-y-1" : "space-y-2"}`}>
+          {[
+            { title: "Buyer Info", body: `${info.buyerCompany} · ${info.buyerContact} · ${info.buyerCountry}` },
+            { title: "Trade Terms", body: `${info.incoterm} · ${info.payTerms}` },
+            { title: "Validity", body: `有效期至 ${info.validUntil}` },
+          ].map((b) => (
+            <div
+              key={b.title}
+              className={`bg-neutral-50 border-l-2 ${compact ? "px-1.5 py-1" : "px-3 py-2.5"}`}
+              style={{ borderLeftColor: "#D7261E" }}
+            >
+              <div
+                className={`font-bold text-neutral-900 ${compact ? "text-[7.5px]" : "text-[12.5px]"}`}
+              >
+                {b.title}
+              </div>
+              <div
+                className={`text-neutral-600 ${compact ? "text-[6.5px] leading-tight mt-0.5" : "text-[11px] leading-snug mt-1"}`}
+              >
+                {b.body}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* KPI tiles */}
+      <div className={`grid grid-cols-4 ${compact ? "gap-1 mt-2" : "gap-2.5 mt-5"}`}>
+        {kpis.map((k) => (
+          <div
+            key={k.label}
+            className={compact ? "px-1.5 py-1 text-white" : "px-3 py-2.5 text-white"}
+            style={{ backgroundColor: "#D7261E" }}
+          >
+            <div className={`font-extrabold leading-tight ${compact ? "text-[9px]" : "text-[18px]"}`}>
+              {k.value}
+            </div>
+            <div className={`opacity-90 ${compact ? "text-[6px]" : "text-[10px]"}`}>{k.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export const QuoteResultCard = ({
   template,
   info,
@@ -462,33 +595,114 @@ export const QuoteResultCard = ({
   const freight = Number(info.freight) || 0;
   const grand = subtotal + freight;
 
-  const downloadExcel = () => {
-    const rows: (string | number)[][] = [
-      ["Quotation / 报价单"],
-      [`Template: ${templateMeta.name}`],
-      [],
-      ["Buyer", info.buyerCompany],
-      ["Contact", info.buyerContact],
-      ["Country", info.buyerCountry],
-      ["Valid Until", info.validUntil],
-      [],
-      ["No.", "Product", "Spec", "Qty", "Unit Price (USD)", "Total (USD)"],
-      [1, items[0].name, "Air sample", items[0].qty, items[0].unit, items[0].total],
-      [2, items[1].name, info.spec, items[1].qty, items[1].unit, items[1].total],
-      [],
-      ["Subtotal", "", "", "", "", subtotal],
-      ["Freight (Est.)", "", "", "", "", freight],
-      ["Grand Total", "", "", "", "", grand],
-      [],
-      ["Incoterms", info.incoterm],
-      ["Lead Time", info.leadTime],
-      ["Payment", info.payTerms],
+  const fileBase = `Quotation_${info.buyerCompany.split(" ")[0] || "Buyer"}`;
+
+  const downloadPDF = () => {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const margin = 48;
+    let y = margin;
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(215, 38, 30);
+    doc.setFontSize(14);
+    doc.text("MENTARC", 595 - margin, y, { align: "right" });
+    doc.setFontSize(9);
+    doc.setTextColor(120);
+    doc.text("QUOTATION", margin, y);
+    y += 28;
+    doc.setFontSize(20);
+    doc.setTextColor(20);
+    doc.text(`Quotation for ${info.buyerCompany.split(/[ ,.]/)[0]}`, margin, y);
+    y += 6;
+    doc.setDrawColor(215, 38, 30);
+    doc.setLineWidth(1.5);
+    doc.line(margin, y, margin + 60, y);
+    y += 22;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(60);
+    const paras = [
+      `Buyer: ${info.buyerCompany}  (${info.buyerContact}, ${info.buyerCountry})`,
+      `Product: ${info.productName}`,
+      `Specification: ${info.spec}`,
+      `Incoterm: ${info.incoterm}    Payment: ${info.payTerms}`,
+      `Lead Time: ${info.leadTime}`,
+      `Validity: ${info.validUntil}`,
     ];
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws["!cols"] = [{ wch: 16 }, { wch: 30 }, { wch: 28 }, { wch: 8 }, { wch: 16 }, { wch: 14 }];
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Quotation");
-    XLSX.writeFile(wb, `Quotation_${info.buyerCompany.split(" ")[0] || "Buyer"}.xlsx`);
+    paras.forEach((p) => {
+      const lines = doc.splitTextToSize(p, 595 - margin * 2);
+      doc.text(lines, margin, y);
+      y += lines.length * 14 + 4;
+    });
+    y += 10;
+    doc.setDrawColor(220);
+    doc.line(margin, y, 595 - margin, y);
+    y += 18;
+    doc.setFont("helvetica", "bold");
+    doc.text("Items", margin, y);
+    y += 14;
+    doc.setFont("helvetica", "normal");
+    items.forEach((it, idx) => {
+      doc.text(
+        `${idx + 1}. ${it.name}  ×${it.qty}  @ $${it.unit}  =  $${it.total.toLocaleString()}`,
+        margin,
+        y
+      );
+      y += 14;
+    });
+    y += 10;
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(215, 38, 30);
+    doc.text(`Grand Total:  $${grand.toLocaleString()} USD`, margin, y);
+    doc.save(`${fileBase}.pdf`);
+  };
+
+  const downloadWord = () => {
+    const rowsHtml = items
+      .map(
+        (it, i) => `
+      <tr>
+        <td style="border:1px solid #ccc;padding:6px 10px;">${i + 1}</td>
+        <td style="border:1px solid #ccc;padding:6px 10px;">${it.name}</td>
+        <td style="border:1px solid #ccc;padding:6px 10px;text-align:right;">${it.qty}</td>
+        <td style="border:1px solid #ccc;padding:6px 10px;text-align:right;">$${it.unit}</td>
+        <td style="border:1px solid #ccc;padding:6px 10px;text-align:right;">$${it.total.toLocaleString()}</td>
+      </tr>`
+      )
+      .join("");
+    const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Quotation</title></head><body style="font-family:Arial,sans-serif;color:#222;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:11px;letter-spacing:2px;color:#777;">QUOTATION</div>
+        <div style="font-size:18px;font-weight:bold;color:#D7261E;letter-spacing:1px;">MENTARC</div>
+      </div>
+      <h1 style="font-size:26px;margin:14px 0 4px 0;">Quotation for ${info.buyerCompany.split(/[ ,.]/)[0]}</h1>
+      <div style="height:2px;width:60px;background:#D7261E;margin-bottom:18px;"></div>
+      <p><b>Buyer:</b> ${info.buyerCompany} — ${info.buyerContact} — ${info.buyerCountry}</p>
+      <p><b>Product:</b> ${info.productName}</p>
+      <p><b>Specification:</b> ${info.spec}</p>
+      <p><b>Incoterm:</b> ${info.incoterm}　<b>Payment:</b> ${info.payTerms}</p>
+      <p><b>Lead Time:</b> ${info.leadTime}　<b>Validity:</b> ${info.validUntil}</p>
+      <table style="border-collapse:collapse;width:100%;margin-top:14px;font-size:13px;">
+        <thead><tr style="background:#f5f5f5;">
+          <th style="border:1px solid #ccc;padding:6px 10px;text-align:left;">No.</th>
+          <th style="border:1px solid #ccc;padding:6px 10px;text-align:left;">Product</th>
+          <th style="border:1px solid #ccc;padding:6px 10px;text-align:right;">Qty</th>
+          <th style="border:1px solid #ccc;padding:6px 10px;text-align:right;">Unit (USD)</th>
+          <th style="border:1px solid #ccc;padding:6px 10px;text-align:right;">Total (USD)</th>
+        </tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+      <p style="margin-top:18px;font-size:16px;color:#D7261E;"><b>Grand Total: $${grand.toLocaleString()} USD</b></p>
+      </body></html>`;
+    const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${fileBase}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -507,26 +721,14 @@ export const QuoteResultCard = ({
           </div>
         </div>
         <div className="px-4 py-3">
-          <div className="rounded-xl border border-border/60 bg-background/60 p-3 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">产品</span>
-              <span className="text-[12.5px] font-medium text-foreground">{info.productName}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">数量 × 单价</span>
-              <span className="text-[12.5px] font-medium text-foreground">
-                {items[1].qty} pcs{info.qtyBasis === "moq" ? "（MOQ）" : "（采购量）"} × ${info.unitPrice}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">贸易术语</span>
-              <span className="text-[12.5px] text-foreground">{info.incoterm}</span>
-            </div>
-            <div className="border-t border-border/60 pt-2 flex items-center justify-between">
-              <span className="text-[12px] font-medium text-foreground">合计 (USD)</span>
-              <span className="text-[15px] font-bold text-primary">${grand.toLocaleString()}</span>
-            </div>
-          </div>
+          <QuotationPreview
+            info={info}
+            items={items}
+            subtotal={subtotal}
+            freight={freight}
+            grand={grand}
+            size="thumb"
+          />
         </div>
         <div className="px-4 pb-3 flex items-center gap-2">
           <button
@@ -534,116 +736,55 @@ export const QuoteResultCard = ({
             className="inline-flex items-center gap-1 rounded-lg border border-border/70 bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:bg-muted transition-colors"
           >
             <Eye className="h-3.5 w-3.5" />
-            查看完整报价单
+            查看报价单
           </button>
-          <button
-            onClick={downloadExcel}
-            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[12px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            <Download className="h-3.5 w-3.5" />
-            下载 Excel
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[12px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors">
+                <Download className="h-3.5 w-3.5" />
+                下载
+                <ChevronDown className="h-3 w-3 ml-0.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[140px]">
+              <DropdownMenuItem onClick={downloadPDF}>下载为 PDF</DropdownMenuItem>
+              <DropdownMenuItem onClick={downloadWord}>下载为 Word</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-3xl max-h-[88vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-muted/40">
           <DialogHeader>
             <DialogTitle className="text-base flex items-center gap-2">
               <FileSpreadsheet className="h-4 w-4 text-primary" />
-              完整报价单 · {templateMeta.name}
+              报价单预览 · {templateMeta.name}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 pt-2">
-            <div className="rounded-xl border border-border/70 bg-card p-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
-                    <Building2 className="h-3.5 w-3.5" />
-                    供应商
-                  </div>
-                  <div className="mt-0.5 text-[14px] font-semibold text-foreground">Mentarc Trading Co., Ltd.</div>
-                  <div className="text-[11.5px] text-muted-foreground">Shanghai, China · sales@mentarc.com</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[11.5px] text-muted-foreground">Quotation No.</div>
-                  <div className="text-[13px] font-semibold text-foreground">PI-{new Date().getFullYear()}-0428</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">有效期：{info.validUntil}</div>
-                </div>
-              </div>
-              <div className="mt-3 grid grid-cols-2 gap-3 text-[12px]">
-                <div className="rounded-lg bg-muted/40 p-2.5">
-                  <div className="text-muted-foreground mb-1">买家</div>
-                  <div className="font-medium text-foreground">{info.buyerCompany}</div>
-                  <div className="text-muted-foreground">{info.buyerContact}</div>
-                  <div className="text-muted-foreground">{info.buyerCountry}</div>
-                </div>
-                <div className="rounded-lg bg-muted/40 p-2.5">
-                  <div className="text-muted-foreground mb-1">条款</div>
-                  <div className="text-foreground">{info.incoterm}</div>
-                  <div className="text-foreground">{info.payTerms}</div>
-                  <div className="text-foreground">{info.leadTime}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-border/70 overflow-hidden">
-              <table className="w-full text-[12.5px]">
-                <thead className="bg-muted/50 text-muted-foreground">
-                  <tr>
-                    <th className="text-left px-3 py-2 font-medium">No.</th>
-                    <th className="text-left px-3 py-2 font-medium">Product</th>
-                    <th className="text-left px-3 py-2 font-medium">Spec</th>
-                    <th className="text-right px-3 py-2 font-medium">Qty</th>
-                    <th className="text-right px-3 py-2 font-medium">Unit (USD)</th>
-                    <th className="text-right px-3 py-2 font-medium">Total (USD)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-t border-border/60">
-                    <td className="px-3 py-2">1</td>
-                    <td className="px-3 py-2">{items[0].name}</td>
-                    <td className="px-3 py-2 text-muted-foreground">Air sample</td>
-                    <td className="px-3 py-2 text-right">{items[0].qty}</td>
-                    <td className="px-3 py-2 text-right">${items[0].unit}</td>
-                    <td className="px-3 py-2 text-right">${items[0].total}</td>
-                  </tr>
-                  <tr className="border-t border-border/60">
-                    <td className="px-3 py-2">2</td>
-                    <td className="px-3 py-2">{items[1].name}</td>
-                    <td className="px-3 py-2 text-muted-foreground">{info.spec}</td>
-                    <td className="px-3 py-2 text-right">{items[1].qty}</td>
-                    <td className="px-3 py-2 text-right">${items[1].unit}</td>
-                    <td className="px-3 py-2 text-right">${items[1].total.toLocaleString()}</td>
-                  </tr>
-                  <tr className="border-t border-border/60 bg-muted/30">
-                    <td colSpan={5} className="px-3 py-2 text-right text-muted-foreground">Subtotal</td>
-                    <td className="px-3 py-2 text-right">${subtotal.toLocaleString()}</td>
-                  </tr>
-                  <tr className="border-t border-border/60 bg-muted/30">
-                    <td colSpan={5} className="px-3 py-2 text-right text-muted-foreground">Freight (Est.)</td>
-                    <td className="px-3 py-2 text-right">${freight.toLocaleString()}</td>
-                  </tr>
-                  <tr className="border-t border-border/60 bg-primary/[0.06]">
-                    <td colSpan={5} className="px-3 py-2 text-right font-semibold text-foreground">Grand Total</td>
-                    <td className="px-3 py-2 text-right font-bold text-primary">${grand.toLocaleString()}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="rounded-xl border border-border/70 bg-muted/30 p-3 text-[12px] text-muted-foreground leading-relaxed">
-              <div className="font-medium text-foreground mb-1">Remarks</div>
-              本报价基于当前 UL1741 合规版本，含一年质保。运费为预估值，最终以指定货代为准。如需修改条款或追加 SKU，请回复本邮件。
-            </div>
-
-            <div className="flex justify-end">
+          <div className="pt-2">
+            <QuotationPreview
+              info={info}
+              items={items}
+              subtotal={subtotal}
+              freight={freight}
+              grand={grand}
+              size="full"
+            />
+            <div className="mt-4 flex justify-end gap-2">
               <button
-                onClick={downloadExcel}
+                onClick={downloadPDF}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-card px-4 py-2 text-[12.5px] font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                <Download className="h-4 w-4" />
+                下载 PDF
+              </button>
+              <button
+                onClick={downloadWord}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-[12.5px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 <Download className="h-4 w-4" />
-                下载为 Excel
+                下载 Word
               </button>
             </div>
           </div>
