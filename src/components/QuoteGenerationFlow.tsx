@@ -498,7 +498,7 @@ export const QuoteResultCard = ({
               </h4>
             </div>
             <p className="text-[11.5px] text-muted-foreground truncate">
-              收件人：{info.buyerCompany} · 有效期至 {info.validUntil}
+              &nbsp;
             </p>
           </div>
         </div>
