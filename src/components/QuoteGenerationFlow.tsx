@@ -497,9 +497,6 @@ export const QuoteResultCard = ({
                 报价单已生成 · {templateMeta.name}
               </h4>
             </div>
-            <p className="text-[11.5px] text-muted-foreground truncate">
-              &nbsp;
-            </p>
           </div>
         </div>
         <div className="px-4 py-3">
