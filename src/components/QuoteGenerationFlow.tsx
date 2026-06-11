@@ -27,12 +27,11 @@ import {
 
 // ---------- Shared data ----------
 
-export type QuoteTemplate = "company" | "business" | "social";
+export type QuoteTemplate = "company" | "business";
 
 export const QUOTE_TEMPLATES: { id: QuoteTemplate; name: string; tagline: string }[] = [
-  { id: "company", name: "公司展示型", tagline: "强化品牌信息，附带工厂资质与认证" },
-  { id: "business", name: "商务标准版", tagline: "通用 PI 报价模板，规范字段，便于审核" },
-  { id: "social", name: "社媒简报版", tagline: "图文简洁，适合 WhatsApp / IG 等社媒发送" },
+  { id: "company", name: "公司展示型", tagline: "偏产品图册，突出品牌、产品大图与卖点" },
+  { id: "business", name: "商务标准版", tagline: "偏报价单表格，规范字段，便于客户审核" },
 ];
 
 export interface QuoteInfo {
@@ -270,52 +269,73 @@ export const QuoteConfirmStep = ({
 
 const TemplateThumb = ({ id }: { id: QuoteTemplate }) => {
   if (id === "company") {
+    // 产品图册风格：顶部品牌条 + 大产品主图 + 缩略图行 + 卖点标签
     return (
-      <div className="h-24 w-full rounded-lg bg-gradient-to-br from-primary/10 to-secondary/20 p-2.5 space-y-1.5">
-        <div className="flex items-center gap-1">
-          <div className="h-3 w-3 rounded bg-primary/60" />
-          <div className="h-1.5 w-12 rounded-full bg-foreground/30" />
-          <div className="ml-auto h-1 w-6 rounded-full bg-foreground/15" />
+      <div className="h-36 w-full rounded-lg bg-gradient-to-br from-primary/10 via-background to-secondary/20 p-2 space-y-1.5 ring-1 ring-border/50">
+        <div className="flex items-center gap-1.5 px-0.5">
+          <div className="h-3 w-3 rounded-sm bg-primary/70" />
+          <div className="h-1.5 w-14 rounded-full bg-foreground/35" />
+          <div className="ml-auto h-1 w-8 rounded-full bg-foreground/15" />
         </div>
-        <div className="h-1 w-3/4 rounded-full bg-foreground/15" />
-        <div className="grid grid-cols-3 gap-1 mt-1">
-          <div className="h-3 rounded bg-card/80 shadow-sm" />
-          <div className="h-3 rounded bg-card/80 shadow-sm" />
-          <div className="h-3 rounded bg-card/80 shadow-sm" />
+        <div className="relative h-14 w-full overflow-hidden rounded-md bg-gradient-to-br from-primary/25 via-primary/10 to-secondary/30 shadow-sm">
+          <div className="absolute left-1/2 top-1/2 h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-md bg-card/90 shadow ring-1 ring-primary/20" />
+          <div className="absolute bottom-1 left-1 h-1 w-10 rounded-full bg-card/80" />
+          <div className="absolute bottom-1 left-12 h-1 w-6 rounded-full bg-card/60" />
         </div>
-        <div className="h-1 w-2/3 rounded-full bg-foreground/10" />
+        <div className="grid grid-cols-4 gap-1">
+          <div className="h-5 rounded bg-card/90 shadow-sm ring-1 ring-border/50" />
+          <div className="h-5 rounded bg-card/90 shadow-sm ring-1 ring-border/50" />
+          <div className="h-5 rounded bg-card/90 shadow-sm ring-1 ring-border/50" />
+          <div className="h-5 rounded bg-card/90 shadow-sm ring-1 ring-border/50" />
+        </div>
+        <div className="flex items-center gap-1 pt-0.5">
+          <span className="h-1.5 w-8 rounded-full bg-primary/50" />
+          <span className="h-1.5 w-6 rounded-full bg-secondary/70" />
+          <span className="h-1.5 w-5 rounded-full bg-primary/30" />
+        </div>
       </div>
     );
   }
-  if (id === "business") {
-    return (
-      <div className="h-24 w-full rounded-lg bg-card border border-border/70 p-2.5 space-y-1">
-        <div className="flex items-center justify-between">
-          <div className="h-1.5 w-16 rounded-full bg-foreground/30" />
-          <div className="h-1 w-8 rounded-full bg-foreground/15" />
+  // 商务标准版：抬头 + 买卖双方区 + 规整报价表格 + 合计
+  return (
+    <div className="h-36 w-full rounded-lg bg-card border border-border/70 p-2 space-y-1 shadow-sm">
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <div className="h-1.5 w-16 rounded-full bg-foreground/40" />
+          <div className="h-1 w-10 rounded-full bg-foreground/15" />
         </div>
-        <div className="h-px bg-border/70 my-1" />
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-1">
-            <div className="h-1 w-1/3 rounded-full bg-foreground/15" />
-            <div className="h-1 flex-1 rounded-full bg-foreground/8" />
-            <div className="h-1 w-6 rounded-full bg-primary/40" />
+        <div className="h-4 w-8 rounded-sm bg-primary/20 ring-1 ring-primary/30" />
+      </div>
+      <div className="h-px bg-border/70" />
+      <div className="grid grid-cols-2 gap-1 pt-0.5">
+        <div className="space-y-0.5">
+          <div className="h-1 w-10 rounded-full bg-foreground/25" />
+          <div className="h-1 w-14 rounded-full bg-foreground/12" />
+        </div>
+        <div className="space-y-0.5">
+          <div className="h-1 w-10 rounded-full bg-foreground/25" />
+          <div className="h-1 w-14 rounded-full bg-foreground/12" />
+        </div>
+      </div>
+      <div className="mt-1 rounded-sm border border-border/60 overflow-hidden">
+        <div className="flex items-center gap-1 bg-primary/10 px-1 py-0.5">
+          <div className="h-1 w-6 rounded-full bg-primary/60" />
+          <div className="h-1 w-8 rounded-full bg-primary/40" />
+          <div className="ml-auto h-1 w-5 rounded-full bg-primary/60" />
+          <div className="h-1 w-6 rounded-full bg-primary/60" />
+        </div>
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="flex items-center gap-1 px-1 py-0.5 border-t border-border/40">
+            <div className="h-1 w-6 rounded-full bg-foreground/20" />
+            <div className="h-1 w-10 rounded-full bg-foreground/10" />
+            <div className="ml-auto h-1 w-5 rounded-full bg-foreground/20" />
+            <div className="h-1 w-6 rounded-full bg-foreground/25" />
           </div>
         ))}
       </div>
-    );
-  }
-  return (
-    <div className="h-24 w-full rounded-lg bg-gradient-to-br from-secondary/30 to-primary/10 p-2.5 flex gap-2">
-      <div className="h-full w-2/5 rounded-md bg-card/80 shadow-sm" />
-      <div className="flex-1 space-y-1.5">
-        <div className="h-1.5 w-3/4 rounded-full bg-foreground/30" />
-        <div className="h-1 w-full rounded-full bg-foreground/15" />
-        <div className="h-1 w-2/3 rounded-full bg-foreground/15" />
-        <div className="flex gap-1 mt-1">
-          <span className="h-2 w-6 rounded-full bg-primary/40" />
-          <span className="h-2 w-4 rounded-full bg-secondary/60" />
-        </div>
+      <div className="flex items-center justify-end gap-1 pt-0.5">
+        <div className="h-1.5 w-8 rounded-full bg-foreground/25" />
+        <div className="h-1.5 w-10 rounded-full bg-primary/50" />
       </div>
     </div>
   );
@@ -363,7 +383,7 @@ export const QuoteTemplateStep = ({
       </div>
       {!collapsed && (
       <div className="px-4 py-3 space-y-3">
-        <div className="grid gap-2.5 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {QUOTE_TEMPLATES.map((t) => {
             const active = currentlySelected === t.id;
             return (
