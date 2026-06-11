@@ -271,7 +271,7 @@ const TemplateThumb = ({ id }: { id: QuoteTemplate }) => {
   if (id === "company") {
     // 产品图册风格：顶部品牌条 + 大产品主图 + 缩略图行 + 卖点标签
     return (
-      <div className="h-36 w-full rounded-lg bg-gradient-to-br from-primary/10 via-background to-secondary/20 p-2 space-y-1.5 ring-1 ring-border/50">
+      <div className="h-28 w-full rounded-lg bg-gradient-to-br from-primary/10 via-background to-secondary/20 p-1.5 space-y-1 ring-1 ring-border/50">
         <div className="flex items-center gap-1.5 px-0.5">
           <div className="h-3 w-3 rounded-sm bg-primary/70" />
           <div className="h-1.5 w-14 rounded-full bg-foreground/35" />
@@ -298,7 +298,7 @@ const TemplateThumb = ({ id }: { id: QuoteTemplate }) => {
   }
   // 商务标准版：抬头 + 买卖双方区 + 规整报价表格 + 合计
   return (
-    <div className="h-36 w-full rounded-lg bg-card border border-border/70 p-2 space-y-1 shadow-sm">
+    <div className="h-28 w-full rounded-lg bg-card border border-border/70 p-1.5 space-y-1 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="space-y-0.5">
           <div className="h-1.5 w-16 rounded-full bg-foreground/40" />
