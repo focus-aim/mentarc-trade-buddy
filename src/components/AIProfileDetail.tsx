@@ -2049,10 +2049,51 @@ const CORE_PRODUCTS: {
   },
 ];
 
-const PRODUCT_CERTS = ["FDA", "LFGB", "CE", "BSCI", "SEDEX", "ISO 9001"];
+// 追加至 10 个主要产品
+CORE_PRODUCTS.push(
+  {
+    name: "运动健身摇摇杯 600ml",
+    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&h=200&fit=crop",
+    price: "FOB $3.20–$3.80",
+    moq: "2,000 pcs",
+    spec: "Tritan 材质 / 防漏盖 / 内置过滤网",
+  },
+  {
+    name: "便携折叠硅胶水杯 350ml",
+    image: "https://images.unsplash.com/photo-1610465299996-30f240ac2b1c?w=200&h=200&fit=crop",
+    price: "FOB $2.80–$3.40",
+    moq: "2,000 pcs",
+    spec: "食品级硅胶 / 可折叠收纳 / 适合出差旅行",
+  },
+  {
+    name: "智能温显保温杯 480ml",
+    image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=200&h=200&fit=crop",
+    price: "FOB $9.80–$11.50",
+    moq: "500 pcs",
+    spec: "OLED 温度显示 / Type-C 充电 / 双层真空",
+  },
+  {
+    name: "玻璃花茶分离杯 400ml",
+    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=200&h=200&fit=crop",
+    price: "FOB $4.20–$5.00",
+    moq: "1,500 pcs",
+    spec: "高硼硅玻璃 / 茶水分离 / 防烫硅胶套",
+  },
+  {
+    name: "大容量户外焖烧罐 1000ml",
+    image: "https://images.unsplash.com/photo-1571781418606-d638b5d49668?w=200&h=200&fit=crop",
+    price: "FOB $7.80–$9.20",
+    moq: "800 pcs",
+    spec: "316 不锈钢 / 长效保温 8h / 食品级密封",
+  },
+);
 
-const AFTER_SALES =
-  "12 个月质保，针对漏水、保温失效等品质问题免费补货；提供英文使用说明与电商售后话术包；大客户配备专属对接人，48 小时内响应海外售后咨询。";
+const PACKAGING_INFO = [
+  { label: "单件包装", value: "彩盒 / 牛皮纸礼盒，可定制 Logo 与品牌色" },
+  { label: "外箱规格", value: "5 层瓦楞外箱，24 pcs / CTN，约 0.045 CBM" },
+  { label: "出货方式", value: "支持 FOB 宁波 / 深圳，整柜或拼箱发运" },
+  { label: "定制选项", value: "支持礼盒、PDQ 展示盒、亚马逊 FBA 合规包装" },
+];
 
 const ProductServiceDetail = ({
   summary,
@@ -2080,12 +2121,28 @@ const ProductServiceDetail = ({
         </div>
       </GroupCard>
 
+      {/* 包装信息 */}
+      <GroupCard title="包装信息">
+        <div className="space-y-1.5 py-0.5">
+          {PACKAGING_INFO.map((item) => (
+            <div key={item.label} className="flex items-start gap-2">
+              <div className="w-[68px] shrink-0 pt-0.5 text-[11.5px] text-muted-foreground">
+                {item.label}
+              </div>
+              <p className="flex-1 text-[12.5px] leading-snug text-foreground/85">
+                {item.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </GroupCard>
+
       {/* 主要产品 */}
       <GroupCard
         title="主要产品"
         extra={
           <span className="text-[10.5px] font-medium text-muted-foreground">
-            {products.length} / 5
+            {products.length} / 10
           </span>
         }
       >
@@ -2117,19 +2174,8 @@ const ProductServiceDetail = ({
             </div>
           ))}
         </div>
-      </GroupCard>
-
-      {/* 产品认证 */}
-      <GroupCard title="产品认证">
-        <p className="text-[12.5px] leading-snug text-foreground/85">
-          {PRODUCT_CERTS.join(" · ")}
-        </p>
-      </GroupCard>
-
-      {/* 售后服务 */}
-      <GroupCard title="售后服务">
-        <p className="text-[12.5px] leading-snug text-foreground/85">
-          {AFTER_SALES}
+        <p className="mt-2 border-t border-border/40 pt-2 text-[11px] leading-snug text-muted-foreground">
+          AI 已完成产品资料学习与理解，此处仅展示核心摘要
         </p>
       </GroupCard>
     </div>
