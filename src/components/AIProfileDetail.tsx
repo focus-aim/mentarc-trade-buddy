@@ -1875,8 +1875,9 @@ const CompanyLogoUploader = ({
   onChange: (v: string) => void;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const hasLogo = !!value || !!preview;
+  const [preview, setPreview] = useState<string | null>(
+    "https://api.dicebear.com/7.x/shapes/svg?seed=henbei&backgroundColor=0061ff",
+  );
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1887,13 +1888,14 @@ const CompanyLogoUploader = ({
     e.target.value = "";
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setPreview(null);
     onChange("");
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div>
       <input
         ref={inputRef}
         type="file"
@@ -1901,43 +1903,26 @@ const CompanyLogoUploader = ({
         className="hidden"
         onChange={handleFile}
       />
-      {hasLogo ? (
-        <>
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
-            {preview ? (
-              <img src={preview} alt="LOGO" className="h-full w-full object-contain" />
-            ) : (
-              <ImageIcon className="h-5 w-5 text-muted-foreground" />
-            )}
-          </div>
-          <span className="text-[12px] text-muted-foreground truncate max-w-[140px]">{value}</span>
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            className="ml-auto inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11.5px] text-muted-foreground hover:border-primary/40 hover:text-primary"
-          >
-            <Upload className="h-3 w-3" />
-            重新上传
-          </button>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="inline-flex items-center justify-center rounded-md border border-border bg-background p-1.5 text-muted-foreground hover:border-rose-400 hover:text-rose-500"
-            title="删除 LOGO"
-          >
-            <Trash2 className="h-3 w-3" />
-          </button>
-        </>
-      ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-border bg-background/50 px-3 py-2 text-[12px] text-muted-foreground hover:border-primary/40 hover:text-primary"
-        >
-          <Upload className="h-3.5 w-3.5" />
-          上传 LOGO
-        </button>
-      )}
+      <div
+        onClick={() => inputRef.current?.click()}
+        className="relative flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-background/60 hover:border-primary/40"
+      >
+        {preview ? (
+          <>
+            <img src={preview} alt="公司 LOGO" className="h-full w-full object-contain" />
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-foreground/80 text-background shadow hover:bg-rose-500"
+              title="删除 LOGO"
+            >
+              <X className="h-2.5 w-2.5" />
+            </button>
+          </>
+        ) : (
+          <ImageIcon className="h-5 w-5 text-muted-foreground" />
+        )}
+      </div>
     </div>
   );
 };
