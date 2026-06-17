@@ -248,7 +248,7 @@ export const QuoteConfirmStep = ({
                 onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
                 className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                去补充
+                完善知识库&nbsp;&nbsp;
                 <ChevronRight className="h-3 w-3" />
               </button>
               <span className="text-[12px] text-muted-foreground truncate">
@@ -894,7 +894,7 @@ export const QuoteWizard = ({
                   onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
                   className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
-                  去补充
+                  完善知识库&nbsp;&nbsp;
                   <ChevronRight className="h-3 w-3" />
                 </button>
                 <span className="text-[12px] text-muted-foreground truncate">
