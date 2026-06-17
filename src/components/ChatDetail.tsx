@@ -101,6 +101,7 @@ interface ChatDetailProps {
   moduleTitle: string;
   onBack: () => void;
   initialUserMessage?: string;
+  onOpenTraining?: () => void;
 }
 
 interface Message {
