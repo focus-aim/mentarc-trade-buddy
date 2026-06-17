@@ -1943,8 +1943,8 @@ const ModuleDetailSheet = ({
                             const value = company[f.key];
                             if (f.key === "companyName") {
                               return (
-                                <div key={f.key} className="flex items-center gap-2 py-1.5">
-                                  <div className="flex flex-1 items-center gap-2">
+                                <div key={f.key} className="py-1.5 space-y-2">
+                                  <div className="flex items-center gap-2">
                                     <div className="w-[68px] shrink-0 text-[11.5px] text-muted-foreground">
                                       {f.label}
                                     </div>
@@ -1955,13 +1955,15 @@ const ModuleDetailSheet = ({
                                       placeholder="点击键入"
                                     />
                                   </div>
-                                  <button
-                                    type="button"
-                                    className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-dashed border-border bg-background/50 text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/[0.04] hover:text-primary"
-                                    title="上传公司 LOGO"
-                                  >
-                                    <ImageIcon className="h-3.5 w-3.5" />
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-[68px] shrink-0 text-[11.5px] text-muted-foreground">
+                                      公司LOGO
+                                    </div>
+                                    <CompanyLogoUploader
+                                      value={company.companyLogo}
+                                      onChange={(v) => onFieldChange("companyLogo", v)}
+                                    />
+                                  </div>
                                 </div>
                               );
                             }
