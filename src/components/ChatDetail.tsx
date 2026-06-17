@@ -472,7 +472,7 @@ const MARKET_REPORT_RECORDS = [
   { date: "机会", title: "春夏户外出行选品机会", summary: "露营、海岸线骑行、城市共享出行内容热度上升。" },
 ];
 
-const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps) => {
+const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }: ChatDetailProps) => {
   const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const config = MODULE_CONFIG[moduleTitle] || MODULE_CONFIG["业务专家"];
   const initialMessage = initialUserMessage?.trim() || config.defaultUserMessage;
@@ -1260,7 +1260,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage }: ChatDetailProps
         <div className="mx-auto w-full max-w-4xl">
           {quoteWizardActive && (
             <div className="mb-3">
-              <QuoteWizard onComplete={handleQuoteWizardComplete} />
+              <QuoteWizard onComplete={handleQuoteWizardComplete} onOpenTraining={onOpenTraining} />
             </div>
           )}
           <ChatInput key={prefillKey} onSend={handleSend} placeholder={config.placeholder} defaultValue={prefillValue} attachment={config.attachment} attachments={config.attachments} quote={activeQuote} onClearQuote={() => setActiveQuote(null)} />
