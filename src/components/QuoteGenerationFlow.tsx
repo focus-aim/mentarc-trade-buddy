@@ -235,19 +235,21 @@ export const QuoteConfirmStep = ({
 
 
           {/* 我的公司和产品信息 */}
-          <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+          <div className="rounded-xl border border-dashed border-primary/30 bg-primary/[0.04] px-3 py-2.5 flex items-center gap-3">
             <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
               <Building2 className="h-3.5 w-3.5 text-primary" />
               我的公司
             </div>
-            <div className="flex-1 text-[12px] text-foreground/80 truncate">
-              我的公司和产品信息
+            <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
+              <span className="text-[12px] text-muted-foreground truncate">
+                公司知识库为空，补充后 AI 可自动调取公司与产品信息
+              </span>
               <button
                 type="button"
                 onClick={() => setKbOpen(true)}
-                className="ml-1.5 inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-medium text-primary hover:bg-primary/15 transition-colors"
+                className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                已从知识库调取
+                去补充
                 <ChevronRight className="h-3 w-3" />
               </button>
             </div>
@@ -877,19 +879,21 @@ export const QuoteWizard = ({
               />
             </div>
             {/* 我的公司 */}
-            <div className="rounded-xl border border-border/60 bg-background/60 px-3 py-2.5 flex items-center gap-3">
+            <div className="rounded-xl border border-dashed border-primary/30 bg-primary/[0.04] px-3 py-2.5 flex items-center gap-3">
               <div className="flex items-center gap-1.5 w-[88px] shrink-0 text-[12px] font-semibold text-foreground">
                 <Building2 className="h-3.5 w-3.5 text-primary" />
                 我的公司
               </div>
-              <div className="flex-1 text-[12px] text-foreground/80 truncate">
-                我的公司和产品信息
+              <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
+                <span className="text-[12px] text-muted-foreground truncate">
+                  公司知识库为空，补充后 AI 可自动调取公司与产品信息
+                </span>
                 <button
                   type="button"
                   onClick={() => setKbOpen(true)}
-                  className="ml-1.5 inline-flex items-center gap-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10.5px] font-medium text-primary hover:bg-primary/15 transition-colors"
+                  className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
-                  已从知识库调取
+                  去补充
                   <ChevronRight className="h-3 w-3" />
                 </button>
               </div>
