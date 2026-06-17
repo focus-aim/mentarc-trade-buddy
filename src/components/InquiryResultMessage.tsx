@@ -99,7 +99,10 @@ export const Cite = ({ sources }: { sources: CitationSource[] }) => {
               </a>
             </TooltipTrigger>
             <TooltipContent side="top" className="text-[11px] px-2 py-1">
-              {s.label}
+              <div className="max-w-[280px]">
+                <div className="font-medium text-foreground/90">{s.label}</div>
+                <div className="text-muted-foreground break-all">{s.url}</div>
+              </div>
             </TooltipContent>
           </Tooltip>
         ))}
