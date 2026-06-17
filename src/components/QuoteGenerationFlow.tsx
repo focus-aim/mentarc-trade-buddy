@@ -809,10 +809,12 @@ export const QuoteWizard = ({
   onComplete,
   initialInfo,
   initialTemplate,
+  onOpenTraining,
 }: {
   onComplete: (info: QuoteInfo, template: QuoteTemplate) => void;
   initialInfo?: QuoteInfo;
   initialTemplate?: QuoteTemplate;
+  onOpenTraining?: () => void;
 }) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [collapsed, setCollapsed] = useState(false);
@@ -892,7 +894,7 @@ export const QuoteWizard = ({
                 </span>
                 <button
                   type="button"
-                  onClick={() => setKbOpen(true)}
+                  onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
                   className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
                   去补充
