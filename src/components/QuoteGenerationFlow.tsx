@@ -158,12 +158,14 @@ export const QuoteConfirmStep = ({
   done,
   doneInfo,
   collapsible,
+  onOpenTraining,
 }: {
   onNext: (info: QuoteInfo) => void;
   initialInfo?: QuoteInfo;
   done?: boolean;
   doneInfo?: QuoteInfo;
   collapsible?: boolean;
+  onOpenTraining?: () => void;
 }) => {
   const [info, setInfo] = useState<QuoteInfo>(initialInfo || DEFAULT_QUOTE_INFO);
   const [collapsed, setCollapsed] = useState(false);
@@ -246,7 +248,7 @@ export const QuoteConfirmStep = ({
               </span>
               <button
                 type="button"
-                onClick={() => setKbOpen(true)}
+                onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
                 className="shrink-0 inline-flex items-center gap-0.5 rounded-md bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 去补充
