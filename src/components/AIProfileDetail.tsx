@@ -1867,7 +1867,6 @@ const CondensedModuleCard = ({
   );
 };
 
-const ModuleDetailSheet = ({
 const CompanyLogoUploader = ({
   value,
   onChange,
