@@ -1069,6 +1069,13 @@ const Index = () => {
           moduleTitle={activeModule}
           onBack={() => setActiveModule(null)}
           initialUserMessage={chatInitialMessage}
+          onOpenTraining={() => {
+            setActiveModule(null);
+            setShowProfile(false);
+            setShowPartnerConfig(true);
+            setTrainingStage("form");
+            setRetrainMode(true);
+          }}
         />
       ) : showProfile ? (
         <AIProfileDetail
