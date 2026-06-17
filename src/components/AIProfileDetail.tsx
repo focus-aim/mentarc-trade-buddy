@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import {
   Sparkles,
   MessageCircleHeart,
@@ -32,6 +32,7 @@ import {
   ChevronLeft,
   ChevronRight,
   AlertTriangle,
+  Upload,
 } from "lucide-react";
 import {
   MoreHorizontal,
@@ -1866,6 +1867,81 @@ const CondensedModuleCard = ({
   );
 };
 
+const CompanyLogoUploader = ({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const hasLogo = !!value || !!preview;
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    onChange(file.name);
+    e.target.value = "";
+  };
+
+  const handleDelete = () => {
+    setPreview(null);
+    onChange("");
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleFile}
+      />
+      {hasLogo ? (
+        <>
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
+            {preview ? (
+              <img src={preview} alt="LOGO" className="h-full w-full object-contain" />
+            ) : (
+              <ImageIcon className="h-5 w-5 text-muted-foreground" />
+            )}
+          </div>
+          <span className="text-[12px] text-muted-foreground truncate max-w-[140px]">{value}</span>
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="ml-auto inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11.5px] text-muted-foreground hover:border-primary/40 hover:text-primary"
+          >
+            <Upload className="h-3 w-3" />
+            重新上传
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="inline-flex items-center justify-center rounded-md border border-border bg-background p-1.5 text-muted-foreground hover:border-rose-400 hover:text-rose-500"
+            title="删除 LOGO"
+          >
+            <Trash2 className="h-3 w-3" />
+          </button>
+        </>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-border bg-background/50 px-3 py-2 text-[12px] text-muted-foreground hover:border-primary/40 hover:text-primary"
+        >
+          <Upload className="h-3.5 w-3.5" />
+          上传 LOGO
+        </button>
+      )}
+    </div>
+  );
+};
+
 const ModuleDetailSheet = ({
   moduleKey,
   company,
@@ -1942,8 +2018,8 @@ const ModuleDetailSheet = ({
                             const value = company[f.key];
                             if (f.key === "companyName") {
                               return (
-                                <div key={f.key} className="flex items-center gap-2 py-1.5">
-                                  <div className="flex flex-1 items-center gap-2">
+                                <div key={f.key} className="py-1.5 space-y-2">
+                                  <div className="flex items-center gap-2">
                                     <div className="w-[68px] shrink-0 text-[11.5px] text-muted-foreground">
                                       {f.label}
                                     </div>
@@ -1954,13 +2030,15 @@ const ModuleDetailSheet = ({
                                       placeholder="点击键入"
                                     />
                                   </div>
-                                  <button
-                                    type="button"
-                                    className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-dashed border-border bg-background/50 text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/[0.04] hover:text-primary"
-                                    title="上传公司 LOGO"
-                                  >
-                                    <ImageIcon className="h-3.5 w-3.5" />
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-[68px] shrink-0 text-[11.5px] text-muted-foreground">
+                                      公司LOGO
+                                    </div>
+                                    <CompanyLogoUploader
+                                      value={company.companyLogo}
+                                      onChange={(v) => onFieldChange("companyLogo", v)}
+                                    />
+                                  </div>
                                 </div>
                               );
                             }
