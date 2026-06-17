@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { useRef } from "react";
 import {
   Sparkles,
   MessageCircleHeart,
