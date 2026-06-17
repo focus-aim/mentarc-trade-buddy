@@ -242,10 +242,7 @@ export const QuoteConfirmStep = ({
               <Building2 className="h-3.5 w-3.5 text-primary" />
               我的公司
             </div>
-            <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
-              <span className="text-[12px] text-muted-foreground truncate">
-                公司知识库为空，补充后 AI 可自动调取公司与产品信息
-              </span>
+            <div className="flex-1 flex items-center gap-2 min-w-0">
               <button
                 type="button"
                 onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
@@ -254,6 +251,9 @@ export const QuoteConfirmStep = ({
                 去补充
                 <ChevronRight className="h-3 w-3" />
               </button>
+              <span className="text-[12px] text-muted-foreground truncate">
+                公司知识库为空，补充后 AI 可自动调取公司与产品信息
+              </span>
             </div>
           </div>
         </div>
@@ -888,10 +888,7 @@ export const QuoteWizard = ({
                 <Building2 className="h-3.5 w-3.5 text-primary" />
                 我的公司
               </div>
-              <div className="flex-1 flex items-center justify-between gap-2 min-w-0">
-                <span className="text-[12px] text-muted-foreground truncate">
-                  公司知识库为空，补充后 AI 可自动调取公司与产品信息
-                </span>
+              <div className="flex-1 flex items-center gap-2 min-w-0">
                 <button
                   type="button"
                   onClick={() => (onOpenTraining ? onOpenTraining() : setKbOpen(true))}
@@ -900,6 +897,9 @@ export const QuoteWizard = ({
                   去补充
                   <ChevronRight className="h-3 w-3" />
                 </button>
+                <span className="text-[12px] text-muted-foreground truncate">
+                  公司知识库为空，补充后 AI 可自动调取公司与产品信息
+                </span>
               </div>
             </div>
           </div>
