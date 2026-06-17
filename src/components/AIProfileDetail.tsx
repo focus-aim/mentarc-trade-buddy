@@ -32,6 +32,7 @@ import {
   ChevronLeft,
   ChevronRight,
   AlertTriangle,
+  Upload,
 } from "lucide-react";
 import {
   MoreHorizontal,
