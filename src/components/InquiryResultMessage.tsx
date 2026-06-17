@@ -84,7 +84,7 @@ export const Cite = ({ sources }: { sources: CitationSource[] }) => {
   if (!sources?.length) return null;
   return (
     <TooltipProvider delayDuration={150}>
-      <span className="inline-flex items-center gap-0.5 align-middle ml-1">
+      <span className="inline-flex items-center gap-0.5 align-middle ml-0.5">
         {sources.map((s, i) => (
           <Tooltip key={i}>
             <TooltipTrigger asChild>
@@ -92,10 +92,10 @@ export const Cite = ({ sources }: { sources: CitationSource[] }) => {
                 href={s.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] bg-primary/8 text-primary/80 hover:bg-primary/15 hover:text-primary transition-colors"
+                className="inline-flex h-[16px] min-w-[16px] px-1 items-center justify-center rounded-full bg-muted text-muted-foreground text-[10px] font-medium leading-none hover:bg-primary/15 hover:text-primary transition-colors"
                 aria-label={`引用来源：${s.label}`}
               >
-                <Link2 className="h-2.5 w-2.5" />
+                {i + 1}
               </a>
             </TooltipTrigger>
             <TooltipContent side="top" className="text-[11px] px-2 py-1">
