@@ -1903,24 +1903,26 @@ const CompanyLogoUploader = ({
         className="hidden"
         onChange={handleFile}
       />
-      <div
-        onClick={() => inputRef.current?.click()}
-        className="relative flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-background/60 hover:border-primary/40"
-      >
-        {preview ? (
-          <>
+      <div className="relative inline-block w-16 pt-1.5 pr-1.5">
+        <div
+          onClick={() => inputRef.current?.click()}
+          className="flex h-16 w-16 cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-background/60 transition-colors hover:border-primary/40"
+        >
+          {preview ? (
             <img src={preview} alt="公司 LOGO" className="h-full w-full object-contain" />
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-foreground/80 text-background shadow hover:bg-rose-500"
-              title="删除 LOGO"
-            >
-              <X className="h-2.5 w-2.5" />
-            </button>
-          </>
-        ) : (
-          <ImageIcon className="h-5 w-5 text-muted-foreground" />
+          ) : (
+            <ImageIcon className="h-5 w-5 text-muted-foreground" />
+          )}
+        </div>
+        {preview && (
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="absolute right-0 top-0 z-10 flex h-5 w-5 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-colors hover:border-rose-400 hover:bg-rose-500 hover:text-white"
+            title="删除 LOGO"
+          >
+            <X className="h-3 w-3" />
+          </button>
         )}
       </div>
     </div>
