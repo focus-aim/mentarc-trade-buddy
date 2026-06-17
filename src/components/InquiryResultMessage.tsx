@@ -20,7 +20,9 @@ import {
   Zap,
   Sparkles,
   ChevronDown,
+  Link2,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export interface ChatQuote {
   moduleName: string;
@@ -72,6 +74,39 @@ const KV = ({ label, value }: { label: string; value: React.ReactNode }) => (
     <span className="text-foreground/85 flex-1">{value}</span>
   </div>
 );
+
+// Inline citation links. Renders one Link2 icon per source after the text.
+export interface CitationSource {
+  label: string;
+  url: string;
+}
+export const Cite = ({ sources }: { sources: CitationSource[] }) => {
+  if (!sources?.length) return null;
+  return (
+    <TooltipProvider delayDuration={150}>
+      <span className="inline-flex items-center gap-0.5 align-middle ml-1">
+        {sources.map((s, i) => (
+          <Tooltip key={i}>
+            <TooltipTrigger asChild>
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] bg-primary/8 text-primary/80 hover:bg-primary/15 hover:text-primary transition-colors"
+                aria-label={`引用来源：${s.label}`}
+              >
+                <Link2 className="h-2.5 w-2.5" />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="text-[11px] px-2 py-1">
+              {s.label}
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </span>
+    </TooltipProvider>
+  );
+};
 
 const InlineKV = ({ label, value }: { label: string; value: React.ReactNode }) => (
   <p className="text-base leading-[1.75] text-foreground/85">
@@ -434,7 +469,16 @@ export const BuyerBackgroundReport = () => {
     <div className="space-y-3">
       <SectionCard icon={Lightbulb} title="评估概要" accent>
         <p className="text-[12.5px] text-foreground/85 leading-[1.7]">
-          这是一家具有 <span className="text-primary font-medium">15 年历史</span>的成熟型进口商，其产品线定价处于<span className="text-primary font-medium">市场中高段位</span>。这类客户的供应链通常相对稳定，他们对价格的敏感度排在第二位，第一诉求是 <span className="text-primary font-medium">"品质的一致性"</span> 和 <span className="text-primary font-medium">"交期的绝对保障"</span>。如果对方主动询盘，大概率是原有供应商出现了质量波动或产能瓶颈。
+          这是一家具有 <span className="text-primary font-medium">15 年历史</span>的成熟型进口商<Cite sources={[
+            { label: "TechSol US LLC · 官网 About 页", url: "https://example.com/techsol/about" },
+            { label: "Texas SOS 企业注册档案", url: "https://example.com/sos/techsol" },
+          ]} />，其产品线定价处于<span className="text-primary font-medium">市场中高段位</span><Cite sources={[
+            { label: "TechSol 零售官网 · 产品定价", url: "https://example.com/techsol/products" },
+          ]} />。这类客户的供应链通常相对稳定，他们对价格的敏感度排在第二位，第一诉求是 <span className="text-primary font-medium">"品质的一致性"</span> 和 <span className="text-primary font-medium">"交期的绝对保障"</span><Cite sources={[
+            { label: "LinkedIn · 采购经理 John Carter 发帖", url: "https://example.com/linkedin/john-carter" },
+            { label: "Solar Power World 行业访谈 2024", url: "https://example.com/spw/interview" },
+            { label: "买家自有 RFQ 历史记录", url: "https://example.com/rfq/history" },
+          ]} />。如果对方主动询盘，大概率是原有供应商出现了质量波动或产能瓶颈。
         </p>
       </SectionCard>
 
@@ -451,11 +495,19 @@ export const BuyerBackgroundReport = () => {
           </div>
           <div className="grid grid-cols-2 gap-x-3 gap-y-1">
             <KV label="公司名" value="TechSol US LLC" />
-            <KV label="注册地" value="Austin, Texas, USA" />
-            <KV label="成立时间" value="2010 年（约 15 年）" />
+            <KV label="注册地" value={<>Austin, Texas, USA<Cite sources={[
+              { label: "Texas Secretary of State 企业档案", url: "https://example.com/sos/techsol" },
+            ]} /></>} />
+            <KV label="成立时间" value={<>2010 年（约 15 年）<Cite sources={[
+              { label: "Texas SOS 注册档案", url: "https://example.com/sos/techsol" },
+              { label: "TechSol 官网 About 页", url: "https://example.com/techsol/about" },
+            ]} /></>} />
             <KV label="员工规模" value="80–120 人" />
             <KV label="组织形式" value="独立法人 · 私有制 LLC" />
-            <KV label="经营状态" value={<span className="text-emerald-600">活跃 · 良好</span>} />
+            <KV label="经营状态" value={<><span className="text-emerald-600">活跃 · 良好</span><Cite sources={[
+              { label: "Texas SOS 在册状态", url: "https://example.com/sos/status" },
+              { label: "D&B Business Directory", url: "https://example.com/dnb/techsol" },
+            ]} /></>} />
           </div>
         </div>
 
@@ -468,19 +520,27 @@ export const BuyerBackgroundReport = () => {
             <div className="flex items-start gap-2 text-[12px]">
               <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary">CEO</span>
               <p className="flex-1 text-foreground/85 leading-[1.6]">
-                <span className="font-medium text-foreground">Sarah Wong</span> · 创始人 · 在职 15 年，主导战略与大额订单签批
+                <span className="font-medium text-foreground">Sarah Wong</span> · 创始人 · 在职 15 年，主导战略与大额订单签批<Cite sources={[
+                  { label: "LinkedIn · Sarah Wong 个人主页", url: "https://example.com/linkedin/sarah-wong" },
+                  { label: "TechSol 官网团队页", url: "https://example.com/techsol/team" },
+                ]} />
               </p>
             </div>
             <div className="flex items-start gap-2 text-[12px]">
               <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-muted text-muted-foreground">采购</span>
               <p className="flex-1 text-foreground/85 leading-[1.6]">
-                <span className="font-medium text-foreground">John Carter</span> · Procurement Manager · 在职 6 年，对接中国工厂
+                <span className="font-medium text-foreground">John Carter</span> · Procurement Manager · 在职 6 年，对接中国工厂<Cite sources={[
+                  { label: "LinkedIn · John Carter", url: "https://example.com/linkedin/john-carter" },
+                ]} />
               </p>
             </div>
             <div className="flex items-start gap-2 text-[12px]">
               <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-muted text-muted-foreground">技术</span>
               <p className="flex-1 text-foreground/85 leading-[1.6]">
-                <span className="font-medium text-foreground">Mark Liu</span> · 技术总监 · 决定认证、兼容性与样品验收
+                <span className="font-medium text-foreground">Mark Liu</span> · 技术总监 · 决定认证、兼容性与样品验收<Cite sources={[
+                  { label: "LinkedIn · Mark Liu", url: "https://example.com/linkedin/mark-liu" },
+                  { label: "TechSol 官网技术博客作者页", url: "https://example.com/techsol/blog/mark" },
+                ]} />
               </p>
             </div>
           </div>
@@ -505,10 +565,20 @@ export const BuyerBackgroundReport = () => {
             <h4 className="font-medium text-foreground text-[12.5px]">采购行为与财务信号</h4>
           </div>
           <div className="space-y-1">
-            <KV label="年采购额" value="≈ $2.5–4M（逆变器 + 电池柜）" />
-            <KV label="主要供应商" value="深圳 × 2、宁波 × 1，另有韩国 LG-Chem 电芯直采" />
+            <KV label="年采购额" value={<>≈ $2.5–4M（逆变器 + 电池柜）<Cite sources={[
+              { label: "Panjiva 美国进口数据", url: "https://example.com/panjiva/techsol" },
+              { label: "ImportGenius 海关记录", url: "https://example.com/importgenius/techsol" },
+            ]} /></>} />
+            <KV label="主要供应商" value={<>深圳 × 2、宁波 × 1，另有韩国 LG-Chem 电芯直采<Cite sources={[
+              { label: "Panjiva 提单收发货人记录", url: "https://example.com/panjiva/shipments" },
+              { label: "中国海关出口数据", url: "https://example.com/chinacustoms/techsol" },
+              { label: "LG-Chem 经销商公告", url: "https://example.com/lgchem/distributors" },
+            ]} /></>} />
             <KV label="付款方式" value="30% T/T + 70% L/C 60 天，大单可接受 D/P" />
-            <KV label="财务状况" value={<span className="text-emerald-600">D&B 评级 3A2 · 无欠款记录</span>} />
+            <KV label="财务状况" value={<><span className="text-emerald-600">D&B 评级 3A2 · 无欠款记录</span><Cite sources={[
+              { label: "Dun & Bradstreet 信用报告", url: "https://example.com/dnb/techsol/credit" },
+              { label: "Experian Business Report", url: "https://example.com/experian/techsol" },
+            ]} /></>} />
           </div>
         </div>
 
@@ -518,9 +588,19 @@ export const BuyerBackgroundReport = () => {
             <h4 className="font-medium text-foreground text-[12.5px]">风险提示</h4>
           </div>
           <div className="space-y-1">
-            <KV label="法律纠纷" value="无公开诉讼或仲裁记录" />
-            <KV label="制裁 / 黑名单" value="未出现在 OFAC/BIS/EU 制裁清单中" />
-            <KV label="潜在风险" value={<span className="text-amber-600">德州电网政策变动可能影响采购节奏</span>} />
+            <KV label="法律纠纷" value={<>无公开诉讼或仲裁记录<Cite sources={[
+              { label: "PACER 联邦法院检索", url: "https://example.com/pacer/techsol" },
+              { label: "Texas Court Records", url: "https://example.com/txcourts/techsol" },
+            ]} /></>} />
+            <KV label="制裁 / 黑名单" value={<>未出现在 OFAC/BIS/EU 制裁清单中<Cite sources={[
+              { label: "OFAC SDN List", url: "https://example.com/ofac/sdn" },
+              { label: "BIS Entity List", url: "https://example.com/bis/entity" },
+              { label: "EU Consolidated Sanctions", url: "https://example.com/eu/sanctions" },
+            ]} /></>} />
+            <KV label="潜在风险" value={<><span className="text-amber-600">德州电网政策变动可能影响采购节奏</span><Cite sources={[
+              { label: "ERCOT 政策公告", url: "https://example.com/ercot/policy" },
+              { label: "Reuters 行业报道 2025", url: "https://example.com/reuters/texas-grid" },
+            ]} /></>} />
           </div>
         </div>
       </section>
