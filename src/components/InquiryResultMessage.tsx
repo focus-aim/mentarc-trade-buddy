@@ -20,7 +20,9 @@ import {
   Zap,
   Sparkles,
   ChevronDown,
+  Link2,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export interface ChatQuote {
   moduleName: string;
@@ -72,6 +74,39 @@ const KV = ({ label, value }: { label: string; value: React.ReactNode }) => (
     <span className="text-foreground/85 flex-1">{value}</span>
   </div>
 );
+
+// Inline citation links. Renders one Link2 icon per source after the text.
+export interface CitationSource {
+  label: string;
+  url: string;
+}
+export const Cite = ({ sources }: { sources: CitationSource[] }) => {
+  if (!sources?.length) return null;
+  return (
+    <TooltipProvider delayDuration={150}>
+      <span className="inline-flex items-center gap-0.5 align-middle ml-1">
+        {sources.map((s, i) => (
+          <Tooltip key={i}>
+            <TooltipTrigger asChild>
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] bg-primary/8 text-primary/80 hover:bg-primary/15 hover:text-primary transition-colors"
+                aria-label={`引用来源：${s.label}`}
+              >
+                <Link2 className="h-2.5 w-2.5" />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="text-[11px] px-2 py-1">
+              {s.label}
+            </TooltipContent>
+          </Tooltip>
+        ))}
+      </span>
+    </TooltipProvider>
+  );
+};
 
 const InlineKV = ({ label, value }: { label: string; value: React.ReactNode }) => (
   <p className="text-base leading-[1.75] text-foreground/85">
