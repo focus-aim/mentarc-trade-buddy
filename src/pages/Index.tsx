@@ -927,6 +927,20 @@ const Index = () => {
   const [partnerConfigured, setPartnerConfigured] = useState(initialPartnerConfigured);
   // Initialization training flow: idle | form | training | result
   const [trainingStage, setTrainingStage] = useState<"idle" | "form" | "training" | "result">("idle");
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("start") === "training") {
+      setShowPartnerConfig(true);
+      setPartnerConfigured(false);
+      setTrainingStage("form");
+      setActiveModule(null);
+      navigate("/app", { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [retrainMode, setRetrainMode] = useState(false);
   const [isRetraining, setIsRetraining] = useState(false);
   const [trainingForm, setTrainingForm] = useState({
