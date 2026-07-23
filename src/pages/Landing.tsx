@@ -21,6 +21,7 @@ const Landing = () => {
   }, []);
 
   const goToApp = () => navigate("/app");
+  const goToTraining = () => navigate("/app?start=training");
 
   return (
     <div className="min-h-screen bg-white text-[hsl(220,20%,14%)] overflow-x-hidden">
@@ -92,7 +93,7 @@ const Landing = () => {
 
             <div className="mt-9 flex items-center gap-4">
               <button
-                onClick={goToApp}
+                onClick={goToTraining}
                 className="group relative px-8 py-4 rounded-full text-[15px] font-semibold text-white bg-gradient-to-r from-[hsl(217,100%,50%)] to-[hsl(174,100%,61%)] shadow-lg shadow-[hsl(217,100%,50%)]/20 hover:shadow-xl hover:shadow-[hsl(217,100%,50%)]/30 transition-all duration-300 active:scale-[0.97]"
               >
                 立即体验
