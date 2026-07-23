@@ -932,12 +932,12 @@ const Index = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get("start") === "training") {
+    if (params.get("start") === "training" || location.pathname === "/") {
       setShowPartnerConfig(true);
       setPartnerConfigured(false);
       setTrainingStage("form");
       setActiveModule(null);
-      navigate("/app", { replace: true });
+      if (location.pathname !== "/") navigate("/app", { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
