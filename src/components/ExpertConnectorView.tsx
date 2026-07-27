@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Plug } from "lucide-react";
+import { Sparkles, Plug, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Item = {
