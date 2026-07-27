@@ -1309,15 +1309,9 @@ const Index = () => {
                             {buyer.companyType} · {buyer.region}
                           </p>
 
-                          <div className="mt-3 space-y-1.5 text-[13px]">
-                            <div className="flex gap-2">
-                              <span className="shrink-0 text-muted-foreground">采购产品</span>
-                              <span className="text-foreground/85">{buyer.products}</span>
-                            </div>
-                            <div className="flex gap-2">
-                              <span className="shrink-0 text-muted-foreground">联系邮箱</span>
-                              <span className="text-foreground/85">{buyer.email}</span>
-                            </div>
+                          <div className="mt-3 flex gap-2 text-[13px]">
+                            <span className="shrink-0 text-muted-foreground">联系邮箱</span>
+                            <span className="text-foreground/85">{buyer.email}</span>
                           </div>
 
                           {/* Next action */}
