@@ -529,6 +529,15 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
   const [showingDemoMindFlow, setShowingDemoMindFlow] = useState(false);
   const [buyerPanelOpen, setBuyerPanelOpen] = useState(false);
   const [resourcePanelOpen, setResourcePanelOpen] = useState(true);
+
+  // 会话主题提炼：取首条用户消息的核心语句
+  const sessionTopic = useMemo(() => {
+    const raw = (initialUserMessage?.trim() || config.taskName || "新会话")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean)[0] || config.taskName;
+    return raw.length > 26 ? `${raw.slice(0, 26)}…` : raw;
+  }, [initialUserMessage, config.taskName]);
   const [assetPanelOpen, setAssetPanelOpen] = useState(false);
   const [showingBuyerBgMindFlow, setShowingBuyerBgMindFlow] = useState(initialIsBuyerBg);
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
