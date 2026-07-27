@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, Check, Circle, Loader2, ArrowRight } from "lucide-react";
+import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, ArrowRight } from "lucide-react";
 
 export type ConversationBuyerRef = {
   company: string;
@@ -169,14 +169,11 @@ const ConversationResourcePanel = ({
                 <div className="space-y-0">
                   {FOLLOW_UP_STEPS.map((s2, i) => {
                     const st = STATUS_STYLE[s2.status];
-                    const Icon = st.icon;
                     const last = i === FOLLOW_UP_STEPS.length - 1;
                     return (
                       <div key={s2.title} className="flex gap-3">
                         <div className="flex flex-col items-center">
-                          <span className={`w-5 h-5 rounded-full border flex items-center justify-center ${st.dot}`}>
-                            <Icon className={`w-3 h-3 ${s2.status === "current" ? "animate-spin" : ""}`} />
-                          </span>
+                          <span className={`mt-1.5 w-2 h-2 rounded-full ${st.dot}`} />
                           {!last && <span className="w-px flex-1 bg-border my-1" />}
                         </div>
                         <div className={`pb-4 ${last ? "pb-0" : ""}`}>
