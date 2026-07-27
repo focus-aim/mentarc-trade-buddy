@@ -1102,7 +1102,7 @@ const Index = () => {
           setShowResults(false);
           setShowMarket(true);
         }}
-        collapsed={!!activeModule || (showPartnerConfig && trainingStage !== "idle")}
+        collapsed={false}
         activeView={showBoard ? "board" : showResults ? "results" : showMarket ? "market" : "new"}
       />
 
