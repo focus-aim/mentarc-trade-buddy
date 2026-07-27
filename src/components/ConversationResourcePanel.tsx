@@ -126,26 +126,48 @@ const ConversationResourcePanel = ({
                 )}
                 {buyers.map((b, idx) => {
                   const fields = b.fields.filter((f) => VISIBLE_FIELD_KEYS.some((k) => f.startsWith(k)));
+                  const secondary = idx > 0;
                   return (
-                    <div key={b.company} className="rounded-2xl border border-border/60 bg-background/60 overflow-hidden">
+                    <div
+                      key={b.company}
+                      className={`rounded-2xl border overflow-hidden ${
+                        secondary ? "border-border/40 bg-background/30" : "border-border/60 bg-background/60"
+                      }`}
+                    >
                       <button
                         onClick={() => setDetailBuyer(b)}
-                        className="w-full flex items-start justify-between gap-3 p-4 text-left"
+                        className={`w-full flex items-start justify-between gap-3 text-left ${secondary ? "px-4 py-3" : "p-4"}`}
                       >
                         <span className="min-w-0">
-                          <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
-                          <span className="mt-1.5 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
-                            {b.stage}
-                          </span>
-                          <span className="mt-3 block space-y-1.5">
-                            {fields.map((f) => (
-                              <span key={f} className="block text-[13px] text-muted-foreground">
-                                {f}
+                          <p
+                            className={
+                              secondary
+                                ? "text-[14px] font-medium text-muted-foreground"
+                                : "text-[15px] font-semibold text-foreground"
+                            }
+                          >
+                            {b.company}
+                          </p>
+                          {secondary ? (
+                            <span className="mt-1 inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">
+                              {b.stage}
+                            </span>
+                          ) : (
+                            <>
+                              <span className="mt-1.5 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
+                                {b.stage}
                               </span>
-                            ))}
-                          </span>
+                              <span className="mt-3 block space-y-1.5">
+                                {fields.map((f) => (
+                                  <span key={f} className="block text-[13px] text-muted-foreground">
+                                    {f}
+                                  </span>
+                                ))}
+                              </span>
+                            </>
+                          )}
                         </span>
-                        <ChevronRight className="w-4 h-4 shrink-0 mt-1 text-muted-foreground" />
+                        <ChevronRight className={`w-4 h-4 shrink-0 mt-1 ${secondary ? "text-muted-foreground/50" : "text-muted-foreground"}`} />
                       </button>
                     </div>
                   );
@@ -198,11 +220,8 @@ const ConversationResourcePanel = ({
             <section className="px-5 pb-6">
               <SectionTitle title="知识引用" />
               <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-3">
-                {results.length === 0 && (
-                  <p className="text-[13px] text-muted-foreground">暂无引用内容</p>
-                )}
-                {results.map((r, i) => (
-                  <div key={`${r.title}-${i}`} className="flex items-start gap-2">
+                {KNOWLEDGE_REFS.map((r) => (
+                  <div key={r.title} className="flex items-start gap-2">
                     <FileText className="w-4 h-4 mt-0.5 text-primary shrink-0" />
                     <div>
                       <p className="text-[14px] font-medium text-foreground">{r.title}</p>
