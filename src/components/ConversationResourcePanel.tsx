@@ -31,7 +31,7 @@ const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?:
   { title: "买家背调", desc: "画像分析、背景调查", status: "done", meta: "07-19 完成" },
   { title: "首轮报价", desc: "FOB $3.85/pc 已发出，等待买家反馈中", status: "current", meta: "07-20 进行中" },
   { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "todo" },
-  { title: "样品与单证", desc: "样品寄送、PI 与单证制作", status: "todo" },
+  { title: "报价附件制作", desc: "图册、PI 与单证制作", status: "todo" },
 ];
 
 const CURRENT_STAGE = "首轮报价";
