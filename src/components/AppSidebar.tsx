@@ -106,9 +106,6 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
         className="mx-4 mt-4 rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm px-4 py-3 text-left transition-all hover:border-primary/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <IdCard className="h-4 w-4" />
-          </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-foreground truncate">AI档案：宁波启明智能科技</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
