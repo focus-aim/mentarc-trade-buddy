@@ -46,6 +46,7 @@ import {
   Newspaper,
   BookOpen,
   MessageSquare,
+  Plus,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -1933,12 +1934,26 @@ const Index = () => {
                   className="w-full resize-none bg-transparent px-1 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
                 <div className="mt-1 flex items-center justify-between gap-3">
-                  <button
-                    className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                    aria-label="添加附件"
-                  >
-                    <Paperclip className="h-4 w-4" />
-                  </button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                        aria-label="更多"
+                      >
+                        <Plus className="h-5 w-5" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-44">
+                      <DropdownMenuItem className="gap-2">
+                        <Paperclip className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm">选择附件</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="gap-2">
+                        <Wand2 className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm">选择技能</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <button
                     onClick={() => {
                       const isBuyerBg = /深度?背景调查|买家背调|生成买家背调报告|深度背调|公司画像.*采购实力|背景调查.*风险/.test(prefillValue);
