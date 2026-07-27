@@ -253,9 +253,9 @@ const STEP_ICONS: Record<string, typeof Search> = {
 };
 
 const TAB_ICONS: Record<string, typeof Search> = {
-  跟单成交: UserRound,
-  产品转化: Package,
-  业务沉淀: Archive,
+  市场分析: BarChart3,
+  产品运营: Package,
+  询盘跟进: UserRound,
 };
 
 const RECOMMENDED_CASES = [
