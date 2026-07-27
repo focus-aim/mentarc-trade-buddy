@@ -47,6 +47,7 @@ import {
   BookOpen,
   MessageSquare,
   Plus,
+  Video,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -55,6 +56,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import AppSidebar from "@/components/AppSidebar";
 import ModuleCard from "@/components/ModuleCard";
@@ -2076,10 +2080,30 @@ const Index = () => {
                         <Paperclip className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">选择附件</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="gap-2">
-                        <Wand2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">选择技能</span>
-                      </DropdownMenuItem>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger className="gap-2 w-full cursor-default">
+                          <Wand2 className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">选择技能</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent className="w-48 rounded-xl border border-border/70 bg-card p-2 shadow-lg">
+                          <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                            已添加技能
+                          </div>
+                          <DropdownMenuItem className="gap-2 rounded-lg px-2 py-2 text-sm">
+                            <Sparkles className="h-4 w-4 text-primary" />
+                            AI麦可
+                          </DropdownMenuItem>
+                          <DropdownMenuItem className="gap-2 rounded-lg px-2 py-2 text-sm">
+                            <Video className="h-4 w-4 text-secondary" />
+                            营销视频
+                          </DropdownMenuItem>
+                          <div className="my-1 h-px bg-border" />
+                          <DropdownMenuItem className="gap-2 rounded-lg px-2 py-2 text-sm text-muted-foreground">
+                            <Plus className="h-4 w-4" />
+                            自定义技能
+                          </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <button
