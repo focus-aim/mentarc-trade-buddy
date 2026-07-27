@@ -27,11 +27,11 @@ const SectionTitle = ({ title, right }: { title: string; right?: React.ReactNode
 type StepStatus = "done" | "current" | "todo";
 
 const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?: string }[] = [
-  { title: "询盘分析", desc: "核心需求提取、风险识别", status: "done", meta: "07-18 完成" },
-  { title: "买家背调", desc: "画像分析、背景调查", status: "done", meta: "07-19 完成" },
-  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "current", meta: "07-20 进行中" },
+  { title: "询盘分析", desc: "核心需求提取、风险识别", status: "done" },
+  { title: "买家背调", desc: "画像分析、背景调查", status: "done" },
+  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "current", meta: "进行中" },
   { title: "动态跟踪", desc: "买家动态监测、跟进提醒", status: "todo" },
-  { title: "报价附件制作", desc: "图册、PI 与单证制作", status: "todo" },
+  { title: "报价材料", desc: "图册、PI 与单证制作", status: "todo" },
 ];
 
 const CURRENT_STAGE = "跟进策略";
