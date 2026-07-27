@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, IdCard } from "lucide-react";
+import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, IdCard, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import mentarcIcon from "@/assets/mentarc-icon.png";
 
@@ -38,9 +38,24 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
   if (isCollapsed) {
     return (
       <aside className="w-16 shrink-0 border-r border-border bg-sidebar-background flex flex-col h-screen items-center py-4 transition-all duration-300">
-        <button onClick={() => navigate("/")} className="w-9 h-9 rounded-lg overflow-hidden hover:opacity-80 transition-opacity" aria-label="返回贸探首页">
-          <img src={mentarcIcon} alt="贸探" className="w-full h-full object-cover" />
-        </button>
+        <div className="relative group">
+          <button onClick={() => navigate("/")} className="w-9 h-9 rounded-lg overflow-hidden hover:opacity-80 transition-opacity" aria-label="返回贸探首页">
+            <img src={mentarcIcon} alt="贸探" className="w-full h-full object-cover" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(false)}
+            className={cn(
+              "absolute -right-1.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-primary text-primary-foreground shadow-sm",
+              "flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+              "hover:bg-primary/90 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            )}
+            aria-label="展开侧边栏"
+            title="展开侧边栏"
+          >
+            <PanelLeftOpen className="w-3 h-3" />
+          </button>
+        </div>
         <nav className="mt-6 space-y-1">
           {navItems.map((item) => (
             <button
