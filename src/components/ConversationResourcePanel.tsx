@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, Check, Circle, Loader2, ArrowRight } from "lucide-react";
+import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, ArrowRight } from "lucide-react";
 
 export type ConversationBuyerRef = {
   company: string;
@@ -29,18 +29,18 @@ type StepStatus = "done" | "current" | "todo";
 const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?: string }[] = [
   { title: "询盘分析", desc: "核心需求提取、风险识别", status: "done", meta: "07-18 完成" },
   { title: "买家背调", desc: "画像分析、背景调查", status: "done", meta: "07-19 完成" },
-  { title: "首轮报价", desc: "FOB $3.85/pc 已发出，等待买家反馈中", status: "current", meta: "07-20 进行中" },
-  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "todo" },
+  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "current", meta: "07-20 进行中" },
+  { title: "动态跟踪", desc: "买家动态监测、跟进提醒", status: "todo" },
   { title: "报价附件制作", desc: "图册、PI 与单证制作", status: "todo" },
 ];
 
-const CURRENT_STAGE = "首轮报价";
+const CURRENT_STAGE = "跟进策略";
 const NEXT_ACTION = "报价发出已满 48 小时未回复，建议以\u201c样品可先行寄送\u201d为切入点做第一次破冰跟进，并附上 CE / ROHS 认证与实测保温数据。";
 
-const STATUS_STYLE: Record<StepStatus, { dot: string; icon: typeof Check; title: string }> = {
-  done: { dot: "bg-emerald-500 text-white border-emerald-500", icon: Check, title: "text-foreground" },
-  current: { dot: "bg-primary text-primary-foreground border-primary", icon: Loader2, title: "text-primary font-semibold" },
-  todo: { dot: "bg-background text-muted-foreground border-border", icon: Circle, title: "text-muted-foreground" },
+const STATUS_STYLE: Record<StepStatus, { dot: string; title: string }> = {
+  done: { dot: "bg-emerald-500", title: "text-foreground" },
+  current: { dot: "bg-primary ring-4 ring-primary/15", title: "text-primary font-semibold" },
+  todo: { dot: "bg-border", title: "text-muted-foreground" },
 };
 
 const CONVERSATION_FILES = [
@@ -128,19 +128,19 @@ const ConversationResourcePanel = ({
                         onClick={() => setExpandedBuyer(open ? "" : b.company)}
                         className="w-full flex items-start justify-between gap-3 p-4 text-left"
                       >
-                        <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
-                        <span className="flex items-center gap-2 shrink-0">
-                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
+                        <span className="min-w-0">
+                          <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
+                          <span className="mt-1.5 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
                             {b.stage}
                           </span>
-                          <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
                         </span>
+                        <ChevronDown className={`w-4 h-4 shrink-0 mt-1 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
                       </button>
                       {open && (
                         <div className="px-4 pb-4 -mt-1">
-                          <div className="space-y-2">
+                          <div className="space-y-1.5">
                             {b.fields.map((f) => (
-                              <div key={f} className="text-[13px] text-foreground">
+                              <div key={f} className="text-[13px] text-muted-foreground">
                                 {f}
                               </div>
                             ))}
@@ -169,14 +169,11 @@ const ConversationResourcePanel = ({
                 <div className="space-y-0">
                   {FOLLOW_UP_STEPS.map((s2, i) => {
                     const st = STATUS_STYLE[s2.status];
-                    const Icon = st.icon;
                     const last = i === FOLLOW_UP_STEPS.length - 1;
                     return (
                       <div key={s2.title} className="flex gap-3">
                         <div className="flex flex-col items-center">
-                          <span className={`w-5 h-5 rounded-full border flex items-center justify-center ${st.dot}`}>
-                            <Icon className={`w-3 h-3 ${s2.status === "current" ? "animate-spin" : ""}`} />
-                          </span>
+                          <span className={`mt-1.5 w-2 h-2 rounded-full ${st.dot}`} />
                           {!last && <span className="w-px flex-1 bg-border my-1" />}
                         </div>
                         <div className={`pb-4 ${last ? "pb-0" : ""}`}>

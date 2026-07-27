@@ -1055,8 +1055,28 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
   const sessionBuyers = useMemo(() => {
     if (moduleTitle !== "业务专家") return [];
     return [
-      { company: "Bergmann Home Supplies GmbH", stage: "首轮报价已发出", fields: ["邮箱", "官网", "所在地"] },
-      { company: "Nordwind Lifestyle AB", stage: "初次接洽", fields: ["邮箱", "所在地"] },
+      {
+        company: "Bergmann Home Supplies GmbH",
+        stage: "首轮报价已发出",
+        fields: [
+          "所在地：德国 · 汉堡",
+          "邮箱：procurement@bergmann-home.de",
+          "官网：www.bergmann-home.de",
+          "企业类型：家居用品分销商",
+          "采购模式：批量集采 · 季度补单",
+        ],
+      },
+      {
+        company: "Nordwind Lifestyle AB",
+        stage: "初次接洽",
+        fields: [
+          "所在地：瑞典 · 哥德堡",
+          "邮箱：info@nordwind-lifestyle.se",
+          "官网：www.nordwind-lifestyle.se",
+          "企业类型：生活方式品牌商",
+          "采购模式：小批量试单",
+        ],
+      },
     ];
   }, [moduleTitle]);
 
