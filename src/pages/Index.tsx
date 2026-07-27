@@ -935,8 +935,9 @@ const INQUIRY_STAGE_STYLES: Record<InquiryBuyer["stageTone"], string> = {
 
 
 const Index = () => {
-  // Persisted training/partner state — new visitors see the launch page;
-  // once trained, the configured state is restored on subsequent visits.
+  // The initialization startup page has been removed; the main task page
+  // is now the default landing. Retraining can still be opened from the
+  // knowledge base via setShowPartnerConfig(true).
   const initialPartnerConfigured = (() => {
     if (typeof window === "undefined") return false;
     try {
@@ -948,7 +949,7 @@ const Index = () => {
 
   const [activeModule, setActiveModule] = useState<string | null>(null);
   const [chatInitialMessage, setChatInitialMessage] = useState("");
-  const [showPartnerConfig, setShowPartnerConfig] = useState(!initialPartnerConfigured);
+  const [showPartnerConfig, setShowPartnerConfig] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [showBoard, setShowBoard] = useState(false);
