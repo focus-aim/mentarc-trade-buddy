@@ -78,8 +78,16 @@ const ResourceLibraryView = () => {
   return (
     <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
       <div className="mx-auto w-full max-w-5xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold text-foreground">资源管理</h1>
-        <p className="mt-2 text-sm text-muted-foreground">历史会话中产出的文件与图片，按类型统一归档。</p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">资源管理</h1>
+            <p className="mt-2 text-sm text-muted-foreground">历史会话中产出的文件与图片，按类型统一归档。</p>
+          </div>
+          <Button variant="outline" size="sm" className="shrink-0 gap-1.5 rounded-full border-border/60 bg-card/80 backdrop-blur-sm">
+            <RefreshCw className="h-3.5 w-3.5" />
+            同步至MIC
+          </Button>
+        </div>
 
         <div className="mt-6 flex items-center gap-1 rounded-full border border-border/60 bg-card/80 p-1 backdrop-blur-sm w-fit">
           {([
