@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, ChevronRight, ChevronUp, FileSpreadsheet, FileCode2, FileText } from "lucide-react";
+import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, Check, Circle, Loader2, ArrowRight } from "lucide-react";
 
 export type ConversationBuyerRef = {
   company: string;
@@ -24,12 +24,24 @@ const SectionTitle = ({ title, right }: { title: string; right?: React.ReactNode
   </div>
 );
 
-const FOLLOW_UP_STEPS = [
-  { title: "询盘分析", desc: "" },
-  { title: "买家背调", desc: "" },
-  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机" },
-  { title: "单证制作", desc: "" },
+type StepStatus = "done" | "current" | "todo";
+
+const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?: string }[] = [
+  { title: "询盘分析", desc: "已提取核心需求：500ml 双层保温啤酒杯 · 5,000 pcs 试单", status: "done", meta: "07-18 完成" },
+  { title: "买家背调", desc: "德国家居分销商，年采购额约 800 万欧，采购决策人已识别", status: "done", meta: "07-19 完成" },
+  { title: "首轮报价", desc: "FOB $3.85/pc 已发出，等待买家反馈中", status: "current", meta: "07-20 进行中" },
+  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "todo" },
+  { title: "样品与单证", desc: "样品寄送、PI 与单证制作", status: "todo" },
 ];
+
+const CURRENT_STAGE = "首轮报价";
+const NEXT_ACTION = "报价发出已满 48 小时未回复，建议以\u201c样品可先行寄送\u201d为切入点做第一次破冰跟进，并附上 CE / ROHS 认证与实测保温数据。";
+
+const STATUS_STYLE: Record<StepStatus, { dot: string; icon: typeof Check; title: string }> = {
+  done: { dot: "bg-emerald-500 text-white border-emerald-500", icon: Check, title: "text-foreground" },
+  current: { dot: "bg-primary text-primary-foreground border-primary", icon: Loader2, title: "text-primary font-semibold" },
+  todo: { dot: "bg-background text-muted-foreground border-border", icon: Circle, title: "text-muted-foreground" },
+};
 
 const CONVERSATION_FILES = [
   { name: "外贸报价单模板.xlsx", icon: FileSpreadsheet, tone: "text-emerald-600 bg-emerald-50" },
@@ -66,6 +78,7 @@ const ConversationResourcePanel = ({
   memories?: ConversationMemoryRef[];
 }) => {
   const [tab, setTab] = useState<"business" | "conversation">("business");
+  const [expandedBuyer, setExpandedBuyer] = useState<string | null>(null);
   const [filesOpen, setFilesOpen] = useState(true);
 
   return (
@@ -107,39 +120,83 @@ const ConversationResourcePanel = ({
                     暂无买家档案
                   </div>
                 )}
-                {buyers.map((b) => (
-                  <div key={b.company} className="rounded-2xl border border-border/60 bg-background/60 p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
-                      <span className="shrink-0 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
-                        {b.stage}
-                      </span>
-                    </div>
-                    <div className="mt-3 space-y-2">
-                      {b.fields.map((f) => (
-                        <div key={f} className="text-[13px] text-foreground">
-                          {f}
+                {buyers.map((b, idx) => {
+                  const open = expandedBuyer === b.company || (expandedBuyer === null && idx === 0);
+                  return (
+                    <div key={b.company} className="rounded-2xl border border-border/60 bg-background/60 overflow-hidden">
+                      <button
+                        onClick={() => setExpandedBuyer(open ? "" : b.company)}
+                        className="w-full flex items-start justify-between gap-3 p-4 text-left"
+                      >
+                        <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
+                        <span className="flex items-center gap-2 shrink-0">
+                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
+                            {b.stage}
+                          </span>
+                          <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+                        </span>
+                      </button>
+                      {open && (
+                        <div className="px-4 pb-4 -mt-1">
+                          <div className="space-y-2">
+                            {b.fields.map((f) => (
+                              <div key={f} className="text-[13px] text-foreground">
+                                {f}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="mt-2 flex justify-end">
+                            <ChevronRight className="w-4 h-4 text-primary" />
+                          </div>
                         </div>
-                      ))}
+                      )}
                     </div>
-                    <div className="mt-2 flex justify-end">
-                      <ChevronRight className="w-4 h-4 text-primary" />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
 
             <section className="px-5 pb-5">
-              <SectionTitle title="买家跟进节奏" />
+              <SectionTitle
+                title="买家跟进节奏"
+                right={
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[12px] font-medium text-primary">
+                    当前：{CURRENT_STAGE}
+                  </span>
+                }
+              />
               <div className="rounded-2xl border border-border/60 bg-background/60 p-4">
-                <div className="border-l border-border pl-4 space-y-4">
-                  {FOLLOW_UP_STEPS.map((s) => (
-                    <div key={s.title}>
-                      <p className="text-[14px] font-medium text-foreground">{s.title}</p>
-                      {s.desc && <p className="mt-1 text-[12px] text-muted-foreground">{s.desc}</p>}
-                    </div>
-                  ))}
+                <div className="space-y-0">
+                  {FOLLOW_UP_STEPS.map((s2, i) => {
+                    const st = STATUS_STYLE[s2.status];
+                    const Icon = st.icon;
+                    const last = i === FOLLOW_UP_STEPS.length - 1;
+                    return (
+                      <div key={s2.title} className="flex gap-3">
+                        <div className="flex flex-col items-center">
+                          <span className={`w-5 h-5 rounded-full border flex items-center justify-center ${st.dot}`}>
+                            <Icon className={`w-3 h-3 ${s2.status === "current" ? "animate-spin" : ""}`} />
+                          </span>
+                          {!last && <span className="w-px flex-1 bg-border my-1" />}
+                        </div>
+                        <div className={`pb-4 ${last ? "pb-0" : ""}`}>
+                          <div className="flex items-center gap-2">
+                            <p className={`text-[14px] ${st.title}`}>{s2.title}</p>
+                            {s2.meta && <span className="text-[11px] text-muted-foreground">{s2.meta}</span>}
+                          </div>
+                          {s2.desc && <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">{s2.desc}</p>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-3">
+                  <div className="flex items-center gap-1.5 text-primary">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span className="text-[13px] font-semibold">下一步跟进关键</span>
+                  </div>
+                  <p className="mt-1.5 text-[12px] leading-relaxed text-foreground/85">{NEXT_ACTION}</p>
                 </div>
               </div>
             </section>
