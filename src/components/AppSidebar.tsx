@@ -42,6 +42,7 @@ const RECENT_CONVERSATIONS = [
 const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, onProfileClick, collapsed = false, activeView = "new" }: AppSidebarProps) => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [assetsOpen, setAssetsOpen] = useState(activeView === "results" || activeView === "board");
 
   useEffect(() => {
     if (collapsed) setIsCollapsed(true);
@@ -118,8 +119,6 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, on
       </aside>
     );
   }
-
-  const [assetsOpen, setAssetsOpen] = useState(activeView === "results" || activeView === "board");
 
   return (
     <aside className="w-[284px] shrink-0 border-r border-border/70 bg-sidebar-background/95 backdrop-blur-sm flex flex-col h-screen transition-all duration-300">
