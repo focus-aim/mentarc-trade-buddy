@@ -128,19 +128,19 @@ const ConversationResourcePanel = ({
                         onClick={() => setExpandedBuyer(open ? "" : b.company)}
                         className="w-full flex items-start justify-between gap-3 p-4 text-left"
                       >
-                        <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
-                        <span className="flex items-center gap-2 shrink-0">
-                          <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
+                        <span className="min-w-0">
+                          <p className="text-[15px] font-semibold text-foreground">{b.company}</p>
+                          <span className="mt-1.5 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
                             {b.stage}
                           </span>
-                          <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
                         </span>
+                        <ChevronDown className={`w-4 h-4 shrink-0 mt-1 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
                       </button>
                       {open && (
                         <div className="px-4 pb-4 -mt-1">
-                          <div className="space-y-2">
+                          <div className="space-y-1.5">
                             {b.fields.map((f) => (
-                              <div key={f} className="text-[13px] text-foreground">
+                              <div key={f} className="text-[13px] text-muted-foreground">
                                 {f}
                               </div>
                             ))}
