@@ -42,6 +42,9 @@ import {
   AlertTriangle,
   AlertCircle,
   BarChart3,
+  Newspaper,
+  BookOpen,
+  MessageSquare,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -169,24 +172,19 @@ const TASK_TABS = [
     expert: "业务专家",
     steps: [
       {
-        title: "分析询盘",
-        desc: "提取需求要点，识别买家意图",
-        prompt: `帮我分析这封买家询盘，提取核心需求并判断买家意图：
-
-From: john.carter@techsol.us
-Subject: Urgent: Solar inverter 5kW for USA retail project
-
-Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, price target FOB <$380/unit. Can you send sample by air? We need to launch in July. Please quote fast.`,
+        title: "外贸资讯",
+        desc: "获取最新外贸政策、市场动态与行业资讯",
+        prompt: "帮我整理最近一周的外贸行业资讯，包括政策变化、汇率波动和热门市场动态",
       },
       {
-        title: "背调买家",
-        desc: "全网检索信息，输出买家画像",
-        prompt: "帮我对这个买家做深度背景调查，输出公司画像、采购实力和风险提示",
+        title: "行业机会",
+        desc: "洞察目标市场机会与竞争格局",
+        prompt: "帮我分析当前外贸行业的机会点，哪些品类和区域值得重点关注",
       },
       {
-        title: "热门产品词",
-        desc: "挖掘搜索热词，锁定需求",
-        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
+        title: "外贸案例分析",
+        desc: "拆解真实外贸案例，提炼可复用经验",
+        prompt: "帮我分析一个典型的外贸成交案例，总结关键成功因素和可复用的跟进策略",
       },
     ],
   },
@@ -196,15 +194,20 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
     expert: "产品专家",
     steps: [
       {
-        title: "提炼卖点&SEO",
-        desc: "提炼核心卖点，优化排行",
-        prompt: "帮我提炼产品核心卖点，并优化标题、关键词和SEO描述",
+        title: "产品热门词",
+        desc: "挖掘搜索热词，锁定买家需求",
+        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
+      },
+      {
+        title: "产品详情生成",
+        desc: "一键生成高转化产品详情内容",
+        prompt: "帮我为这款产品生成专业的产品详情页内容，包括标题、卖点和描述",
       },
       { title: "营销素材生成", desc: "一键生成多平台营销图文", prompt: "帮我生成适合多平台发布的产品营销图文素材" },
       {
-        title: "企业知识库",
-        desc: "AI 学习公司业务，沉淀企业画像",
-        prompt: "",
+        title: "图像视频工具箱",
+        desc: "批量生成图片、视频等营销素材",
+        prompt: "帮我生成一组适合海外社媒推广的产品图片和短视频脚本",
       },
     ],
   },
@@ -214,9 +217,24 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
     expert: "培训专家",
     steps: [
       {
-        title: "策略咨询",
-        desc: "制定跟进节奏与话术路径",
-        prompt: "帮我为这个买家制定一套跟进策略，包括节奏、话术和下一步动作",
+        title: "询盘分析",
+        desc: "提取需求要点，识别买家意图",
+        prompt: `帮我分析这封买家询盘，提取核心需求并判断买家意图：
+
+From: john.carter@techsol.us
+Subject: Urgent: Solar inverter 5kW for USA retail project
+
+Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, price target FOB <$380/unit. Can you send sample by air? We need to launch in July. Please quote fast.`,
+      },
+      {
+        title: "买家背调",
+        desc: "全网检索信息，输出买家画像",
+        prompt: "帮我对这个买家做深度背景调查，输出公司画像、采购实力和风险提示",
+      },
+      {
+        title: "话术生成",
+        desc: "生成专业跟进话术与邮件模板",
+        prompt: "帮我针对这个买家生成一段专业的跟进话术和邮件模板",
       },
       {
         title: "生成报价单",
@@ -225,14 +243,9 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         isNew: true,
       },
       {
-        title: "外贸问题解答",
-        desc: "实时回答外贸业务实操问题",
-        prompt: "我在外贸业务中遇到一些具体问题，想请教 AI 专家给出实操建议",
-      },
-      {
-        title: "经验资产沉淀",
-        desc: "归档团队经验、案例与素材资产",
-        prompt: "",
+        title: "生成公司图册",
+        desc: "自动生成企业产品图册",
+        prompt: "帮我生成一份适合发给海外买家的公司介绍和产品图册",
       },
     ],
   },
@@ -240,16 +253,18 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
 
 // 简约浅色案例示意图：根据 step.title 渲染不同的 SVG-like 视觉
 const STEP_ICONS: Record<string, typeof Search> = {
-  分析询盘: FileSearch,
-  背调买家: Search,
-  策略咨询: Target,
-  生成报价单: FileText,
-  热门产品词: TrendingUp,
-  "提炼卖点&SEO": Sparkles,
+  外贸资讯: Newspaper,
+  行业机会: Target,
+  外贸案例分析: BookOpen,
+  产品热门词: TrendingUp,
+  产品详情生成: FileText,
   营销素材生成: Image,
-  外贸问题解答: HelpCircle,
-  企业知识库: Building2,
-  经验资产沉淀: Archive,
+  图像视频工具箱: Image,
+  询盘分析: FileSearch,
+  买家背调: Search,
+  话术生成: MessageSquare,
+  生成报价单: FileText,
+  生成公司图册: Building2,
 };
 
 const TAB_ICONS: Record<string, typeof Search> = {
