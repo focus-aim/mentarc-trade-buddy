@@ -684,6 +684,8 @@ type InquiryBuyer = {
   nextAction: { label: string };
   analyses: { title: string; date: string }[];
   owner: string;
+  source: "来自会话" | "文件导入" | "Made-in-China" | "其他";
+  updatedAt: string;
 };
 
 const INQUIRY_BUYERS: InquiryBuyer[] = [
