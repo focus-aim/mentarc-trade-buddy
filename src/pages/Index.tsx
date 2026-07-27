@@ -2206,6 +2206,15 @@ const Index = () => {
               stage={INQUIRY_BUYERS.find((b) => b.id === sheetBuyerId)?.stage ?? ""}
               updated={false}
               onClose={() => setSheetBuyerId(null)}
+              noBackgroundReport={sheetBuyerId === INQUIRY_BUYERS[0].id}
+              onStartBackgroundCheck={() => {
+                const buyer = INQUIRY_BUYERS.find((b) => b.id === sheetBuyerId);
+                setSheetBuyerId(null);
+                setChatInitialMessage(
+                  `生成买家背调报告：请对买家「${buyer?.company ?? ""}」做深度背景调查，输出公司画像、采购实力与风险提示。`,
+                );
+                setActiveModule("业务专家");
+              }}
             />
           )}
         </SheetContent>
