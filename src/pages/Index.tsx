@@ -699,7 +699,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "德国 慕尼黑",
     stage: "深度跟进",
     stageTone: "primary",
-    nextAction: { label: "跟进报价进展，确认整店方案反馈" },
+    nextAction: { label: "跟进项目进展，tigong" },
     analyses: [
       { title: "慕尼黑展会名片清洗-0326", date: "03/26" },
       { title: "德国采购意向跟进-0402", date: "04/02" },
