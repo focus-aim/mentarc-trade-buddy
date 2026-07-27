@@ -961,7 +961,7 @@ const Index = () => {
   const [caseDialogOpen, setCaseDialogOpen] = useState(false);
   const [casePrompt, setCasePrompt] = useState("");
   const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
-  const [activeTaskTab, setActiveTaskTab] = useState(TASK_TABS[0].label);
+  const [activeTaskTab, setActiveTaskTab] = useState("询盘跟进");
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
