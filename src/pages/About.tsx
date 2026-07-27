@@ -92,7 +92,7 @@ const About = () => {
               基于
               <span className="text-[hsl(220,20%,14%)] font-semibold"> 30 年外贸实战经验</span>，
               聚焦
-              <span className="text-[hsl(220,20%,14%)] font-semibold">「跟单成交、产品转化、业务沉淀」</span>
+              <span className="text-[hsl(220,20%,14%)] font-semibold">「市场分析、产品运营、询盘跟进」</span>
               三大核心板块。
             </p>
           </div>

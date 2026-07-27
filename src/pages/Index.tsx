@@ -41,6 +41,7 @@ import {
   UploadCloud,
   AlertTriangle,
   AlertCircle,
+  BarChart3,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -164,7 +165,7 @@ const EXAMPLE_PROMPTS: { label: string; prompt: string; icon: typeof Sparkles; a
 const TASK_TABS = [
   {
     avatar: businessAvatar,
-    label: "跟单成交",
+    label: "市场分析",
     expert: "业务专家",
     steps: [
       {
@@ -183,7 +184,37 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         prompt: "帮我对这个买家做深度背景调查，输出公司画像、采购实力和风险提示",
       },
       {
-        title: "​策略咨询",
+        title: "热门产品词",
+        desc: "挖掘搜索热词，锁定需求",
+        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
+      },
+    ],
+  },
+  {
+    avatar: operationAvatar,
+    label: "产品运营",
+    expert: "产品专家",
+    steps: [
+      {
+        title: "提炼卖点&SEO",
+        desc: "提炼核心卖点，优化排行",
+        prompt: "帮我提炼产品核心卖点，并优化标题、关键词和SEO描述",
+      },
+      { title: "营销素材生成", desc: "一键生成多平台营销图文", prompt: "帮我生成适合多平台发布的产品营销图文素材" },
+      {
+        title: "企业知识库",
+        desc: "AI 学习公司业务，沉淀企业画像",
+        prompt: "",
+      },
+    ],
+  },
+  {
+    avatar: trainingAvatar,
+    label: "询盘跟进",
+    expert: "培训专家",
+    steps: [
+      {
+        title: "策略咨询",
         desc: "制定跟进节奏与话术路径",
         prompt: "帮我为这个买家制定一套跟进策略，包括节奏、话术和下一步动作",
       },
@@ -193,40 +224,10 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         prompt: "买家 GreenLife 采购 5kW hybrid inverter with UL1741 要求 Need 300 units first, price target FOB <$380/unit，生成个性化报价单",
         isNew: true,
       },
-    ],
-  },
-  {
-    avatar: operationAvatar,
-    label: "产品转化",
-    expert: "产品专家",
-    steps: [
-      {
-        title: "热门产品词",
-        desc: "挖掘搜索热词，锁定需求",
-        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
-      },
-      {
-        title: "提炼卖点&SEO",
-        desc: "提炼核心卖点，优化排行",
-        prompt: "帮我提炼产品核心卖点，并优化标题、关键词和SEO描述",
-      },
-      { title: "营销素材生成", desc: "一键生成多平台营销图文", prompt: "帮我生成适合多平台发布的产品营销图文素材" },
-    ],
-  },
-  {
-    avatar: trainingAvatar,
-    label: "业务沉淀",
-    expert: "培训专家",
-    steps: [
       {
         title: "外贸问题解答",
         desc: "实时回答外贸业务实操问题",
         prompt: "我在外贸业务中遇到一些具体问题，想请教 AI 专家给出实操建议",
-      },
-      {
-        title: "企业知识库",
-        desc: "AI 学习公司业务，沉淀企业画像",
-        prompt: "",
       },
       {
         title: "经验资产沉淀",
@@ -252,16 +253,16 @@ const STEP_ICONS: Record<string, typeof Search> = {
 };
 
 const TAB_ICONS: Record<string, typeof Search> = {
-  跟单成交: UserRound,
-  产品转化: Package,
-  业务沉淀: Archive,
+  市场分析: BarChart3,
+  产品运营: Package,
+  询盘跟进: UserRound,
 };
 
 const RECOMMENDED_CASES = [
-  { title: "巴西太阳能项目询盘拆解", tag: "跟单成交" },
-  { title: "德国厨具批发商画像", tag: "跟单成交" },
-  { title: "中东健身房连锁商机", tag: "产品转化" },
-  { title: "北美买家跟进节奏", tag: "业务沉淀" },
+  { title: "巴西太阳能项目询盘拆解", tag: "市场分析" },
+  { title: "德国厨具批发商画像", tag: "市场分析" },
+  { title: "中东健身房连锁商机", tag: "产品运营" },
+  { title: "北美买家跟进节奏", tag: "询盘跟进" },
 ];
 
 const StepPreview = ({ title }: { title: string }) => {
@@ -979,7 +980,7 @@ const Index = () => {
   const [trainingProgress, setTrainingProgress] = useState(0);
   const selectedTaskTab = TASK_TABS.find((tab) => tab.label === activeTaskTab) ?? TASK_TABS[0];
   const selectedModuleTitle =
-    selectedTaskTab.label === "产品转化" ? "运营专家" : selectedTaskTab.label === "业务沉淀" ? "培训专家" : "业务专家";
+    selectedTaskTab.label === "产品运营" ? "运营专家" : selectedTaskTab.label === "询盘跟进" ? "培训专家" : "业务专家";
 
   const handleLogout = useCallback(() => {
     setPartnerConfigured(false);
