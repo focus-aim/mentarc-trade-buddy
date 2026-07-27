@@ -160,10 +160,70 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
 
       {/* Nav */}
       <nav className="px-5 pt-5 space-y-1">
-        {navItems.map((item) => (
+        {topNavItems.map((item) => (
           <button
             key={item.key}
-            onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
+            onClick={item.key === "new" ? onNewTask : undefined}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+              activeView === item.key
+                ? "bg-muted text-foreground"
+                : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+            )}
+          >
+            <item.icon className="w-[18px] h-[18px]" />
+            <span>{item.label}</span>
+          </button>
+        ))}
+
+        {/* 业务资产 — 可折叠 */}
+        <div className="space-y-0.5">
+          <button
+            type="button"
+            onClick={() => setAssetsOpen((v) => !v)}
+            className={cn(
+              "w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+              activeView === "results" || activeView === "board"
+                ? "bg-muted text-foreground"
+                : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <businessAssets.icon className="w-[18px] h-[18px]" />
+              <span>{businessAssets.label}</span>
+            </div>
+            <ChevronDown
+              className={cn(
+                "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                assetsOpen ? "rotate-180" : ""
+              )}
+            />
+          </button>
+          {assetsOpen && (
+            <div className="pl-4 space-y-0.5">
+              {businessAssets.children.map((child) => (
+                <button
+                  key={child.key}
+                  onClick={child.key === "results" ? onResultsClick : child.key === "board" ? onBoardClick : undefined}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition-all text-left",
+                    activeView === child.key
+                      ? "bg-muted text-foreground"
+                      : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+                  )}
+                >
+                  <child.icon className="w-[18px] h-[18px]" />
+                  <span>{child.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {bottomNavItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={item.key === "market" ? onMarketClick : undefined}
             className={cn(
               "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
               activeView === item.key
