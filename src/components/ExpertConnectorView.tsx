@@ -13,7 +13,7 @@ type Item = {
 
 const EXPERTS: Item[] = [
   { code: "MI", name: "MIC 麦可", tag: "MIC 平台对接", desc: "对接 MIC 平台，读取数据、调用麦可能力、结果可暂存到麦可", color: "bg-blue-50 text-blue-500", enabled: true },
-  { code: "社媒", name: "社媒专家", tag: "社媒运营", desc: "社媒图文创作、社媒运营策略与执行建议", color: "bg-pink-50 text-pink-500" },
+  { code: "社媒", name: "营销视频", tag: "社媒运营", desc: "社媒热点挖掘、视频内容规划、营销视频生成", color: "bg-pink-50 text-pink-500" },
   { code: "GE", name: "GEO 专家", tag: "独立站增长", desc: "独立站数据分析、独立站运营策略与优化建议", color: "bg-emerald-50 text-emerald-500" },
   { code: "单证", name: "单证专家", tag: "外贸单证", desc: "外贸单证审核、单证制作与合规检查", color: "bg-amber-50 text-amber-500" },
 ];
@@ -63,7 +63,7 @@ const ExpertConnectorView = () => {
         {/* Tabs */}
         <div className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-card/80 p-1 backdrop-blur-sm">
           {([
-            { key: "expert", label: "专家", icon: Sparkles },
+            { key: "expert", label: "技能\u00a0", icon: Sparkles },
             { key: "connector", label: "连接器", icon: Plug },
           ] as const).map((t) => (
             <button
@@ -83,7 +83,7 @@ const ExpertConnectorView = () => {
         </div>
 
         <h1 className="mt-8 text-2xl font-bold tracking-tight text-foreground">
-          {tab === "expert" ? "AI 专家" : "连接器"}
+          {tab === "expert" ? "附加技能" : "连接器"}
         </h1>
         <p className="mt-1.5 text-[13px] text-muted-foreground">
           {tab === "expert" ? "启用后，专家能力将在发起任务时可选" : "启用后，可在任务中读取和写入对应平台数据"}
