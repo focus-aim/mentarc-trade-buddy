@@ -29,7 +29,7 @@ const businessAssets = {
 };
 
 const bottomNavItems = [
-  { icon: Users, label: "专家&连接器", key: "market" },
+  { icon: Users, label: "专家 & 连接器", key: "market" },
 ];
 
 const RECENT_CONVERSATIONS = [
