@@ -706,6 +706,8 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "决策链梳理 & 预算确认-0418", date: "04/18" },
     ],
     owner: "用户 133****7053",
+    source: "来自会话",
+    updatedAt: "07-24",
   },
   {
     id: "b2",
@@ -724,6 +726,8 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "美西采购窗口期分析-0410", date: "04/10" },
     ],
     owner: "用户 133****7053",
+    source: "来自会话",
+    updatedAt: "07-24",
   },
   {
     id: "b3",
@@ -738,6 +742,8 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     nextAction: { label: "深度买家背调，评估资金与决策链" },
     analyses: [{ title: "迪拜健身展线索整理-0331", date: "03/31" }],
     owner: "用户 133****7053",
+    source: "文件导入",
+    updatedAt: "07-22",
   },
   {
     id: "b4",
@@ -755,6 +761,45 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
       { title: "买家 TechSol US 背调", date: "04/24" },
     ],
     owner: "用户 133****7053",
+    source: "Made-in-China",
+    updatedAt: "07-20",
+  },
+];
+
+type InquiryLead = {
+  id: string;
+  title: string;
+  buyer: string;
+  region: string;
+  products: string;
+  source: string;
+  date: string;
+  stage: string;
+  stageTone: InquiryBuyer["stageTone"];
+};
+
+const INQUIRY_LEADS: InquiryLead[] = [
+  {
+    id: "q1",
+    title: "保温啤酒杯阶梯报价询盘",
+    buyer: "TechSol US Renewable Distribution",
+    region: "美国 德州",
+    products: "500ml 双层保温杯 · 5,000 pcs 试单",
+    source: "来自会话",
+    date: "07-24",
+    stage: "待报价",
+    stageTone: "amber",
+  },
+  {
+    id: "q2",
+    title: "整店成套器械采购询盘",
+    buyer: "中东商用健身房连锁 Desert Gym",
+    region: "阿联酋 迪拜",
+    products: "整店成套器械 / 售后配件",
+    source: "文件导入",
+    date: "07-22",
+    stage: "初步接触",
+    stageTone: "primary",
   },
 ];
 
