@@ -1290,6 +1290,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
         onClose={() => setResourcePanelOpen(false)}
         buyers={sessionBuyers}
         results={sessionResults}
+        businessDisabled={moduleTitle !== "业务专家"}
       />
     )}
     </div>

@@ -81,13 +81,17 @@ const ConversationResourcePanel = ({
   onClose,
   buyers,
   results,
+  businessDisabled = false,
 }: {
   onClose: () => void;
   buyers: ConversationBuyerRef[];
   results: ConversationResultRef[];
   memories?: ConversationMemoryRef[];
+  businessDisabled?: boolean;
 }) => {
-  const [tab, setTab] = useState<"business" | "conversation">("business");
+  const [tab, setTab] = useState<"business" | "conversation">(
+    businessDisabled ? "conversation" : "business",
+  );
   const [detailBuyer, setDetailBuyer] = useState<ConversationBuyerRef | null>(null);
   const [filesOpen, setFilesOpen] = useState(true);
   const [knowledgeOpen, setKnowledgeOpen] = useState(false);
@@ -99,17 +103,25 @@ const ConversationResourcePanel = ({
           {([
             { key: "business", label: "业务信息" },
             { key: "conversation", label: "对话信息" },
-          ] as const).map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`text-[15px] transition-colors ${
-                tab === t.key ? "font-semibold text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+          ] as const).map((t) => {
+            const disabled = businessDisabled && t.key === "business";
+            return (
+              <button
+                key={t.key}
+                disabled={disabled}
+                onClick={() => !disabled && setTab(t.key)}
+                className={`text-[15px] transition-colors ${
+                  disabled
+                    ? "cursor-not-allowed text-muted-foreground/40"
+                    : tab === t.key
+                      ? "font-semibold text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
