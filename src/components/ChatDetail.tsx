@@ -1,10 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef, ReactNode } from "react";
-import { ChevronDown, FileText, History, Image as ImageIcon, UserRound, Sparkles, BarChart3, Clock, Check, Coins, Users, LogOut, Share2 } from "lucide-react";
+import { FileText, History, Image as ImageIcon, UserRound, Sparkles, BarChart3, Clock, Check, Share2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import TeamManagementDialog from "./TeamManagementDialog";
 import { ArrowLeft, PanelRight, Pencil } from "lucide-react";
 import ConversationResourcePanel from "./ConversationResourcePanel";
 
@@ -22,7 +19,6 @@ import InquiryResultMessage, { ChatQuote, InquiryFollowUpResult, BuyerBackground
 import MessageFeedback from "./MessageFeedback";
 import InquiryStrategyPrompt, { InquiryStrategyChoice } from "./InquiryStrategyPrompt";
 import SecondFollowupPrompt, { SecondFollowupChoice } from "./SecondFollowupPrompt";
-import BuyerProfileFloatingCard from "./BuyerProfileFloatingCard";
 import KeywordGuidancePrompt, { KeywordGuidanceChoice } from "./KeywordGuidancePrompt";
 import InquiryDetailSection from "./InquiryDetailSection";
 import OperationGreeting from "./OperationGreeting";
@@ -474,7 +470,6 @@ const MARKET_REPORT_RECORDS = [
 ];
 
 const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }: ChatDetailProps) => {
-  const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const config = MODULE_CONFIG[moduleTitle] || MODULE_CONFIG["业务专家"];
   const initialMessage = initialUserMessage?.trim() || config.defaultUserMessage;
   const expertAvatar = useMemo(() => {
@@ -683,19 +678,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
     return null;
   }, [moduleTitle]);
 
-  // Buyer profile floating card state (业务专家 only)
-  const buyerCardState = useMemo(() => {
-    if (moduleTitle !== "业务专家") return { visible: false, updated: false, stage: "" };
-    const hasInquiryResult = messages.some((m) => m.type === "inquiry-result");
-    const hasSecondFollowup = messages.some(
-      (m) => m.type === "second-followup-prompt" || (m.role === "user" && /二次跟进|二轮跟进|再次跟进/.test(m.content))
-    );
-    return {
-      visible: hasInquiryResult,
-      updated: hasSecondFollowup,
-      stage: hasSecondFollowup ? "二次跟进 · 决策摇摆期" : "首轮报价已发出",
-    };
-  }, [messages, moduleTitle]);
 
   const COMPETITOR_HIGHLIGHTS = [
     { title: "价格策略", desc: "阶梯报价清晰：1-9台 $899、10-49台 $829、50+台 $769，支持整柜议价" },
