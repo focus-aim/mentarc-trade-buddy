@@ -972,17 +972,6 @@ const Index = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("start") === "training" || location.pathname === "/") {
-      setShowPartnerConfig(true);
-      setPartnerConfigured(false);
-      setTrainingStage("form");
-      setActiveModule(null);
-      if (location.pathname !== "/") navigate("/app", { replace: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const [retrainMode, setRetrainMode] = useState(false);
   const [isRetraining, setIsRetraining] = useState(false);
   const [trainingForm, setTrainingForm] = useState({
@@ -1104,6 +1093,16 @@ const Index = () => {
         }}
         collapsed={!!activeModule || (showPartnerConfig && trainingStage !== "idle")}
         activeView={showBoard ? "board" : showResults ? "results" : showMarket ? "market" : "new"}
+        onProfileClick={() => {
+          setActiveModule(null);
+          setShowProfile(false);
+          setShowBoard(false);
+          setShowResults(false);
+          setShowMarket(false);
+          setShowPartnerConfig(true);
+          setRetrainMode(false);
+          setTrainingStage("form");
+        }}
       />
 
       {activeModule ? (

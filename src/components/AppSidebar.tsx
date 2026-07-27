@@ -9,6 +9,7 @@ interface AppSidebarProps {
   onBoardClick?: () => void;
   onResultsClick?: () => void;
   onMarketClick?: () => void;
+  onProfileClick?: () => void;
   collapsed?: boolean;
   activeView?: "new" | "board" | "results" | "market";
 }
@@ -38,7 +39,7 @@ const RECENT_CONVERSATIONS = [
   "商用动感单车营销素材",
 ];
 
-const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, collapsed = false, activeView = "new" }: AppSidebarProps) => {
+const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, onProfileClick, collapsed = false, activeView = "new" }: AppSidebarProps) => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -145,7 +146,7 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
       {/* AI Profile Card */}
       <button
         type="button"
-        onClick={() => navigate("/")}
+        onClick={() => onProfileClick?.()}
         className="mx-4 mt-4 rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm px-4 py-3 text-left transition-all hover:border-primary/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <div className="flex items-center gap-2.5">
