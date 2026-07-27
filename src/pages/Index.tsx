@@ -965,6 +965,9 @@ const Index = () => {
   
   const [activeBuyerId, setActiveBuyerId] = useState<string | null>(null);
   const [expandedBuyerId, setExpandedBuyerId] = useState<string | null>(null);
+  const [buyerTab, setBuyerTab] = useState<"buyer" | "inquiry">("buyer");
+  const [buyerSource, setBuyerSource] = useState<string>("全部");
+  const [buyerSearch, setBuyerSearch] = useState("");
   const [sheetBuyerId, setSheetBuyerId] = useState<string | null>(null);
   
   const [bgReportBuyerId, setBgReportBuyerId] = useState<string | null>(null);
