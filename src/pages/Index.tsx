@@ -719,7 +719,7 @@ const INQUIRY_BUYERS: InquiryBuyer[] = [
     region: "美国 洛杉矶",
     stage: "已建档",
     stageTone: "emerald",
-    nextAction: { label: "发起看厂邀请，推进 ID 联合开发落地" },
+    nextAction: { label: "买家最新动态分析，挖掘潜在需求" },
     analyses: [
       { title: "北美市场竞对背调-0328", date: "03/28" },
       { title: "DTC 品牌私域获客拆解-0405", date: "04/05" },
