@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, ArrowRight } from "lucide-react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { BuyerProfileSheetContent } from "@/components/BuyerProfileFloatingCard";
+
+const VISIBLE_FIELD_KEYS = ["所在地", "邮箱"];
 
 export type ConversationBuyerRef = {
   company: string;
@@ -78,7 +82,7 @@ const ConversationResourcePanel = ({
   memories?: ConversationMemoryRef[];
 }) => {
   const [tab, setTab] = useState<"business" | "conversation">("business");
-  const [expandedBuyer, setExpandedBuyer] = useState<string | null>(null);
+  const [detailBuyer, setDetailBuyer] = useState<ConversationBuyerRef | null>(null);
   const [filesOpen, setFilesOpen] = useState(true);
 
   return (
@@ -121,11 +125,11 @@ const ConversationResourcePanel = ({
                   </div>
                 )}
                 {buyers.map((b, idx) => {
-                  const open = expandedBuyer === b.company || (expandedBuyer === null && idx === 0);
+                  const fields = b.fields.filter((f) => VISIBLE_FIELD_KEYS.some((k) => f.startsWith(k)));
                   return (
                     <div key={b.company} className="rounded-2xl border border-border/60 bg-background/60 overflow-hidden">
                       <button
-                        onClick={() => setExpandedBuyer(open ? "" : b.company)}
+                        onClick={() => setDetailBuyer(b)}
                         className="w-full flex items-start justify-between gap-3 p-4 text-left"
                       >
                         <span className="min-w-0">
@@ -133,23 +137,16 @@ const ConversationResourcePanel = ({
                           <span className="mt-1.5 inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[12px] font-medium text-emerald-600">
                             {b.stage}
                           </span>
-                        </span>
-                        <ChevronDown className={`w-4 h-4 shrink-0 mt-1 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
-                      </button>
-                      {open && (
-                        <div className="px-4 pb-4 -mt-1">
-                          <div className="space-y-1.5">
-                            {b.fields.map((f) => (
-                              <div key={f} className="text-[13px] text-muted-foreground">
+                          <span className="mt-3 block space-y-1.5">
+                            {fields.map((f) => (
+                              <span key={f} className="block text-[13px] text-muted-foreground">
                                 {f}
-                              </div>
+                              </span>
                             ))}
-                          </div>
-                          <div className="mt-2 flex justify-end">
-                            <ChevronRight className="w-4 h-4 text-primary" />
-                          </div>
-                        </div>
-                      )}
+                          </span>
+                        </span>
+                        <ChevronRight className="w-4 h-4 shrink-0 mt-1 text-muted-foreground" />
+                      </button>
                     </div>
                   );
                 })}
