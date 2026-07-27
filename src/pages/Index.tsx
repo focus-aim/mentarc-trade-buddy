@@ -238,6 +238,32 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
 ];
 
 // 简约浅色案例示意图：根据 step.title 渲染不同的 SVG-like 视觉
+const STEP_ICONS: Record<string, typeof Search> = {
+  分析询盘: FileSearch,
+  背调买家: Search,
+  策略咨询: Target,
+  生成报价单: FileText,
+  热门产品词: TrendingUp,
+  "提炼卖点&SEO": Sparkles,
+  营销素材生成: Image,
+  外贸问题解答: HelpCircle,
+  企业知识库: Building2,
+  经验资产沉淀: Archive,
+};
+
+const TAB_ICONS: Record<string, typeof Search> = {
+  跟单成交: UserRound,
+  产品转化: Package,
+  业务沉淀: Archive,
+};
+
+const RECOMMENDED_CASES = [
+  { title: "巴西太阳能项目询盘拆解", tag: "跟单成交" },
+  { title: "德国厨具批发商画像", tag: "跟单成交" },
+  { title: "中东健身房连锁商机", tag: "产品转化" },
+  { title: "北美买家跟进节奏", tag: "业务沉淀" },
+];
+
 const StepPreview = ({ title }: { title: string }) => {
   const baseWrap = "relative h-28 w-full overflow-hidden rounded-xl border border-border/60";
 
