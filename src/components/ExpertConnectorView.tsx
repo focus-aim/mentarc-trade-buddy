@@ -105,6 +105,12 @@ const ExpertConnectorView = () => {
           {items.map((item) => (
             <Row key={item.name} item={item} showQuota={tab === "expert"} />
           ))}
+          {tab === "expert" && (
+            <button className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border/70 bg-card/50 px-5 py-4 text-[13px] font-medium text-muted-foreground backdrop-blur-sm transition-colors hover:border-primary/30 hover:bg-card/80 hover:text-foreground">
+              <Plus className="h-4 w-4" />
+              添加技能
+            </button>
+          )}
         </div>
       </div>
     </main>
