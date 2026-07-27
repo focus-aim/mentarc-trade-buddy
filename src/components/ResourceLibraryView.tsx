@@ -1,17 +1,45 @@
 import { useState } from "react";
-import { FileSpreadsheet, FileText, FileCode2, Star, MessageSquareText, RefreshCw } from "lucide-react";
+import { FileSpreadsheet, FileText, FileCode2, Star, MessageSquareText, RefreshCw, Sparkles, Video, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "@/hooks/use-toast";
 
 type ResFile = { name: string; type: "xlsx" | "docx" | "pdf" | "code"; size: string; session: string; date: string };
 type ResImage = { url: string; name: string; session: string; date: string };
+type ResSkill = { name: string; desc: string; session: string; date: string; icon: typeof Sparkles; tone: string };
 
 const FILES: ResFile[] = [
   { name: "外贸报价单模板.xlsx", type: "xlsx", size: "42 KB", session: "德国买家询盘跟进", date: "2026-07-20" },
   { name: "Bergmann 询盘分析报告.pdf", type: "pdf", size: "1.2 MB", session: "德国买家询盘跟进", date: "2026-07-19" },
   { name: "保温杯产品详情文案.docx", type: "docx", size: "88 KB", session: "产品详情页生成", date: "2026-07-15" },
   { name: "negotiation-scripts.md", type: "code", size: "12 KB", session: "价格谈判策略", date: "2026-07-12" },
+];
+
+const SKILLS: ResSkill[] = [
+  {
+    name: "AI 麦可",
+    desc: "询盘响应话术与跟进策略生成",
+    session: "德国买家询盘跟进",
+    date: "2026-07-20",
+    icon: Sparkles,
+    tone: "text-primary bg-primary/10",
+  },
+  {
+    name: "营销视频",
+    desc: "社媒热点挖掘、视频内容规划与生成",
+    session: "产品详情页生成",
+    date: "2026-07-15",
+    icon: Video,
+    tone: "text-emerald-600 bg-emerald-50",
+  },
+  {
+    name: "报价单生成",
+    desc: "公司展示型模板，一键输出 PI 报价单",
+    session: "价格谈判策略",
+    date: "2026-07-12",
+    icon: Wand2,
+    tone: "text-amber-600 bg-amber-50",
+  },
 ];
 
 const IMAGES: ResImage[] = [
@@ -29,7 +57,7 @@ const ICONS = {
 } as const;
 
 const ResourceLibraryView = () => {
-  const [tab, setTab] = useState<"file" | "image">("file");
+  const [tab, setTab] = useState<"file" | "image" | "skill">("file");
   const [favorites, setFavorites] = useState<string[]>([]);
 
   const toggleFavorite = (key: string) => {
@@ -93,6 +121,7 @@ const ResourceLibraryView = () => {
           {([
             { key: "file", label: `文件（${FILES.length}）` },
             { key: "image", label: `图片（${IMAGES.length}）` },
+            { key: "skill", label: `技能（${SKILLS.length}）` },
           ] as const).map((t) => (
             <button
               key={t.key}
@@ -106,7 +135,24 @@ const ResourceLibraryView = () => {
           ))}
         </div>
 
-        {tab === "file" ? (
+        {tab === "skill" ? (
+          <div className="mt-5 divide-y divide-border/60 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm">
+            {SKILLS.map((s) => (
+              <div key={s.name} className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/40 transition-colors">
+                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${s.tone}`}>
+                  <s.icon className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[14px] text-foreground">{s.name}</p>
+                  <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+                    {s.desc} · 来自「{s.session}」 · {s.date}
+                  </p>
+                </div>
+                <ActionButtons id={s.name} session={s.session} />
+              </div>
+            ))}
+          </div>
+        ) : tab === "file" ? (
           <div className="mt-5 divide-y divide-border/60 rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm">
             {FILES.map((f) => {
               const { icon: Icon, tone } = ICONS[f.type];
