@@ -111,13 +111,6 @@ const ConversationResourcePanel = ({
             </button>
           ))}
         </div>
-        <button
-          onClick={onClose}
-          aria-label="关闭会话资源"
-          className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
       </div>
 
       <div className="flex-1 overflow-y-auto scrollbar-thin">
