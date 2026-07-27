@@ -1070,6 +1070,23 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
     setMessages(newMessages);
   };
 
+  const sessionBuyers = useMemo(() => {
+    if (moduleTitle !== "业务专家") return [];
+    return [
+      { company: "Bergmann Home Supplies GmbH", stage: "首轮报价已发出", fields: ["邮箱", "官网", "所在地"] },
+      { company: "Nordwind Lifestyle AB", stage: "初次接洽", fields: ["邮箱", "所在地"] },
+    ];
+  }, [moduleTitle]);
+
+  const sessionResults = useMemo(
+    () =>
+      messages
+        .map((m) => buildResultFor(m))
+        .filter((r): r is { node: ReactNode; label: string } => !!r)
+        .map((r) => ({ title: r.label, meta: "解析 · 刚刚" })),
+    [messages, buildResultFor]
+  );
+
 
 
   return (
