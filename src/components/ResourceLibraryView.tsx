@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { FileSpreadsheet, FileText, FileCode2, Download } from "lucide-react";
+import { FileSpreadsheet, FileText, FileCode2, Star, MessageSquareText } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "@/hooks/use-toast";
 
 type ResFile = { name: string; type: "xlsx" | "docx" | "pdf" | "code"; size: string; session: string; date: string };
 type ResImage = { url: string; name: string; session: string; date: string };
@@ -27,6 +29,50 @@ const ICONS = {
 
 const ResourceLibraryView = () => {
   const [tab, setTab] = useState<"file" | "image">("file");
+  const [favorites, setFavorites] = useState<string[]>([]);
+
+  const toggleFavorite = (key: string) => {
+    setFavorites((prev) => {
+      const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
+      toast({ description: prev.includes(key) ? "已取消收藏" : "已标记收藏" });
+      return next;
+    });
+  };
+
+  const openSession = (session: string) => {
+    toast({ description: `正在回溯会话「${session}」` });
+  };
+
+  const ActionButtons = ({ id, session }: { id: string; session: string }) => (
+    <div className="flex items-center gap-0.5">
+      <TooltipProvider delayDuration={200}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => toggleFavorite(id)}
+              className="rounded-lg p-2 text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="标记收藏"
+            >
+              <Star className={`h-4 w-4 ${favorites.includes(id) ? "fill-amber-400 text-amber-400" : ""}`} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>{favorites.includes(id) ? "取消收藏" : "标记收藏"}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => openSession(session)}
+              className="rounded-lg p-2 text-muted-foreground hover:bg-muted transition-colors"
+              aria-label="回溯会话"
+            >
+              <MessageSquareText className="h-4 w-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>回溯到会话「{session}」</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </div>
+  );
 
   return (
     <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
@@ -66,9 +112,7 @@ const ResourceLibraryView = () => {
                       来自「{f.session}」 · {f.date} · {f.size}
                     </p>
                   </div>
-                  <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted transition-colors" aria-label="下载">
-                    <Download className="h-4 w-4" />
-                  </button>
+                  <ActionButtons id={f.name} session={f.session} />
                 </div>
               );
             })}
@@ -78,9 +122,12 @@ const ResourceLibraryView = () => {
             {IMAGES.map((img) => (
               <figure key={img.name + img.url} className="overflow-hidden rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm">
                 <img src={img.url} alt={img.name} loading="lazy" className="h-32 w-full object-cover" />
-                <figcaption className="px-3 py-2.5">
-                  <p className="truncate text-[13px] text-foreground">{img.name}</p>
-                  <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{img.session} · {img.date}</p>
+                <figcaption className="flex items-center gap-1 px-3 py-2">
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[13px] text-foreground">{img.name}</span>
+                    <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">{img.session} · {img.date}</span>
+                  </span>
+                  <ActionButtons id={img.name} session={img.session} />
                 </figcaption>
               </figure>
             ))}
