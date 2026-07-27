@@ -259,10 +259,10 @@ const TAB_ICONS: Record<string, typeof Search> = {
 };
 
 const RECOMMENDED_CASES = [
-  { title: "巴西太阳能项目询盘拆解", tag: "跟单成交" },
-  { title: "德国厨具批发商画像", tag: "跟单成交" },
-  { title: "中东健身房连锁商机", tag: "产品转化" },
-  { title: "北美买家跟进节奏", tag: "业务沉淀" },
+  { title: "巴西太阳能项目询盘拆解", tag: "市场分析" },
+  { title: "德国厨具批发商画像", tag: "市场分析" },
+  { title: "中东健身房连锁商机", tag: "产品运营" },
+  { title: "北美买家跟进节奏", tag: "询盘跟进" },
 ];
 
 const StepPreview = ({ title }: { title: string }) => {
@@ -980,7 +980,7 @@ const Index = () => {
   const [trainingProgress, setTrainingProgress] = useState(0);
   const selectedTaskTab = TASK_TABS.find((tab) => tab.label === activeTaskTab) ?? TASK_TABS[0];
   const selectedModuleTitle =
-    selectedTaskTab.label === "产品转化" ? "运营专家" : selectedTaskTab.label === "业务沉淀" ? "培训专家" : "业务专家";
+    selectedTaskTab.label === "产品运营" ? "运营专家" : selectedTaskTab.label === "询盘跟进" ? "培训专家" : "业务专家";
 
   const handleLogout = useCallback(() => {
     setPartnerConfigured(false);
