@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquarePlus, PanelLeft, Archive, LogOut, SlidersHorizontal, Store, MessageSquare, FolderArchive, UserCog, Monitor, Sparkles, Users } from "lucide-react";
+import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, IdCard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import mentarcIcon from "@/assets/mentarc-icon.png";
-import PersonalizationDialog from "@/components/PersonalizationDialog";
 
 interface AppSidebarProps {
   onNewTask: () => void;
   onBoardClick?: () => void;
-  onPartnerClick?: () => void;
   onResultsClick?: () => void;
   onMarketClick?: () => void;
-  onLogout?: () => void;
-  partnerConfigured?: boolean;
   collapsed?: boolean;
   activeView?: "new" | "board" | "results" | "market";
 }
@@ -31,14 +27,9 @@ const RECENT_CONVERSATIONS = [
   "商用动感单车营销素材",
 ];
 
-const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, onMarketClick, onLogout, partnerConfigured = false, collapsed = false, activeView = "new" }: AppSidebarProps) => {
+const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, collapsed = false, activeView = "new" }: AppSidebarProps) => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [personalizationOpen, setPersonalizationOpen] = useState(false);
-  const partnerMetrics = [
-    { label: "业务理解力", value: 3 },
-    { label: "任务执行力", value: 1 },
-  ];
 
   useEffect(() => {
     if (collapsed) setIsCollapsed(true);
@@ -47,18 +38,10 @@ const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, o
   if (isCollapsed) {
     return (
       <aside className="w-16 shrink-0 border-r border-border bg-sidebar-background flex flex-col h-screen items-center py-4 transition-all duration-300">
-        <div className="relative w-9 h-9 mb-6 group">
-           <button onClick={() => navigate("/")} className="w-9 h-9 rounded-lg overflow-hidden transition-opacity group-hover:opacity-0">
-            <img src={mentarcIcon} alt="Mentarc" className="w-full h-full object-cover" />
-          </button>
-          <button
-            onClick={() => setIsCollapsed(false)}
-            className="absolute inset-0 w-9 h-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all opacity-0 group-hover:opacity-100"
-          >
-            <PanelLeft className="w-5 h-5" />
-          </button>
-        </div>
-        <nav className="space-y-1">
+        <button onClick={() => navigate("/")} className="w-9 h-9 rounded-lg overflow-hidden hover:opacity-80 transition-opacity" aria-label="返回贸探首页">
+          <img src={mentarcIcon} alt="贸探" className="w-full h-full object-cover" />
+        </button>
+        <nav className="mt-6 space-y-1">
           {navItems.map((item) => (
             <button
               key={item.key}
@@ -81,93 +64,65 @@ const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, o
 
   return (
     <aside className="w-[284px] shrink-0 border-r border-border/70 bg-sidebar-background/95 backdrop-blur-sm flex flex-col h-screen transition-all duration-300">
-      {/* Logo + collapse */}
+      {/* Logo + PC client */}
+      <div className="px-5 pt-5 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity focus-visible:outline-none"
+          aria-label="返回贸探首页"
+        >
+          <img src={mentarcIcon} alt="贸探" className="h-7 w-7 rounded-lg" />
+          <span className="text-xl font-bold">贸探</span>
+        </button>
+        <button
+          type="button"
+          className="p-2 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          aria-label="下载客户端"
+        >
+          <Monitor className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* AI Profile Card */}
       <button
         type="button"
         onClick={() => navigate("/")}
-        className="px-5 pt-5 flex items-center gap-2 text-foreground hover:opacity-80 transition-opacity focus-visible:outline-none"
-        aria-label="返回贸探首页"
+        className="mx-4 mt-4 rounded-2xl border border-border/70 bg-card/80 backdrop-blur-sm px-4 py-3 text-left transition-all hover:border-primary/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
-        <img src={mentarcIcon} alt="贸探" className="h-7 w-7 rounded-lg" />
-        <span className="text-xl font-bold">贸探</span>
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <IdCard className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground truncate">AI档案：宁波启明智能科技</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              企业知识 <span className="font-medium text-foreground">128</span> 份 · 团队经验 <span className="font-medium text-foreground">56</span> 份
+            </p>
+          </div>
+        </div>
       </button>
 
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={onPartnerClick ?? (() => navigate("/"))}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            (onPartnerClick ?? (() => navigate("/")))();
-          }
-        }}
-        className={cn("mx-4 mt-5 cursor-pointer rounded-2xl border px-4 py-4 text-foreground shadow-sm backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", partnerConfigured ? "border-primary/20 bg-gradient-to-br from-primary/10 via-card/80 to-accent/70 shadow-primary/10" : "border-border/70 bg-muted/45 shadow-primary/5")}
-      >
-        <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-3 text-left transition-opacity">
-          <div className="min-w-0">
-            <p className="text-sm font-bold leading-tight text-foreground">AI团队档案</p>
-            <p className={cn("mt-1 text-xs", partnerConfigured ? "text-success" : "text-muted-foreground")}>{partnerConfigured ? "运行中" : "待启动"}</p>
-          </div>
-        </div>
-        <button
-          onClick={(event) => {
-            event.stopPropagation();
-            setIsCollapsed(true);
-          }}
-          className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-        </button>
-        </div>
-        <div className="mt-4 space-y-3 text-left text-[13px]">
-          {partnerConfigured ? (
-            <>
-              <div className="rounded-xl border border-success/15 bg-card/60 px-3 py-2 text-xs font-medium text-foreground">
-                待关注：新增2条AI画像总结
-              </div>
-              <div className="space-y-2">
-                {partnerMetrics.map((metric) => (
-                  <div key={metric.label} className="flex items-center justify-between gap-3 rounded-lg px-1 text-xs text-muted-foreground">
-                    <span>{metric.label}</span>
-                    <span className="flex items-center gap-1.5" aria-label={`${metric.label} ${metric.value}/4`}>
-                      {[1, 2, 3, 4].map((dot) => (
-                        <span key={dot} className={cn("h-1.5 w-1.5 rounded-full", dot <= metric.value ? "bg-success" : "bg-card")} />
-                      ))}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">简单设定，启动你的AI专家团队</span>
-            </div>
-          )}
-        </div>
-      </div>
-
       {/* Nav */}
-      <nav className="px-5 pt-7 space-y-2">
-        {navItems.map((item, i) => (
-          <div key={item.key}>
-            <button
-              onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
-              className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-left",
-                activeView === item.key
-                  ? "text-primary-foreground bg-primary shadow-md shadow-primary/20"
-                  : "text-sidebar-foreground hover:bg-muted hover:text-foreground active:scale-[0.99]"
-              )}
-            >
-              <item.icon className="w-[18px] h-[18px]" />
-              <span>{item.label}</span>
-            </button>
-          </div>
+      <nav className="px-5 pt-5 space-y-1">
+        {navItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+              activeView === item.key
+                ? "bg-muted text-foreground"
+                : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+            )}
+          >
+            <item.icon className="w-[18px] h-[18px]" />
+            <span>{item.label}</span>
+          </button>
         ))}
       </nav>
 
+      {/* Recent conversations */}
       <div className="px-5 pt-6 flex-1 overflow-hidden flex flex-col min-h-0">
         <p className="px-3 pb-2 text-xs font-semibold text-muted-foreground">最近会话</p>
         <div className="flex-1 overflow-y-auto scrollbar-thin space-y-0.5 pr-1">
@@ -182,8 +137,24 @@ const AppSidebar = ({ onNewTask, onBoardClick, onPartnerClick, onResultsClick, o
           ))}
         </div>
       </div>
-      <div className="mt-auto" />
-      <PersonalizationDialog open={personalizationOpen} onOpenChange={setPersonalizationOpen} />
+
+      {/* Footer */}
+      <div className="px-5 pb-5 pt-3 space-y-3">
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-2 rounded-xl border border-border/70 bg-card/60 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+        >
+          <Download className="w-4 h-4" />
+          下载客户端
+        </button>
+        <div className="flex items-center gap-3 px-2">
+          <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold">MC</div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-foreground truncate">Mentarc</p>
+            <p className="text-xs text-muted-foreground">1,280 点</p>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 };

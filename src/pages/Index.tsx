@@ -1085,19 +1085,6 @@ const Index = () => {
           setShowMarket(false);
           setShowBoard(true);
         }}
-        onPartnerClick={() => {
-          setActiveModule(null);
-          setShowResults(false);
-          setShowBoard(false);
-          setShowMarket(false);
-          if (partnerConfigured) {
-            setShowPartnerConfig(false);
-            setShowProfile(true);
-          } else {
-            setShowProfile(false);
-            setShowPartnerConfig(true);
-          }
-        }}
         onResultsClick={() => {
           setActiveModule(null);
           setShowPartnerConfig(false);
@@ -1115,8 +1102,6 @@ const Index = () => {
           setShowResults(false);
           setShowMarket(true);
         }}
-        onLogout={handleLogout}
-        partnerConfigured={partnerConfigured}
         collapsed={!!activeModule || (showPartnerConfig && trainingStage !== "idle")}
         activeView={showBoard ? "board" : showResults ? "results" : showMarket ? "market" : "new"}
       />
