@@ -29,18 +29,18 @@ type StepStatus = "done" | "current" | "todo";
 const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?: string }[] = [
   { title: "询盘分析", desc: "核心需求提取、风险识别", status: "done", meta: "07-18 完成" },
   { title: "买家背调", desc: "画像分析、背景调查", status: "done", meta: "07-19 完成" },
-  { title: "首轮报价", desc: "FOB $3.85/pc 已发出，等待买家反馈中", status: "current", meta: "07-20 进行中" },
-  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "todo" },
+  { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "current", meta: "07-20 进行中" },
+  { title: "动态跟踪", desc: "买家动态监测、跟进提醒", status: "todo" },
   { title: "报价附件制作", desc: "图册、PI 与单证制作", status: "todo" },
 ];
 
-const CURRENT_STAGE = "首轮报价";
+const CURRENT_STAGE = "跟进策略";
 const NEXT_ACTION = "报价发出已满 48 小时未回复，建议以\u201c样品可先行寄送\u201d为切入点做第一次破冰跟进，并附上 CE / ROHS 认证与实测保温数据。";
 
-const STATUS_STYLE: Record<StepStatus, { dot: string; icon: typeof Check; title: string }> = {
-  done: { dot: "bg-emerald-500 text-white border-emerald-500", icon: Check, title: "text-foreground" },
-  current: { dot: "bg-primary text-primary-foreground border-primary", icon: Loader2, title: "text-primary font-semibold" },
-  todo: { dot: "bg-background text-muted-foreground border-border", icon: Circle, title: "text-muted-foreground" },
+const STATUS_STYLE: Record<StepStatus, { dot: string; title: string }> = {
+  done: { dot: "bg-emerald-500", title: "text-foreground" },
+  current: { dot: "bg-primary ring-4 ring-primary/15", title: "text-primary font-semibold" },
+  todo: { dot: "bg-border", title: "text-muted-foreground" },
 };
 
 const CONVERSATION_FILES = [
