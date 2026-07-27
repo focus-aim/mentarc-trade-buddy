@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FileSpreadsheet, FileText, FileCode2, Star, MessageSquareText } from "lucide-react";
+import { FileSpreadsheet, FileText, FileCode2, Star, MessageSquareText, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "@/hooks/use-toast";
 
