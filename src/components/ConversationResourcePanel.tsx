@@ -90,6 +90,7 @@ const ConversationResourcePanel = ({
   const [tab, setTab] = useState<"business" | "conversation">("business");
   const [detailBuyer, setDetailBuyer] = useState<ConversationBuyerRef | null>(null);
   const [filesOpen, setFilesOpen] = useState(true);
+  const [knowledgeOpen, setKnowledgeOpen] = useState(false);
 
   return (
     <aside className="hidden lg:flex w-[400px] shrink-0 flex-col h-screen border-l border-border/60 bg-card/80 backdrop-blur-sm">
