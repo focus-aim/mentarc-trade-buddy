@@ -1062,16 +1062,32 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
 
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden">
+    <div className="flex-1 flex h-screen overflow-hidden">
+    <div className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
       <div className="flex items-center gap-2 px-6 pt-4 pb-3">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 px-2 py-1 -ml-2 rounded-lg text-base font-semibold text-foreground hover:bg-muted transition-colors active:scale-95"
+          aria-label="返回"
+          className="p-1.5 -ml-2 rounded-lg text-muted-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <ArrowLeft className="w-4 h-4" />
-          {config.taskName}
         </button>
+        <h1 className="text-base font-semibold text-foreground truncate max-w-[46%]" title={sessionTopic}>
+          {sessionTopic}
+        </h1>
+        <Pencil className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         <div className="ml-auto flex items-center gap-3">
+          <button
+            onClick={() => setResourcePanelOpen((v) => !v)}
+            aria-label="会话资源"
+            className={`hidden lg:flex items-center justify-center h-8 w-8 rounded-lg border transition-colors ${
+              resourcePanelOpen
+                ? "border-primary/40 bg-primary/10 text-primary"
+                : "border-border/60 bg-card text-muted-foreground hover:bg-muted"
+            }`}
+          >
+            <PanelRight className="w-4 h-4" />
+          </button>
           <button
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/60 text-sm font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
