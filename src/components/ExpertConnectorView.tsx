@@ -9,7 +9,11 @@ type Item = {
   desc: string;
   color: string;
   enabled?: boolean;
+  quota?: number;
 };
+
+/** 每个技能默认赠送的应用额度（次） */
+const DEFAULT_SKILL_QUOTA = 5;
 
 const EXPERTS: Item[] = [
   { code: "MI", name: "MIC 麦可", tag: "MIC 平台对接", desc: "对接 MIC 平台，读取数据、调用麦可能力、结果可暂存到麦可", color: "bg-blue-50 text-blue-500", enabled: true },
@@ -24,8 +28,9 @@ const CONNECTORS: Item[] = [
   { code: "邮箱", name: "企业邮箱", tag: "邮件同步", desc: "同步往来邮件，自动识别询盘与跟进阶段", color: "bg-violet-50 text-violet-500" },
 ];
 
-const Row = ({ item }: { item: Item }) => {
+const Row = ({ item, showQuota }: { item: Item; showQuota?: boolean }) => {
   const [on, setOn] = useState(!!item.enabled);
+  const quota = item.quota ?? DEFAULT_SKILL_QUOTA;
   return (
     <div className="flex items-center gap-4 rounded-2xl border border-border/70 bg-card/80 px-5 py-4 backdrop-blur-sm transition-colors hover:border-primary/30">
       <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xs font-semibold", item.color)}>
@@ -35,6 +40,11 @@ const Row = ({ item }: { item: Item }) => {
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold text-foreground">{item.name}</h3>
           <span className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground">{item.tag}</span>
+          {showQuota && (
+            <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+              免费额度 {quota} 次
+            </span>
+          )}
         </div>
         <p className="mt-1 truncate text-[13px] text-muted-foreground">{item.desc}</p>
       </div>
@@ -86,12 +96,14 @@ const ExpertConnectorView = () => {
           {tab === "expert" ? "附加技能" : "连接器"}
         </h1>
         <p className="mt-1.5 text-[13px] text-muted-foreground">
-          {tab === "expert" ? "启用后，专家能力将在发起任务时可选" : "启用后，可在任务中读取和写入对应平台数据"}
+          {tab === "expert"
+            ? `启用后，技能将在发起任务时可选，每个技能默认赠送 ${DEFAULT_SKILL_QUOTA} 次应用额度`
+            : "启用后，可在任务中读取和写入对应平台数据"}
         </p>
 
         <div className="mt-6 space-y-3">
           {items.map((item) => (
-            <Row key={item.name} item={item} />
+            <Row key={item.name} item={item} showQuota={tab === "expert"} />
           ))}
         </div>
       </div>
