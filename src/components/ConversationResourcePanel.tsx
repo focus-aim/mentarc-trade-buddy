@@ -5,6 +5,12 @@ import { BuyerProfileSheetContent } from "@/components/BuyerProfileFloatingCard"
 
 const VISIBLE_FIELD_KEYS = ["所在地", "邮箱"];
 
+const KNOWLEDGE_REFS = [
+  { title: "欧洲家居分销商询盘响应案例", meta: "外贸知识库 · 询盘跟进" },
+  { title: "报价后客户沉默的破冰话术", meta: "外贸知识库 · 谈判策略" },
+  { title: "CE / ROHS 认证材料准备清单", meta: "外贸知识库 · 单证合规" },
+];
+
 export type ConversationBuyerRef = {
   company: string;
   stage: string;
