@@ -224,18 +224,31 @@ const ConversationResourcePanel = ({
             </section>
 
             <section className="px-5 pb-6">
-              <SectionTitle title="知识引用" />
-              <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-3">
-                {KNOWLEDGE_REFS.map((r) => (
-                  <div key={r.title} className="flex items-start gap-2">
-                    <FileText className="w-4 h-4 mt-0.5 text-primary shrink-0" />
-                    <div>
-                      <p className="text-[14px] font-medium text-foreground">{r.title}</p>
-                      <p className="mt-0.5 text-[12px] text-muted-foreground">{r.meta}</p>
+              <SectionTitle
+                title="知识引用"
+                right={
+                  <button
+                    onClick={() => setKnowledgeOpen((v) => !v)}
+                    className="p-1 rounded-md text-muted-foreground hover:bg-muted transition-colors"
+                    aria-label="展开或收起知识引用"
+                  >
+                    <ChevronUp className={`w-4 h-4 transition-transform ${knowledgeOpen ? "" : "rotate-180"}`} />
+                  </button>
+                }
+              />
+              {knowledgeOpen && (
+                <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-3">
+                  {KNOWLEDGE_REFS.map((r) => (
+                    <div key={r.title} className="flex items-start gap-2">
+                      <FileText className="w-4 h-4 mt-0.5 text-primary shrink-0" />
+                      <div>
+                        <p className="text-[14px] text-foreground">{r.title}</p>
+                        <p className="mt-0.5 text-[12px] text-muted-foreground">{r.meta}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </section>
           </>
         ) : (
