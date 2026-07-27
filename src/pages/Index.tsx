@@ -56,6 +56,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import AppSidebar from "@/components/AppSidebar";
 import ModuleCard from "@/components/ModuleCard";
