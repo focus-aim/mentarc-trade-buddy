@@ -27,8 +27,8 @@ const SectionTitle = ({ title, right }: { title: string; right?: React.ReactNode
 type StepStatus = "done" | "current" | "todo";
 
 const FOLLOW_UP_STEPS: { title: string; desc: string; status: StepStatus; meta?: string }[] = [
-  { title: "询盘分析", desc: "已提取核心需求：500ml 双层保温啤酒杯 · 5,000 pcs 试单", status: "done", meta: "07-18 完成" },
-  { title: "买家背调", desc: "德国家居分销商，年采购额约 800 万欧，采购决策人已识别", status: "done", meta: "07-19 完成" },
+  { title: "询盘分析", desc: "核心需求提取、风险识别", status: "done", meta: "07-18 完成" },
+  { title: "买家背调", desc: "画像分析、背景调查", status: "done", meta: "07-19 完成" },
   { title: "首轮报价", desc: "FOB $3.85/pc 已发出，等待买家反馈中", status: "current", meta: "07-20 进行中" },
   { title: "跟进策略", desc: "询盘响应、客户沉默应对、破冰契机", status: "todo" },
   { title: "样品与单证", desc: "样品寄送、PI 与单证制作", status: "todo" },
