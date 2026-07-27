@@ -5,7 +5,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TeamManagementDialog from "./TeamManagementDialog";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PanelRight, Pencil } from "lucide-react";
+import ConversationResourcePanel from "./ConversationResourcePanel";
 
 import ChatInput, { ChatAttachment } from "./ChatInput";
 import MindFlowMessage, { RichStep } from "./MindFlowMessage";
@@ -527,6 +528,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
   const [showCompetitorDialog, setShowCompetitorDialog] = useState(false);
   const [showingDemoMindFlow, setShowingDemoMindFlow] = useState(false);
   const [buyerPanelOpen, setBuyerPanelOpen] = useState(false);
+  const [resourcePanelOpen, setResourcePanelOpen] = useState(true);
   const [assetPanelOpen, setAssetPanelOpen] = useState(false);
   const [showingBuyerBgMindFlow, setShowingBuyerBgMindFlow] = useState(initialIsBuyerBg);
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
