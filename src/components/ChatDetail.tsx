@@ -1,10 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef, ReactNode } from "react";
-import { ChevronDown, FileText, History, Image as ImageIcon, UserRound, Sparkles, BarChart3, Clock, Check, Coins, Users, LogOut, Share2 } from "lucide-react";
+import { FileText, History, Image as ImageIcon, UserRound, Sparkles, BarChart3, Clock, Check, Share2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import TeamManagementDialog from "./TeamManagementDialog";
 import { ArrowLeft, PanelRight, Pencil } from "lucide-react";
 import ConversationResourcePanel from "./ConversationResourcePanel";
 
@@ -22,7 +19,6 @@ import InquiryResultMessage, { ChatQuote, InquiryFollowUpResult, BuyerBackground
 import MessageFeedback from "./MessageFeedback";
 import InquiryStrategyPrompt, { InquiryStrategyChoice } from "./InquiryStrategyPrompt";
 import SecondFollowupPrompt, { SecondFollowupChoice } from "./SecondFollowupPrompt";
-import BuyerProfileFloatingCard from "./BuyerProfileFloatingCard";
 import KeywordGuidancePrompt, { KeywordGuidanceChoice } from "./KeywordGuidancePrompt";
 import InquiryDetailSection from "./InquiryDetailSection";
 import OperationGreeting from "./OperationGreeting";
@@ -474,7 +470,6 @@ const MARKET_REPORT_RECORDS = [
 ];
 
 const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }: ChatDetailProps) => {
-  const [teamDialogOpen, setTeamDialogOpen] = useState(false);
   const config = MODULE_CONFIG[moduleTitle] || MODULE_CONFIG["业务专家"];
   const initialMessage = initialUserMessage?.trim() || config.defaultUserMessage;
   const expertAvatar = useMemo(() => {
@@ -683,19 +678,6 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
     return null;
   }, [moduleTitle]);
 
-  // Buyer profile floating card state (业务专家 only)
-  const buyerCardState = useMemo(() => {
-    if (moduleTitle !== "业务专家") return { visible: false, updated: false, stage: "" };
-    const hasInquiryResult = messages.some((m) => m.type === "inquiry-result");
-    const hasSecondFollowup = messages.some(
-      (m) => m.type === "second-followup-prompt" || (m.role === "user" && /二次跟进|二轮跟进|再次跟进/.test(m.content))
-    );
-    return {
-      visible: hasInquiryResult,
-      updated: hasSecondFollowup,
-      stage: hasSecondFollowup ? "二次跟进 · 决策摇摆期" : "首轮报价已发出",
-    };
-  }, [messages, moduleTitle]);
 
   const COMPETITOR_HIGHLIGHTS = [
     { title: "价格策略", desc: "阶梯报价清晰：1-9台 $899、10-49台 $829、50+台 $769，支持整柜议价" },
@@ -1106,6 +1088,12 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
         <Pencil className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         <div className="ml-auto flex items-center gap-3">
           <button
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/60 text-sm font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
+          >
+            <Share2 className="w-4 h-4 text-muted-foreground" />
+            <span>分享</span>
+          </button>
+          <button
             onClick={() => setResourcePanelOpen((v) => !v)}
             aria-label="会话资源"
             className={`hidden lg:flex items-center justify-center h-8 w-8 rounded-lg border transition-colors ${
@@ -1116,55 +1104,8 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
           >
             <PanelRight className="w-4 h-4" />
           </button>
-          <button
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/60 text-sm font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
-          >
-            <Share2 className="w-4 h-4 text-muted-foreground" />
-            <span>分享</span>
-          </button>
-          <button
-            onClick={() => setTeamDialogOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium hover:bg-accent/80 transition-colors cursor-pointer"
-          >
-            <Coins className="w-4 h-4 text-[hsl(45,100%,51%)]" />
-            <span>1,280 点</span>
-          </button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1.5 rounded-full hover:bg-muted/60 p-1 pr-2 transition-all duration-200 focus:outline-none">
-                <Avatar className="h-8 w-8 ring-2 ring-border/40 transition-shadow hover:ring-primary/30">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
-                    MC
-                  </AvatarFallback>
-                </Avatar>
-                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform duration-200" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44 rounded-xl shadow-lg border-border/50 p-1.5">
-              <DropdownMenuItem
-                className="gap-2.5 cursor-pointer rounded-lg px-3 py-3 text-sm"
-                onSelect={() => setTeamDialogOpen(true)}
-              >
-                <Users className="w-4 h-4 text-muted-foreground" />
-                团队管理
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2.5 cursor-pointer rounded-lg px-3 py-3 text-sm text-destructive focus:text-destructive">
-                <LogOut className="w-4 h-4" />
-                退出账号
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
-      <TeamManagementDialog open={teamDialogOpen} onOpenChange={setTeamDialogOpen} />
-
-      <BuyerProfileFloatingCard
-        visible={buyerCardState.visible}
-        updated={buyerCardState.updated}
-        stage={buyerCardState.stage}
-        scrollRef={chatScrollRef}
-      />
 
       <div ref={chatScrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
         <div className="mx-auto w-full max-w-4xl px-6 pt-2 pb-4 space-y-4">
