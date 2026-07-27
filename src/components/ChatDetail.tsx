@@ -1058,7 +1058,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
       {
         company: "Bergmann Home Supplies GmbH",
         stage: "首轮报价已发出",
-        fields: ["所在地：德国 · 汉堡"],
+        fields: ["所在地：德国 · 汉堡", "邮箱：procurement@bergmann-home.de"],
       },
       {
         company: "Nordwind Lifestyle AB",
