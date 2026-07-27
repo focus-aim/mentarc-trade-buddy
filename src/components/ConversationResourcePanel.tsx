@@ -158,7 +158,7 @@ const ConversationResourcePanel = ({
 
             <section className="px-5 pb-5">
               <SectionTitle
-                title="买家跟进节奏"
+                title="跟进节奏"
                 right={
                   <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[12px] font-medium text-primary">
                     当前：{CURRENT_STAGE}
