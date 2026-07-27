@@ -165,7 +165,7 @@ const EXAMPLE_PROMPTS: { label: string; prompt: string; icon: typeof Sparkles; a
 const TASK_TABS = [
   {
     avatar: businessAvatar,
-    label: "跟单成交",
+    label: "市场分析",
     expert: "业务专家",
     steps: [
       {
@@ -184,7 +184,37 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         prompt: "帮我对这个买家做深度背景调查，输出公司画像、采购实力和风险提示",
       },
       {
-        title: "​策略咨询",
+        title: "热门产品词",
+        desc: "挖掘搜索热词，锁定需求",
+        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
+      },
+    ],
+  },
+  {
+    avatar: operationAvatar,
+    label: "产品运营",
+    expert: "产品专家",
+    steps: [
+      {
+        title: "提炼卖点&SEO",
+        desc: "提炼核心卖点，优化排行",
+        prompt: "帮我提炼产品核心卖点，并优化标题、关键词和SEO描述",
+      },
+      { title: "营销素材生成", desc: "一键生成多平台营销图文", prompt: "帮我生成适合多平台发布的产品营销图文素材" },
+      {
+        title: "企业知识库",
+        desc: "AI 学习公司业务，沉淀企业画像",
+        prompt: "",
+      },
+    ],
+  },
+  {
+    avatar: trainingAvatar,
+    label: "询盘跟进",
+    expert: "培训专家",
+    steps: [
+      {
+        title: "策略咨询",
         desc: "制定跟进节奏与话术路径",
         prompt: "帮我为这个买家制定一套跟进策略，包括节奏、话术和下一步动作",
       },
@@ -194,40 +224,10 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
         prompt: "买家 GreenLife 采购 5kW hybrid inverter with UL1741 要求 Need 300 units first, price target FOB <$380/unit，生成个性化报价单",
         isNew: true,
       },
-    ],
-  },
-  {
-    avatar: operationAvatar,
-    label: "产品转化",
-    expert: "产品专家",
-    steps: [
-      {
-        title: "热门产品词",
-        desc: "挖掘搜索热词，锁定需求",
-        prompt: "帮我挖掘这个品类的热门产品词和海外买家常用搜索词",
-      },
-      {
-        title: "提炼卖点&SEO",
-        desc: "提炼核心卖点，优化排行",
-        prompt: "帮我提炼产品核心卖点，并优化标题、关键词和SEO描述",
-      },
-      { title: "营销素材生成", desc: "一键生成多平台营销图文", prompt: "帮我生成适合多平台发布的产品营销图文素材" },
-    ],
-  },
-  {
-    avatar: trainingAvatar,
-    label: "业务沉淀",
-    expert: "培训专家",
-    steps: [
       {
         title: "外贸问题解答",
         desc: "实时回答外贸业务实操问题",
         prompt: "我在外贸业务中遇到一些具体问题，想请教 AI 专家给出实操建议",
-      },
-      {
-        title: "企业知识库",
-        desc: "AI 学习公司业务，沉淀企业画像",
-        prompt: "",
       },
       {
         title: "经验资产沉淀",
