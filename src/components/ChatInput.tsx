@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Paperclip, Send, X, Link, MessageSquareQuote, Shield, ShieldCheck, ChevronDown } from "lucide-react";
+import { Paperclip, Send, X, Link, MessageSquareQuote, Shield, ShieldCheck, ChevronDown, Plus, Wand2 } from "lucide-react";
 import type { ChatQuote } from "./InquiryResultMessage";
 import {
   DropdownMenu,
@@ -131,9 +131,23 @@ const ChatInput = ({
               </div>
             ))
           ) : (
-            <button className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors active:scale-95">
-              <Paperclip className="w-5 h-5" />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors active:scale-95">
+                  <Plus className="w-5 h-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-44">
+                <DropdownMenuItem className="gap-2">
+                  <Paperclip className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm">上传附件</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="gap-2">
+                  <Wand2 className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm">选择技能</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
