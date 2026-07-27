@@ -128,10 +128,14 @@ export const BuyerProfileSheetContent = ({
   stage,
   updated,
   onClose,
+  noBackgroundReport = false,
+  onStartBackgroundCheck,
 }: {
   stage: string;
   updated: boolean;
   onClose: () => void;
+  noBackgroundReport?: boolean;
+  onStartBackgroundCheck?: () => void;
 }) => {
   const [bgOpen, setBgOpen] = useState(false);
   const analyses = [
@@ -202,6 +206,23 @@ export const BuyerProfileSheetContent = ({
 
       {/* Background report */}
       <section className="px-5 py-4 border-b border-border">
+        <h3 className="text-[12.5px] font-semibold text-foreground flex items-center gap-1.5 mb-2.5">
+          <Search className="w-3.5 h-3.5 text-primary" />
+          买家背调
+        </h3>
+        {noBackgroundReport ? (
+          <div className="rounded-xl border border-dashed border-border bg-muted/15 px-3 py-5 text-center">
+            <p className="text-[12.5px] text-muted-foreground">暂无背调记录</p>
+            <button
+              type="button"
+              onClick={() => onStartBackgroundCheck?.()}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-[12px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              <Search className="w-3.5 h-3.5" />
+              立即背调
+            </button>
+          </div>
+        ) : (
         <button
           type="button"
           onClick={() => setBgOpen(true)}
@@ -220,6 +241,7 @@ export const BuyerProfileSheetContent = ({
           </span>
           <ChevronRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
         </button>
+        )}
       </section>
 
       {/* Procurement intent */}
