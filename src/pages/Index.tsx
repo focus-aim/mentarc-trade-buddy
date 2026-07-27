@@ -59,6 +59,7 @@ import AppSidebar from "@/components/AppSidebar";
 import ModuleCard from "@/components/ModuleCard";
 import ChatInput, { ChatAttachment } from "@/components/ChatInput";
 import ChatDetail from "@/components/ChatDetail";
+import ResourceLibraryView from "@/components/ResourceLibraryView";
 import AIProfileDetail from "@/components/AIProfileDetail";
 import TeamManagementDialog from "@/components/TeamManagementDialog";
 import InquiryResultMessage, { BuyerBackgroundReport } from "@/components/InquiryResultMessage";
@@ -1136,63 +1137,7 @@ const Index = () => {
           isRetraining={isRetraining}
         />
       ) : showBoard ? (
-        <main className="flex-1 h-screen overflow-y-auto scrollbar-thin bg-background">
-          <div className="mx-auto w-full max-w-5xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
-            <section>
-              <h1 className="text-2xl font-bold text-foreground">今日待办推荐</h1>
-              <p className="mt-2 text-sm text-muted-foreground">
-                今日已为您搜集5条行业热品资讯，建议优先分析以下机会点。
-              </p>
-            </section>
-
-            <section className="mt-7 rounded-2xl border border-border/70 bg-muted/30 opacity-75 backdrop-blur-sm">
-              <div className="flex items-center gap-4 border-b border-border/60 px-5 py-4">
-                <img
-                  src={defaultProductBike}
-                  alt="智能健身热品示例"
-                  className="h-16 w-20 rounded-xl object-cover grayscale opacity-60"
-                  loading="lazy"
-                />
-                <div>
-                  <span className="text-xs font-semibold text-muted-foreground">今日主推热品</span>
-                  <h2 className="mt-1 text-base font-bold text-muted-foreground">智能居家健身设备组合</h2>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    低噪音、可折叠、APP训练计划，是今日更值得跟进的内容方向。
-                  </p>
-                </div>
-              </div>
-              <div className="divide-y divide-border/60">
-                {boardNews.map((item, index) => (
-                  <article
-                    key={item.title}
-                    className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div className="flex min-w-0 items-start gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-muted-foreground">
-                        {index + 1}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-bold text-muted-foreground">{item.title}</h3>
-                          <span className="rounded-md bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
-                            {item.tag}
-                          </span>
-                        </div>
-                        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{item.copy}</p>
-                      </div>
-                    </div>
-                    <button
-                      disabled
-                      className="shrink-0 cursor-not-allowed rounded-full bg-muted px-4 py-2 text-xs font-semibold text-muted-foreground opacity-70"
-                    >
-                      立即分析
-                    </button>
-                  </article>
-                ))}
-              </div>
-            </section>
-          </div>
-        </main>
+        <ResourceLibraryView />
       ) : showResults ? (
         activeBuyerId ? (
           <BuyerProfileDetail buyerId={activeBuyerId} onBack={() => setActiveBuyerId(null)} />
