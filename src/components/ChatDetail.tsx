@@ -1304,6 +1304,14 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
         </DialogContent>
       </Dialog>
     </div>
+    {resourcePanelOpen && (
+      <ConversationResourcePanel
+        onClose={() => setResourcePanelOpen(false)}
+        buyers={sessionBuyers}
+        results={sessionResults}
+      />
+    )}
+    </div>
   );
 };
 
