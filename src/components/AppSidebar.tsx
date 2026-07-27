@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, PanelLeftOpen } from "lucide-react";
+import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, PanelLeftOpen, Briefcase, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import mentarcIcon from "@/assets/mentarc-icon.png";
 
@@ -13,10 +13,21 @@ interface AppSidebarProps {
   activeView?: "new" | "board" | "results" | "market";
 }
 
-const navItems = [
+const topNavItems = [
   { icon: MessageSquarePlus, label: "发起任务", key: "new" },
-  { icon: FolderArchive, label: "买家档案", key: "results" },
-  { icon: Archive, label: "资源管理", key: "board" },
+];
+
+const businessAssets = {
+  icon: Briefcase,
+  label: "业务资产",
+  key: "assets",
+  children: [
+    { icon: FolderArchive, label: "买家档案", key: "results" },
+    { icon: Archive, label: "资源管理", key: "board" },
+  ],
+};
+
+const bottomNavItems = [
   { icon: Users, label: "专家&连接器", key: "market" },
 ];
 
@@ -57,10 +68,40 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
           </button>
         </div>
         <nav className="mt-6 space-y-1">
-          {navItems.map((item) => (
+          {topNavItems.map((item) => (
             <button
               key={item.key}
-              onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
+              onClick={item.key === "new" ? onNewTask : undefined}
+              className={cn(
+                "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
+                activeView === item.key
+                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+              title={item.label}
+            >
+              <item.icon className="w-[18px] h-[18px]" />
+            </button>
+          ))}
+          <button
+            onClick={() => {
+              setAssetsOpen(true);
+              setIsCollapsed(false);
+            }}
+            className={cn(
+              "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
+              activeView === "results" || activeView === "board"
+                ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+            title={businessAssets.label}
+          >
+            <businessAssets.icon className="w-[18px] h-[18px]" />
+          </button>
+          {bottomNavItems.map((item) => (
+            <button
+              key={item.key}
+              onClick={item.key === "market" ? onMarketClick : undefined}
               className={cn(
                 "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
                 activeView === item.key
@@ -76,6 +117,8 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
       </aside>
     );
   }
+
+  const [assetsOpen, setAssetsOpen] = useState(activeView === "results" || activeView === "board");
 
   return (
     <aside className="w-[284px] shrink-0 border-r border-border/70 bg-sidebar-background/95 backdrop-blur-sm flex flex-col h-screen transition-all duration-300">
@@ -117,10 +160,70 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
 
       {/* Nav */}
       <nav className="px-5 pt-5 space-y-1">
-        {navItems.map((item) => (
+        {topNavItems.map((item) => (
           <button
             key={item.key}
-            onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
+            onClick={item.key === "new" ? onNewTask : undefined}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+              activeView === item.key
+                ? "bg-muted text-foreground"
+                : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+            )}
+          >
+            <item.icon className="w-[18px] h-[18px]" />
+            <span>{item.label}</span>
+          </button>
+        ))}
+
+        {/* 业务资产 — 可折叠 */}
+        <div className="space-y-0.5">
+          <button
+            type="button"
+            onClick={() => setAssetsOpen((v) => !v)}
+            className={cn(
+              "w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+              activeView === "results" || activeView === "board"
+                ? "bg-muted text-foreground"
+                : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <businessAssets.icon className="w-[18px] h-[18px]" />
+              <span>{businessAssets.label}</span>
+            </div>
+            <ChevronDown
+              className={cn(
+                "w-4 h-4 text-muted-foreground transition-transform duration-200",
+                assetsOpen ? "rotate-180" : ""
+              )}
+            />
+          </button>
+          {assetsOpen && (
+            <div className="pl-4 space-y-0.5">
+              {businessAssets.children.map((child) => (
+                <button
+                  key={child.key}
+                  onClick={child.key === "results" ? onResultsClick : child.key === "board" ? onBoardClick : undefined}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium transition-all text-left",
+                    activeView === child.key
+                      ? "bg-muted text-foreground"
+                      : "text-sidebar-foreground hover:bg-muted/60 hover:text-foreground"
+                  )}
+                >
+                  <child.icon className="w-[18px] h-[18px]" />
+                  <span>{child.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {bottomNavItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={item.key === "market" ? onMarketClick : undefined}
             className={cn(
               "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
               activeView === item.key
