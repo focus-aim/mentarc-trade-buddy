@@ -68,10 +68,40 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
           </button>
         </div>
         <nav className="mt-6 space-y-1">
-          {navItems.map((item) => (
+          {topNavItems.map((item) => (
             <button
               key={item.key}
-              onClick={item.key === "new" ? onNewTask : item.key === "board" ? onBoardClick : item.key === "results" ? onResultsClick : item.key === "market" ? onMarketClick : undefined}
+              onClick={item.key === "new" ? onNewTask : undefined}
+              className={cn(
+                "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
+                activeView === item.key
+                  ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+              title={item.label}
+            >
+              <item.icon className="w-[18px] h-[18px]" />
+            </button>
+          ))}
+          <button
+            onClick={() => {
+              setAssetsOpen(true);
+              setIsCollapsed(false);
+            }}
+            className={cn(
+              "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
+              activeView === "results" || activeView === "board"
+                ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            )}
+            title={businessAssets.label}
+          >
+            <businessAssets.icon className="w-[18px] h-[18px]" />
+          </button>
+          {bottomNavItems.map((item) => (
+            <button
+              key={item.key}
+              onClick={item.key === "market" ? onMarketClick : undefined}
               className={cn(
                 "w-10 h-10 flex items-center justify-center rounded-lg transition-colors",
                 activeView === item.key
@@ -87,6 +117,8 @@ const AppSidebar = ({ onNewTask, onBoardClick, onResultsClick, onMarketClick, co
       </aside>
     );
   }
+
+  const [assetsOpen, setAssetsOpen] = useState(activeView === "results" || activeView === "board");
 
   return (
     <aside className="w-[284px] shrink-0 border-r border-border/70 bg-sidebar-background/95 backdrop-blur-sm flex flex-col h-screen transition-all duration-300">
