@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, PanelLeftOpen } from "lucide-react";
+import { MessageSquarePlus, Archive, FolderArchive, Users, Monitor, Download, PanelLeftOpen, Briefcase, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import mentarcIcon from "@/assets/mentarc-icon.png";
 
@@ -13,10 +13,21 @@ interface AppSidebarProps {
   activeView?: "new" | "board" | "results" | "market";
 }
 
-const navItems = [
+const topNavItems = [
   { icon: MessageSquarePlus, label: "发起任务", key: "new" },
-  { icon: FolderArchive, label: "买家档案", key: "results" },
-  { icon: Archive, label: "资源管理", key: "board" },
+];
+
+const businessAssets = {
+  icon: Briefcase,
+  label: "业务资产",
+  key: "assets",
+  children: [
+    { icon: FolderArchive, label: "买家档案", key: "results" },
+    { icon: Archive, label: "资源管理", key: "board" },
+  ],
+};
+
+const bottomNavItems = [
   { icon: Users, label: "专家&连接器", key: "market" },
 ];
 
