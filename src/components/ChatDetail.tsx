@@ -5,7 +5,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TeamManagementDialog from "./TeamManagementDialog";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PanelRight, Pencil } from "lucide-react";
+import ConversationResourcePanel from "./ConversationResourcePanel";
 
 import ChatInput, { ChatAttachment } from "./ChatInput";
 import MindFlowMessage, { RichStep } from "./MindFlowMessage";
@@ -527,6 +528,16 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
   const [showCompetitorDialog, setShowCompetitorDialog] = useState(false);
   const [showingDemoMindFlow, setShowingDemoMindFlow] = useState(false);
   const [buyerPanelOpen, setBuyerPanelOpen] = useState(false);
+  const [resourcePanelOpen, setResourcePanelOpen] = useState(true);
+
+  // 会话主题提炼：取首条用户消息的核心语句
+  const sessionTopic = useMemo(() => {
+    const raw = (initialUserMessage?.trim() || config.taskName || "新会话")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean)[0] || config.taskName;
+    return raw.length > 26 ? `${raw.slice(0, 26)}…` : raw;
+  }, [initialUserMessage, config.taskName]);
   const [assetPanelOpen, setAssetPanelOpen] = useState(false);
   const [showingBuyerBgMindFlow, setShowingBuyerBgMindFlow] = useState(initialIsBuyerBg);
   const [showingEmailsMindFlow, setShowingEmailsMindFlow] = useState(false);
@@ -1059,19 +1070,52 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
     setMessages(newMessages);
   };
 
+  const sessionBuyers = useMemo(() => {
+    if (moduleTitle !== "业务专家") return [];
+    return [
+      { company: "Bergmann Home Supplies GmbH", stage: "首轮报价已发出", fields: ["邮箱", "官网", "所在地"] },
+      { company: "Nordwind Lifestyle AB", stage: "初次接洽", fields: ["邮箱", "所在地"] },
+    ];
+  }, [moduleTitle]);
+
+  const sessionResults = useMemo(
+    () =>
+      messages
+        .map((m) => buildResultFor(m))
+        .filter((r): r is { node: ReactNode; label: string } => !!r)
+        .map((r) => ({ title: r.label, meta: "解析 · 刚刚" })),
+    [messages, buildResultFor]
+  );
+
 
 
   return (
-    <div className="flex-1 flex flex-col h-screen overflow-hidden">
+    <div className="flex-1 flex h-screen overflow-hidden">
+    <div className="flex-1 min-w-0 flex flex-col h-screen overflow-hidden">
       <div className="flex items-center gap-2 px-6 pt-4 pb-3">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 px-2 py-1 -ml-2 rounded-lg text-base font-semibold text-foreground hover:bg-muted transition-colors active:scale-95"
+          aria-label="返回"
+          className="p-1.5 -ml-2 rounded-lg text-muted-foreground hover:bg-muted transition-colors active:scale-95"
         >
           <ArrowLeft className="w-4 h-4" />
-          {config.taskName}
         </button>
+        <h1 className="text-base font-semibold text-foreground truncate max-w-[46%]" title={sessionTopic}>
+          {sessionTopic}
+        </h1>
+        <Pencil className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         <div className="ml-auto flex items-center gap-3">
+          <button
+            onClick={() => setResourcePanelOpen((v) => !v)}
+            aria-label="会话资源"
+            className={`hidden lg:flex items-center justify-center h-8 w-8 rounded-lg border transition-colors ${
+              resourcePanelOpen
+                ? "border-primary/40 bg-primary/10 text-primary"
+                : "border-border/60 bg-card text-muted-foreground hover:bg-muted"
+            }`}
+          >
+            <PanelRight className="w-4 h-4" />
+          </button>
           <button
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border/60 text-sm font-medium text-foreground hover:bg-muted transition-colors cursor-pointer"
           >
@@ -1285,6 +1329,14 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+    {resourcePanelOpen && (
+      <ConversationResourcePanel
+        onClose={() => setResourcePanelOpen(false)}
+        buyers={sessionBuyers}
+        results={sessionResults}
+      />
+    )}
     </div>
   );
 };
