@@ -2076,10 +2076,37 @@ const Index = () => {
                         <Paperclip className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">选择附件</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="gap-2">
-                        <Wand2 className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">选择技能</span>
-                      </DropdownMenuItem>
+                      <div
+                        className="relative"
+                        onMouseEnter={() => setSkillSubmenuOpen(true)}
+                        onMouseLeave={() => setSkillSubmenuOpen(false)}
+                      >
+                        <DropdownMenuItem className="gap-2 w-full cursor-default">
+                          <Wand2 className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">选择技能</span>
+                          <ChevronRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+                        </DropdownMenuItem>
+                        {skillSubmenuOpen && (
+                          <div className="absolute left-full top-0 ml-1 w-48 rounded-xl border border-border/70 bg-card p-2 shadow-lg z-50">
+                            <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                              已添加技能
+                            </div>
+                            <button className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                              <Sparkles className="h-4 w-4 text-primary" />
+                              AI麦可
+                            </button>
+                            <button className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                              <Video className="h-4 w-4 text-secondary" />
+                              营销视频
+                            </button>
+                            <div className="my-1 h-px bg-border" />
+                            <button className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                              <Plus className="h-4 w-4" />
+                              自定义技能
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <button
