@@ -238,6 +238,32 @@ Dear Sirs, do you have 5kW hybrid inverter with UL1741? Need 300 units first, pr
 ];
 
 // 简约浅色案例示意图：根据 step.title 渲染不同的 SVG-like 视觉
+const STEP_ICONS: Record<string, typeof Search> = {
+  分析询盘: FileSearch,
+  背调买家: Search,
+  策略咨询: Target,
+  生成报价单: FileText,
+  热门产品词: TrendingUp,
+  "提炼卖点&SEO": Sparkles,
+  营销素材生成: Image,
+  外贸问题解答: HelpCircle,
+  企业知识库: Building2,
+  经验资产沉淀: Archive,
+};
+
+const TAB_ICONS: Record<string, typeof Search> = {
+  跟单成交: UserRound,
+  产品转化: Package,
+  业务沉淀: Archive,
+};
+
+const RECOMMENDED_CASES = [
+  { title: "巴西太阳能项目询盘拆解", tag: "跟单成交" },
+  { title: "德国厨具批发商画像", tag: "跟单成交" },
+  { title: "中东健身房连锁商机", tag: "产品转化" },
+  { title: "北美买家跟进节奏", tag: "业务沉淀" },
+];
+
 const StepPreview = ({ title }: { title: string }) => {
   const baseWrap = "relative h-28 w-full overflow-hidden rounded-xl border border-border/60";
 
@@ -2149,39 +2175,34 @@ const Index = () => {
 
           <div className="relative z-10 flex-1 flex flex-col px-4 sm:px-6 lg:px-8 pb-5">
             <section
-              className="mx-auto w-full max-w-5xl pt-12 text-center opacity-0 animate-fade-up"
+              className="mx-auto w-full max-w-4xl pt-14 text-center opacity-0 animate-fade-up"
               style={{ animationDelay: "80ms" }}
             >
               <h1 className="text-3xl md:text-[34px] font-bold leading-tight tracking-tight text-foreground">
-                发起一个任务，让 <span className="text-aurora">AI 专家</span> 帮你推进
+                业务问题，让贸探来帮你
               </h1>
             </section>
 
             <div
-              className="mx-auto mt-8 w-full max-w-3xl opacity-0 animate-fade-up"
+              className="mx-auto mt-8 w-full max-w-4xl opacity-0 animate-fade-up"
               style={{ animationDelay: "180ms" }}
             >
-              <div className="rounded-2xl border border-border/70 bg-card/85 backdrop-blur-sm shadow-lg shadow-primary/8 p-3.5">
+              <div className="rounded-2xl border border-border/70 bg-card p-4">
                 <textarea
                   key={inputKey}
                   value={prefillValue}
                   onChange={(e) => setPrefillValue(e.target.value)}
                   placeholder="告诉外贸 AI 专家你想做什么，例如：帮我分析一封来自巴西客户的询盘..."
-                  rows={3}
-                  className="w-full resize-none bg-transparent px-1 text-base text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  rows={4}
+                  className="w-full resize-none bg-transparent px-1 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
                 <div className="mt-1 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                      aria-label="添加附件"
-                    >
-                      <Paperclip className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                    <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                      {selectedTaskTab.label}
-                    </span>
-                  </div>
+                  <button
+                    className="inline-flex items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    aria-label="添加附件"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </button>
                   <button
                     onClick={() => {
                       const isBuyerBg = /深度?背景调查|买家背调|生成买家背调报告|深度背调|公司画像.*采购实力|背景调查.*风险/.test(prefillValue);
@@ -2190,129 +2211,104 @@ const Index = () => {
                       setChatInitialMessage(prefillValue);
                       setActiveModule(isBuyerBg || isFollowup || isInquirySummary ? "业务专家" : selectedModuleTitle);
                     }}
-                    className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary/90 transition-colors"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                     aria-label="发送"
                   >
                     <Send className="h-4 w-4" />
                   </button>
                 </div>
               </div>
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-base font-semibold text-muted-foreground">
-                {TASK_TABS.map((tab) => (
-                  <button
-                    key={tab.label}
-                    onClick={() => setActiveTaskTab(tab.label)}
-                    className={cn(
-                      "inline-flex items-center gap-3 rounded-full border px-5 py-2.5 transition-colors",
-                      activeTaskTab === tab.label
-                        ? "border-border bg-card text-foreground shadow-sm"
-                        : "border-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                    )}
-                  >
-                    <span className="h-8 w-8 overflow-hidden rounded-full border border-primary/15 bg-accent shadow-sm">
-                      <img
-                        src={tab.avatar}
-                        alt={tab.expert}
-                        className="h-full w-full object-cover object-top"
-                        loading="lazy"
-                      />
-                    </span>
-                    {tab.label}
-                  </button>
-                ))}
+
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                {TASK_TABS.map((tab) => {
+                  const TabIcon = TAB_ICONS[tab.label] ?? Sparkles;
+                  const active = activeTaskTab === tab.label;
+                  return (
+                    <button
+                      key={tab.label}
+                      onClick={() => setActiveTaskTab(tab.label)}
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                        active
+                          ? "border-primary text-primary bg-card"
+                          : "border-border/70 bg-card text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      <TabIcon className="h-4 w-4" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             <section
-              className="mx-auto mt-6 w-full max-w-5xl opacity-0 animate-fade-up"
+              className="mx-auto mt-12 w-full max-w-5xl opacity-0 animate-fade-up"
               style={{ animationDelay: "300ms" }}
             >
-              <p className="mb-3 flex items-center gap-2 text-sm font-bold text-foreground">
-                <Sparkles className="h-4 w-4 text-primary" />
-                AI专家建议行动：
-              </p>
-              <div
-                className={cn(
-                  "grid gap-4",
-                  selectedTaskTab.label === "跟单成交"
-                    ? "md:grid-cols-2 lg:grid-cols-4"
-                    : "md:grid-cols-3",
-                )}
-              >
+              <p className="mb-3 text-sm font-semibold text-foreground">试试以下任务</p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {selectedTaskTab.steps.map((step) => {
-                  const isProfileLink = step.title === "企业知识库" || step.title === "经验资产沉淀" || step.title === "企业知识画像" || step.title === "团队经验技巧";
-                  const isPromptFill = step.title === "外贸问题解答";
-                  const stepAny = step as { soon?: boolean; isNew?: boolean };
+                  const isProfileLink =
+                    step.title === "企业知识库" ||
+                    step.title === "经验资产沉淀" ||
+                    step.title === "企业知识画像" ||
+                    step.title === "团队经验技巧";
+                  const StepIcon = STEP_ICONS[step.title.replace(/\u200b/g, "")] ?? Sparkles;
                   return (
-                    <article
+                    <button
                       key={step.title}
                       onClick={
-                        isProfileLink
-                          ? handleOpenProfile
-                          : isPromptFill
-                            ? () => handleUseCasePrompt(step.prompt)
-                            : undefined
+                        isProfileLink ? handleOpenProfile : () => handleUseCasePrompt(step.prompt)
                       }
-                      className={cn(
-                        "group relative overflow-hidden rounded-2xl border border-border/70 bg-card/80 p-4 shadow-sm shadow-primary/3",
-                        stepAny.soon && "bg-muted/40 opacity-75",
-                        (isProfileLink || isPromptFill) &&
-                          "cursor-pointer transition-all hover:border-primary/50 hover:shadow-md hover:shadow-primary/10",
-                      )}
+                      className="group rounded-2xl border border-border/70 bg-card p-4 text-left transition-colors hover:border-primary/50"
                     >
                       <div className="flex items-center gap-2">
-                        <h2 className="text-base font-bold text-foreground">{step.title}</h2>
-                        {stepAny.isNew && (
-                          <span className="rounded-full bg-[hsl(0,90%,55%)] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
-                            New
-                          </span>
-                        )}
-                        {stepAny.soon && (
-                          <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
-                            即将上线
-                          </span>
-                        )}
+                        <StepIcon className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
+                        <span className="text-[15px] font-semibold text-foreground">{step.title}</span>
                       </div>
-                      <p className="mt-1 text-sm text-muted-foreground">{step.desc}</p>
-                      <div className="mt-4">
-                        <StepPreview title={step.title} />
-                      </div>
-                      {!stepAny.soon && !isProfileLink && !isPromptFill && (
-                        <div className="absolute inset-x-0 bottom-0 flex translate-y-3 items-center justify-center gap-2 bg-card/90 px-4 py-4 opacity-0 backdrop-blur-sm transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                          <button
-                            onClick={() => {
-                              setCasePrompt(step.prompt);
-                              setCaseDialogOpen(true);
-                            }}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground shadow-sm shadow-primary/20 hover:bg-primary/90 transition-colors"
-                          >
-                            <Eye className="h-3.5 w-3.5" />
-                            查看详情
-                          </button>
-                          <button
-                            onClick={() => handleUseCasePrompt(step.prompt)}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-card px-3 py-2 text-xs font-semibold text-primary hover:bg-accent transition-colors"
-                          >
-                            <Wand2 className="h-3.5 w-3.5" />
-                            做同款
-                          </button>
-                        </div>
-                      )}
-                      {isProfileLink && (
-                        <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                          查看档案
-                          <ArrowRight className="h-3 w-3" />
-                        </div>
-                      )}
-                      {isPromptFill && (
-                        <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
-                          填入提示词
-                          <ArrowRight className="h-3 w-3" />
-                        </div>
-                      )}
-                    </article>
+                      <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{step.desc}</p>
+                    </button>
                   );
                 })}
+              </div>
+            </section>
+
+            <section
+              className="mx-auto mt-12 w-full max-w-5xl pb-4 opacity-0 animate-fade-up"
+              style={{ animationDelay: "380ms" }}
+            >
+              <div className="mb-3 flex items-baseline gap-2">
+                <p className="text-sm font-semibold text-foreground">推荐案例</p>
+                <span className="text-xs text-muted-foreground">看看别的外贸人在用贸探做什么</span>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {RECOMMENDED_CASES.map((item) => (
+                  <article
+                    key={item.title}
+                    className="overflow-hidden rounded-xl border border-border/70 bg-card transition-colors hover:border-primary/50"
+                  >
+                    <div className="relative border-b border-border/60 bg-muted/40 p-3">
+                      <div className="h-1.5 w-full rounded-full bg-primary" />
+                      <div className="mt-3 rounded-lg bg-card p-3">
+                        <div className="h-2 w-10 rounded-full bg-primary/80" />
+                        <div className="mt-2 space-y-1.5">
+                          <div className="h-1.5 w-full rounded-full bg-foreground/10" />
+                          <div className="h-1.5 w-5/6 rounded-full bg-foreground/10" />
+                          <div className="h-1.5 w-2/3 rounded-full bg-foreground/10" />
+                        </div>
+                        <div className="mt-3 flex items-center gap-1.5">
+                          <div className="h-3 w-10 rounded-full bg-primary" />
+                          <div className="h-3 w-6 rounded-full bg-foreground/10" />
+                        </div>
+                      </div>
+                      <span className="absolute right-3 top-3 rounded bg-card px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                        {item.tag}
+                      </span>
+                    </div>
+                    <p className="px-3 py-3 text-[13px] font-medium text-foreground">{item.title}</p>
+                  </article>
+                ))}
               </div>
             </section>
           </div>
