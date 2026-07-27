@@ -274,6 +274,18 @@ const ConversationResourcePanel = ({
           </>
         )}
       </div>
+
+      <Sheet open={!!detailBuyer} onOpenChange={(o) => !o && setDetailBuyer(null)}>
+        <SheetContent side="right" className="w-full sm:max-w-[480px] p-0 overflow-y-auto scrollbar-thin">
+          {detailBuyer && (
+            <BuyerProfileSheetContent
+              stage={detailBuyer.stage}
+              updated={false}
+              onClose={() => setDetailBuyer(null)}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
     </aside>
   );
 };
