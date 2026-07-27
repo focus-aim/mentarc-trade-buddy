@@ -20,6 +20,8 @@ interface AppSidebarProps {
 const navItems = [
   { icon: MessageSquarePlus, label: "发起任务", key: "new" },
   { icon: FolderArchive, label: "买家档案", key: "results" },
+  { icon: Archive, label: "资源管理", key: "board" },
+  { icon: Users, label: "专家&连接器", key: "market" },
 ];
 
 const RECENT_CONVERSATIONS = [
