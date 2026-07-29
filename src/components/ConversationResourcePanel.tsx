@@ -435,30 +435,32 @@ const ConversationResourcePanel = ({
             </section>
 
             <section className="px-5 pb-6">
-              <SectionTitle title="记忆" />
+              <SectionTitle title="AI 记忆" />
               <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-4">
-                {aiMemoryGroups.map((g) => (
-                  <div key={g.label}>
-                    <p className="mb-2 text-[13px] text-muted-foreground">
-                      {g.label}（{g.items.length}）
-                    </p>
-                    <div className="space-y-2">
-                      {g.items.map((it) => (
-                        <div
-                          key={it.text}
-                          className="flex items-start gap-2 px-1 py-0.5"
-                        >
-                          {it.icon === "up" ? (
-                            <ArrowUp className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                          ) : (
-                            <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-600" />
-                          )}
-                          <span className="text-[13px] leading-relaxed text-foreground">{it.text}</span>
-                        </div>
-                      ))}
+                {aiMemoryGroups
+                  .filter((g) => g.label !== "记忆")
+                  .map((g) => (
+                    <div key={g.label}>
+                      <p className="mb-2 text-[13px] text-muted-foreground">
+                        {g.label}（{g.items.length}）
+                      </p>
+                      <div className="space-y-2">
+                        {g.items.map((it) => (
+                          <div
+                            key={it.text}
+                            className="flex items-start gap-2 px-1 py-0.5"
+                          >
+                            {it.icon === "up" ? (
+                              <ArrowUp className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                            ) : (
+                              <Check className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-600" />
+                            )}
+                            <span className="text-[13px] leading-relaxed text-foreground">{it.text}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </section>
           </>
