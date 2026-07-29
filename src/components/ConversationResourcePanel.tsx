@@ -174,6 +174,7 @@ const TOPIC_AI_MEMORY: Record<string, AiMemoryGroup[]> = {
   keyword: [
     { label: "技能", items: [{ icon: "check", text: "关键词分层（主词 / 场景词 / 参数词）" }] },
     { label: "画像", items: [{ icon: "up", text: "关注旺季前的词布局节奏，偏好可直接落地的词表" }] },
+    { label: "经验", items: [{ icon: "check", text: "旺季前 6 周布局长尾词效果最佳" }] },
     { label: "记忆", items: [
       { icon: "check", text: "主力市场：北美" },
       { icon: "check", text: "核心品类：便携储能 / 家用备电" },
@@ -182,6 +183,7 @@ const TOPIC_AI_MEMORY: Record<string, AiMemoryGroup[]> = {
   detail: [
     { label: "技能", items: [{ icon: "check", text: "强化 LED 产品卖点表达" }] },
     { label: "画像", items: [{ icon: "up", text: "偏好简洁直给的表达，参数需保留占位" }] },
+    { label: "经验", items: [{ icon: "check", text: "首屏 3 个卖点转化最优" }] },
     { label: "记忆", items: [
       { icon: "check", text: "认证与实测数据放首屏" },
       { icon: "check", text: "标题需嵌入核心搜索词" },
@@ -190,6 +192,7 @@ const TOPIC_AI_MEMORY: Record<string, AiMemoryGroup[]> = {
   material: [
     { label: "技能", items: [{ icon: "check", text: "一稿多改，适配平台调性" }] },
     { label: "画像", items: [{ icon: "up", text: "希望配套发布排期建议" }] },
+    { label: "经验", items: [{ icon: "check", text: "同一素材分平台改写可提升互动" }] },
     { label: "记忆", items: [
       { icon: "check", text: "投放平台：Facebook / Instagram / LinkedIn" },
       { icon: "check", text: "统一 CTA 引导至产品页" },
@@ -198,6 +201,7 @@ const TOPIC_AI_MEMORY: Record<string, AiMemoryGroup[]> = {
   media: [
     { label: "技能", items: [{ icon: "check", text: "短视频分镜结构复用" }] },
     { label: "画像", items: [{ icon: "up", text: "偏好痛点开场、15 秒讲清一个卖点" }] },
+    { label: "经验", items: [{ icon: "check", text: "前 3 秒抛出痛点完播率更高" }] },
     { label: "记忆", items: [
       { icon: "check", text: "结尾统一品牌与 CTA" },
       { icon: "check", text: "中段展示实测续航" },
@@ -206,6 +210,7 @@ const TOPIC_AI_MEMORY: Record<string, AiMemoryGroup[]> = {
   default: [
     { label: "技能", items: [{ icon: "check", text: "强化 LED 产品卖点表达" }] },
     { label: "画像", items: [{ icon: "up", text: "专注精细化谈判策略，善于用系统化方法处理客户议价" }] },
+    { label: "经验", items: [{ icon: "check", text: "议价阶段先给方案再谈价格更易成交" }] },
     { label: "记忆", items: [
       { icon: "check", text: "默认报价币种：USD" },
       { icon: "check", text: "已保存邮件签名" },
@@ -431,7 +436,7 @@ const ConversationResourcePanel = ({
 
             <section className="px-5 pb-6">
               <SectionTitle title="AI 记忆" />
-              <div className="space-y-4">
+              <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-4">
                 {aiMemoryGroups.map((g) => (
                   <div key={g.label}>
                     <p className="mb-2 text-[13px] text-muted-foreground">
@@ -441,7 +446,7 @@ const ConversationResourcePanel = ({
                       {g.items.map((it) => (
                         <div
                           key={it.text}
-                          className="flex items-start gap-2 rounded-xl border border-border/60 bg-background/60 px-3 py-2"
+                          className="flex items-start gap-2 px-1 py-0.5"
                         >
                           {it.icon === "up" ? (
                             <ArrowUp className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
