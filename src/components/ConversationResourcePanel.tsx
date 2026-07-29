@@ -168,6 +168,7 @@ const TOPIC_MEMORIES: Record<string, ConvMemory[]> = {
 };
 
 const ConversationResourcePanel = ({
+
   onClose,
   buyers,
   results,
