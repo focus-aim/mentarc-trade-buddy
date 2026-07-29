@@ -1291,6 +1291,7 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
         buyers={sessionBuyers}
         results={sessionResults}
         businessDisabled={moduleTitle !== "业务专家"}
+        topicKey={conversationTopicKey}
       />
     )}
     </div>
