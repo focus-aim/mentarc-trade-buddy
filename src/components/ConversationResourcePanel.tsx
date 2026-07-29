@@ -53,14 +53,103 @@ const STATUS_STYLE: Record<StepStatus, { dot: string; title: string }> = {
   todo: { dot: "bg-border", title: "text-muted-foreground" },
 };
 
-const CONVERSATION_FILES = [
-  { name: "外贸报价单模板.xlsx", icon: FileSpreadsheet, tone: "text-emerald-600 bg-emerald-50" },
-  { name: "create_quotation_template.py", icon: FileCode2, tone: "text-foreground bg-muted" },
-  { name: "add_data_validation.py", icon: FileCode2, tone: "text-foreground bg-muted" },
-];
+type ConvFile = { name: string; icon: typeof FileSpreadsheet; tone: string };
+type ConvMemory = {
+  date: string;
+  topic: string;
+  strategy: string;
+  background: string;
+  points: string[];
+  demand: string;
+  output: string;
+  notes: string[];
+};
 
-const CONVERSATION_MEMORIES = [
-  {
+const XLSX = "text-emerald-600 bg-emerald-50";
+const DOC = "text-primary bg-primary/10";
+const CODE = "text-foreground bg-muted";
+
+const TOPIC_FILES: Record<string, ConvFile[]> = {
+  keyword: [
+    { name: "热门产品词_趋势报告.xlsx", icon: FileSpreadsheet, tone: XLSX },
+    { name: "买家搜索词_长尾清单.xlsx", icon: FileSpreadsheet, tone: XLSX },
+    { name: "关键词_竞品覆盖对比.md", icon: FileText, tone: DOC },
+  ],
+  detail: [
+    { name: "产品详情页_文案初稿.md", icon: FileText, tone: DOC },
+    { name: "卖点提炼_对照表.xlsx", icon: FileSpreadsheet, tone: XLSX },
+  ],
+  material: [
+    { name: "多平台营销图文_文案包.md", icon: FileText, tone: DOC },
+    { name: "发布排期_建议表.xlsx", icon: FileSpreadsheet, tone: XLSX },
+  ],
+  media: [
+    { name: "社媒短视频_脚本.md", icon: FileText, tone: DOC },
+    { name: "产品图_生成参数.json", icon: FileCode2, tone: CODE },
+  ],
+  default: [
+    { name: "外贸报价单模板.xlsx", icon: FileSpreadsheet, tone: XLSX },
+    { name: "create_quotation_template.py", icon: FileCode2, tone: CODE },
+    { name: "add_data_validation.py", icon: FileCode2, tone: CODE },
+  ],
+};
+
+const TOPIC_MEMORIES: Record<string, ConvMemory[]> = {
+  keyword: [
+    {
+      date: "2026-07-28",
+      topic: "产品热门词与买家搜索习惯",
+      strategy: "高潜力词优先 + 长尾词补量",
+      background: "品类聚焦便携储能 / 家用备电，目标市场以北美为主",
+      points: [
+        "solar generator for home backup 搜索量稳步上升，作为核心主词",
+        "emergency power backup for fridge 转化意图强，适合详情页卖点承接",
+        "避免与竞品高度重合的宽泛词，优先场景化长尾词",
+        "词表按“主词 / 场景词 / 参数词”三层落地",
+      ],
+      demand: "输出可直接用于产品页与广告的关键词清单",
+      output: "热门产品词_趋势报告.xlsx（含搜索量与竞争度）",
+      notes: ["用户关注旺季前的词布局节奏", "偏好把关键词直接落到产品详情文案"],
+    },
+  ],
+  detail: [
+    {
+      date: "2026-07-28",
+      topic: "产品详情页内容生成",
+      strategy: "场景化开头 + 参数可信化",
+      background: "买家为海外零售与分销渠道，关注认证与实测数据",
+      points: ["标题嵌入核心搜索词", "卖点按使用场景组织，而非罗列参数", "认证与实测数据放在首屏承接信任"],
+      demand: "生成标题、卖点与描述全套文案",
+      output: "产品详情页_文案初稿.md",
+      notes: ["用户偏好简洁直给的表达", "需保留可替换的参数占位"],
+    },
+  ],
+  material: [
+    {
+      date: "2026-07-28",
+      topic: "多平台营销图文素材",
+      strategy: "一稿多改，适配平台调性",
+      background: "投放平台为 Facebook / Instagram / LinkedIn",
+      points: ["同一卖点按平台改写语气与长度", "首图强调使用场景", "统一 CTA 引导至产品页"],
+      demand: "生成可直接发布的图文素材包",
+      output: "多平台营销图文_文案包.md",
+      notes: ["用户希望配套发布排期建议"],
+    },
+  ],
+  media: [
+    {
+      date: "2026-07-28",
+      topic: "社媒图片与短视频素材",
+      strategy: "痛点开场 + 15 秒内讲清一个卖点",
+      background: "面向海外社媒推广，以短视频为主要形式",
+      points: ["前 3 秒呈现停电场景痛点", "中段展示实测续航", "结尾统一品牌与 CTA"],
+      demand: "输出短视频脚本与配图生成参数",
+      output: "社媒短视频_脚本.md",
+      notes: ["用户偏好可直接复用的分镜结构"],
+    },
+  ],
+  default: [
+    {
     date: "2026-07-20",
     topic: "外贸价格谈判策略",
     strategy: "价格梯度 + 选择性让步",
@@ -74,20 +163,23 @@ const CONVERSATION_MEMORIES = [
     demand: "将策略整理成谈判话术库",
     output: "negotiation-scripts.md（谈判话术库文档）",
     notes: ["客户可能从事外贸跟单或业务工作", "专注精细化谈判策略，善于用系统化方法处理客户议价", "本次生成了完整的谈判话术库文档"],
-  },
-];
+    },
+  ],
+};
 
 const ConversationResourcePanel = ({
   onClose,
   buyers,
   results,
   businessDisabled = false,
+  topicKey = "default",
 }: {
   onClose: () => void;
   buyers: ConversationBuyerRef[];
   results: ConversationResultRef[];
   memories?: ConversationMemoryRef[];
   businessDisabled?: boolean;
+  topicKey?: string;
 }) => {
   const [tab, setTab] = useState<"business" | "conversation">(
     businessDisabled ? "conversation" : "business",
@@ -95,6 +187,8 @@ const ConversationResourcePanel = ({
   const [detailBuyer, setDetailBuyer] = useState<ConversationBuyerRef | null>(null);
   const [filesOpen, setFilesOpen] = useState(true);
   const [knowledgeOpen, setKnowledgeOpen] = useState(false);
+  const conversationFiles = TOPIC_FILES[topicKey] ?? TOPIC_FILES.default;
+  const conversationMemories = TOPIC_MEMORIES[topicKey] ?? TOPIC_MEMORIES.default;
 
   return (
     <aside className="hidden lg:flex w-[400px] shrink-0 flex-col h-screen border-l border-border/60 bg-card/80 backdrop-blur-sm">
