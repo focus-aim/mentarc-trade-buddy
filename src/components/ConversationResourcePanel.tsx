@@ -357,7 +357,7 @@ const ConversationResourcePanel = ({
           <>
             <section className="px-5 py-5">
               <SectionTitle
-                title={`文件（${conversationFiles.length}）`}
+                title={`关键成果（${conversationFiles.length}）`}
                 right={
                   <button
                     onClick={() => setFilesOpen((v) => !v)}
