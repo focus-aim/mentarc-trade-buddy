@@ -478,6 +478,14 @@ const ChatDetail = ({ moduleTitle, onBack, initialUserMessage, onOpenTraining }:
   }, [moduleTitle]);
 
   const initialIsKeyword = moduleTitle === "运营专家" && isKeywordPrompt(initialUserMessage);
+  const conversationTopicKey = useMemo(() => {
+    const t = initialUserMessage || "";
+    if (/热门|搜索词|关键词/.test(t)) return "keyword";
+    if (/产品详情|详情页/.test(t)) return "detail";
+    if (/营销图文|营销素材/.test(t)) return "material";
+    if (/短视频|视频脚本|社媒/.test(t)) return "media";
+    return "default";
+  }, [initialUserMessage]);
   const initialIsMarket = moduleTitle === "市场专家" && isMarketResearchPrompt(initialUserMessage);
   const initialIsTrend = moduleTitle === "市场专家" && isTrendCollectionPrompt(initialUserMessage);
   const initialIsBuyerBg = moduleTitle === "业务专家" && isBuyerBackgroundPrompt(initialUserMessage);
