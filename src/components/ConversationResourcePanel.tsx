@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, ArrowRight } from "lucide-react";
+import { X, ChevronRight, ChevronUp, ChevronDown, FileSpreadsheet, FileCode2, FileText, ArrowRight, ArrowUp, Check } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { BuyerProfileSheetContent } from "@/components/BuyerProfileFloatingCard";
 
