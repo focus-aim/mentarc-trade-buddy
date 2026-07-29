@@ -355,7 +355,7 @@ const ConversationResourcePanel = ({
           <>
             <section className="px-5 py-5">
               <SectionTitle
-                title={`文件（${CONVERSATION_FILES.length}）`}
+                title={`文件（${conversationFiles.length}）`}
                 right={
                   <button
                     onClick={() => setFilesOpen((v) => !v)}
@@ -368,7 +368,7 @@ const ConversationResourcePanel = ({
               />
               {filesOpen && (
                 <div className="space-y-2">
-                  {CONVERSATION_FILES.map((f) => (
+                  {conversationFiles.map((f) => (
                     <div key={f.name} className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-muted/60 transition-colors">
                       <span className={`w-7 h-7 rounded-md flex items-center justify-center ${f.tone}`}>
                         <f.icon className="w-4 h-4" />
@@ -381,9 +381,9 @@ const ConversationResourcePanel = ({
             </section>
 
             <section className="px-5 pb-6">
-              <SectionTitle title={`记忆（${CONVERSATION_MEMORIES.length + 4}）`} />
+              <SectionTitle title={`记忆（${conversationMemories.length + 4}）`} />
               <div className="space-y-3">
-                {CONVERSATION_MEMORIES.map((m) => (
+                {conversationMemories.map((m) => (
                   <div key={m.date} className="rounded-2xl bg-muted/60 border border-border/60 p-4 text-[13px] leading-relaxed">
                     <p className="text-foreground font-medium">{m.date}</p>
                     <p className="mt-2 text-foreground"><span className="font-medium">主题：</span>{m.topic}</p>
