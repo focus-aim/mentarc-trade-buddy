@@ -197,8 +197,10 @@ const ConversationResourcePanel = ({
           {([
             { key: "business", label: "业务信息" },
             { key: "conversation", label: "对话信息" },
-          ] as const).map((t) => {
-            const disabled = businessDisabled && t.key === "business";
+          ] as const)
+            .filter((t) => !(businessDisabled && t.key === "business"))
+            .map((t) => {
+            const disabled = false;
             return (
               <button
                 key={t.key}
