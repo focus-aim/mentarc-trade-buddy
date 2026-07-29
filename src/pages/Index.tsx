@@ -1999,12 +1999,6 @@ const Index = () => {
       ) : (
         <main className="ambient-bg relative flex-1 flex flex-col h-screen overflow-y-auto scrollbar-thin bg-background">
           <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-5 flex items-center justify-between gap-3">
-            <button
-              className="flex h-11 w-11 items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="历史任务"
-            >
-              <Clock className="h-5 w-5" />
-            </button>
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={() => setTeamDialogOpen(true)}
