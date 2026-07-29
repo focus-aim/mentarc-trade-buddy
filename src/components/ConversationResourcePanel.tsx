@@ -409,7 +409,7 @@ const ConversationResourcePanel = ({
           <>
             <section className="px-5 py-5">
               <SectionTitle
-                title={`关键成果（${conversationFiles.length}）`}
+                title={`文件（${conversationFiles.length}）`}
                 right={
                   <button
                     onClick={() => setFilesOpen((v) => !v)}
@@ -435,7 +435,7 @@ const ConversationResourcePanel = ({
             </section>
 
             <section className="px-5 pb-6">
-              <SectionTitle title="AI 记忆" />
+              <SectionTitle title="记忆" />
               <div className="rounded-2xl border border-border/60 bg-background/60 p-4 space-y-4">
                 {aiMemoryGroups.map((g) => (
                   <div key={g.label}>
