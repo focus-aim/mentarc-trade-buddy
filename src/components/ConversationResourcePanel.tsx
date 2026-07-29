@@ -95,6 +95,7 @@ const TOPIC_FILES: Record<string, ConvFile[]> = {
 };
 
 const TOPIC_MEMORIES: Record<string, ConvMemory[]> = {
+  __placeholder__: [],
   keyword: [
     {
       date: "2026-07-28",
